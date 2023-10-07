@@ -1,0 +1,9 @@
+= Prepare Release to npm
+:experimental:
+:source-highlighter: highlight.js
+
+This repository implements a reusable GitHub Action that prepares package repositories for upcoming releases to npm.
+
+== Contributing
+
+Please take a look at link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] for detailed instructions on how to contribute to this project 😀
