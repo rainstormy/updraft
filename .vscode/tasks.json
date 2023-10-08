@@ -2,6 +2,12 @@
 	"tasks": [
 		{
 			"type": "npm",
+			"script": "build",
+			"problemMatcher": [],
+			"label": "build"
+		},
+		{
+			"type": "npm",
 			"script": "setup",
 			"problemMatcher": [],
 			"label": "setup"
@@ -29,6 +35,30 @@
 			"script": "validate.format.nocache",
 			"problemMatcher": [],
 			"label": "validate.format.nocache"
+		},
+		{
+			"type": "npm",
+			"script": "validate.test",
+			"problemMatcher": [],
+			"label": "validate.test"
+		},
+		{
+			"type": "npm",
+			"script": "validate.test.coverage",
+			"problemMatcher": [],
+			"label": "validate.test.coverage"
+		},
+		{
+			"type": "npm",
+			"script": "validate.test.overview",
+			"problemMatcher": [],
+			"label": "validate.test.overview"
+		},
+		{
+			"type": "npm",
+			"script": "validate.test.watch",
+			"problemMatcher": [],
+			"label": "validate.test.watch"
 		},
 		{
 			"type": "npm",

@@ -14,7 +14,9 @@
 		"moduleResolution": "Node",
 		"noEmit": true,
 		"noImplicitReturns": true,
-		"paths": {},
+		"paths": {
+			"+": ["./src/index"]
+		},
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"sourceMap": true,

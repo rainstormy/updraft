@@ -128,6 +128,18 @@ It runs the following means of validation:
 * *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
 ** `validate.format.fix` reformats the files accordingly.
 ** `validate.format.nocache` runs `validate.format` without caching which is encouraged after an adjustment to the formatting configuration.
+* *Unit tests* via https://vitest.dev[Vitest] (`validate.test`).
+** `validate.test.coverage` creates a code coverage report in the `node_modules/.vitest/coverage` directory.
+** `validate.test.overview` launches the https://vitest.dev/guide/ui.html[Vitest user interface] in a web browser.
+** `validate.test.watch` makes the test suite run continuously.
+
+=== Build for Production
+[source,shell]
+----
+yarn run build
+----
+
+It saves the output in the `dist` directory.
 
 == Troubleshooting
 

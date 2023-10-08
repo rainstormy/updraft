@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
+      <excludePattern pattern="dist" />
       <excludePattern pattern=".pnp.*" />
       <excludePattern pattern="yarn.lock" />
     </content>
