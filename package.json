@@ -1,27 +1,42 @@
 {
+	"$schema": "https://json.schemastore.org/package.json",
 	"private": true,
 	"type": "module",
 	"scripts": {
 		"setup": "yarn install && simple-git-hooks",
-		"validate": "yarn run validate.format",
-		"validate.format": "        prettier './.vscode/**/*.json' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache --check",
-		"validate.format.fix": "    prettier './.vscode/**/*.json' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache         --list-different --write",
-		"validate.format.nocache": "prettier './.vscode/**/*.json' './*.config.{js,ts}' './*.{json,yml}' --log-level warn         --check"
+		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' --group --names 'types','format' --prefix-colors 'blue.bold','magenta.bold'",
+		"validate.format": "        prettier './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache --check",
+		"validate.format.fix": "    prettier './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache         --list-different --write",
+		"validate.format.nocache": "prettier './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn         --check",
+		"validate.types": "        tsc --incremental --tsBuildInfoFile './node_modules/.cache/typescript/.tsbuildinfo'",
+		"validate.types.nocache": "tsc"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "yarn run validate.format"
+		"pre-commit": "yarn run concurrently 'yarn:validate.types' 'yarn:validate.format' --group --names 'types','format' --prefix-colors 'blue.bold','magenta.bold'"
+	},
+	"dependencies": {
+		"tslib": "2.6.2"
 	},
 	"devDependencies": {
+		"concurrently": "8.2.1",
 		"prettier": "3.0.3",
+		"prettier-plugin-organize-imports": "3.2.3",
 		"prettier-plugin-packagejson": "2.4.6",
-		"simple-git-hooks": "2.9.0"
+		"simple-git-hooks": "2.9.0",
+		"typescript": "5.2.2"
 	},
 	"packageManager": "yarn@3.6.4",
 	"//": {
+		"dependencies": {
+			"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
+		},
 		"devDependencies": {
+			"concurrently": "A tool that executes multiple Yarn script commands in parallel.",
 			"prettier": "An opinionated code formatter.",
+			"prettier-plugin-organize-imports": "A Prettier plugin that sorts import statements and removes unused ones.",
 			"prettier-plugin-packagejson": "A Prettier plugin that sorts properties in the `package.json` file.",
-			"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands."
+			"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
+			"typescript": "A statically typed programming language that extends the JavaScript syntax."
 		}
 	}
 }

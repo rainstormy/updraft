@@ -29,6 +29,18 @@
 			"script": "validate.format.nocache",
 			"problemMatcher": [],
 			"label": "validate.format.nocache"
+		},
+		{
+			"type": "npm",
+			"script": "validate.types",
+			"problemMatcher": [],
+			"label": "validate.types"
+		},
+		{
+			"type": "npm",
+			"script": "validate.types.nocache",
+			"problemMatcher": [],
+			"label": "validate.types.nocache"
 		}
 	]
 }

@@ -123,6 +123,8 @@ yarn run validate
 
 It runs the following means of validation:
 
+* *Type checking* via https://www.typescriptlang.org[TypeScript] (`validate.types`).
+** `validate.types.nocache` runs `validate.types` without caching which is encouraged after an adjustment to the TypeScript configuration.
 * *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
 ** `validate.format.fix` reformats the files accordingly.
 ** `validate.format.nocache` runs `validate.format` without caching which is encouraged after an adjustment to the formatting configuration.

@@ -6,6 +6,11 @@
 export default {
 	plugins: [
 		/**
+		 * @see https://github.com/simonhaenisch/prettier-plugin-organize-imports
+		 */
+		import("prettier-plugin-organize-imports"),
+
+		/**
 		 * @see https://github.com/matzkoh/prettier-plugin-packagejson
 		 */
 		import("prettier-plugin-packagejson"),
