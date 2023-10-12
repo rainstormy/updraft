@@ -15,7 +15,8 @@
 		"noEmit": true,
 		"noImplicitReturns": true,
 		"paths": {
-			"+": ["./src/index"]
+			"+changelogs": ["./src/changelogs/index"],
+			"+utilities": ["./src/utilities/index"]
 		},
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
