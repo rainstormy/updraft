@@ -1,2 +1,3 @@
+export * from "./parsers/AsciidocChangelogParser"
 export * from "./Changelog"
-export * from "./promote-asciidoc-changelog-version"
+export * from "./PromoteChangelog"

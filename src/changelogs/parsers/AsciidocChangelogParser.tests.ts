@@ -1,5 +1,5 @@
 import { parseAsciidocChangelog } from "+changelogs"
-import { dedent } from "+utilities"
+import { assumeNotNullish, dedent } from "+utilities"
 import { describe, expect, it } from "vitest"
 
 const preamble = dedent`
@@ -350,13 +350,3 @@ describe("when the changelog contains a non-empty unreleased section and two ear
 		})
 	})
 })
-
-function assumeNotNullish(
-	value: unknown,
-): asserts value is NonNullable<typeof value> {
-	if (value === null || value === undefined) {
-		throw new Error(
-			`Assumed a non-nullish value prior to running the test, but got ${value}`,
-		)
-	}
-}
