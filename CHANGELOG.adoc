@@ -1,8 +1,9 @@
 = Changelog
 :experimental:
 :source-highlighter: highlight.js
+:url-github-repository: https://github.com/rainstormy/github-action-prepare-release-to-npm
 
 This file documents all notable changes to this project.
 The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
-== Unreleased
+== {url-github-repository}[Unreleased]
