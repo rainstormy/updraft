@@ -50,8 +50,7 @@ describe("when the changelog contains an unreleased section", () => {
 		`,
 		sections: [
 			{
-				repositoryUrl:
-					"https://github.com/rainstormy/github-action-prepare-release-to-npm",
+				repositoryUrl: "https://github.com/rainstormy/release-automation",
 				previousRelease: {
 					version: "3.0.1",
 					date: "2021-06-04",
@@ -75,7 +74,7 @@ describe("when the changelog contains an unreleased section", () => {
 				This is a changelog.
 
 
-				== https://github.com/rainstormy/github-action-prepare-release-to-npm/compare/v3.0.1\\...HEAD[Unreleased]
+				== https://github.com/rainstormy/release-automation/compare/v3.0.1\\...HEAD[Unreleased]
 
 				=== Added
 				* A new shower mode: \`jet-stream\`.

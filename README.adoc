@@ -1,8 +1,8 @@
-= Prepare Release to npm
+= Release Automation
 :experimental:
 :source-highlighter: highlight.js
 
-This repository implements a reusable GitHub Action that prepares package repositories for upcoming releases to npm.
+This repository implements a generic CLI tool that prepares repositories for upcoming releases.
 
 == Contributing
 

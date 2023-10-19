@@ -99,10 +99,10 @@ describe.each<string>([
 )
 
 describe.each`
-	heading                                                                             | body                           | expectedRepositoryUrl
-	${"Unreleased"}                                                                     | ${sectionOfBathroomAppliances} | ${null}
-	${"https://github.com/rainstormy/github-action-prepare-release-to-npm[Unreleased]"} | ${sectionOfKitchenAppliances}  | ${"https://github.com/rainstormy/github-action-prepare-release-to-npm"}
-	${"{url-github}[Unreleased]"}                                                       | ${sectionOfOfficeAppliances}   | ${"{url-github}"}
+	heading                                                           | body                           | expectedRepositoryUrl
+	${"Unreleased"}                                                   | ${sectionOfBathroomAppliances} | ${null}
+	${"https://github.com/rainstormy/release-automation[Unreleased]"} | ${sectionOfKitchenAppliances}  | ${"https://github.com/rainstormy/release-automation"}
+	${"{url-github}[Unreleased]"}                                     | ${sectionOfOfficeAppliances}   | ${"{url-github}"}
 `(
 	"when the changelog contains a non-empty unreleased section with a heading of $heading",
 	(testRow: {

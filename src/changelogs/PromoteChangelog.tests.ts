@@ -39,8 +39,7 @@ describe("when the changelog contains an empty unreleased section", () => {
 		`,
 		sections: [
 			{
-				repositoryUrl:
-					"https://github.com/rainstormy/github-action-prepare-release-to-npm",
+				repositoryUrl: "https://github.com/rainstormy/release-automation",
 				previousRelease: null,
 				release: null,
 				sectionBody: "",
@@ -111,8 +110,7 @@ describe("when the changelog contains a non-empty unreleased section and no prio
 		`,
 		sections: [
 			{
-				repositoryUrl:
-					"https://github.com/rainstormy/github-action-prepare-release-to-npm",
+				repositoryUrl: "https://github.com/rainstormy/release-automation",
 				previousRelease: null,
 				release: null,
 				sectionBody: dedent`

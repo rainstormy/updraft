@@ -475,6 +475,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rainstormy/release-automation@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@rainstormy/release-automation@workspace:."
+  dependencies:
+    "@types/node": 20.8.3
+    "@vitest/coverage-v8": 0.34.6
+    "@vitest/ui": 0.34.6
+    concurrently: 8.2.1
+    prettier: 3.0.3
+    prettier-plugin-organize-imports: 3.2.3
+    prettier-plugin-packagejson: 2.4.6
+    simple-git-hooks: 2.9.0
+    tslib: 2.6.2
+    typescript: 5.2.2
+    vite: 4.4.11
+    vitest: 0.34.6
+  languageName: unknown
+  linkType: soft
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -2414,25 +2433,6 @@ __metadata:
   checksum: 8bb20a39c8d91130825159c3823eccf4dc2295c9a0a5c4ed851a5bf2167dbf24d9a29f23461a54c955e5506395e6cc188eafc8ab0e20399d7489fb33793b184e
   languageName: node
   linkType: hard
-
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@types/node": 20.8.3
-    "@vitest/coverage-v8": 0.34.6
-    "@vitest/ui": 0.34.6
-    concurrently: 8.2.1
-    prettier: 3.0.3
-    prettier-plugin-organize-imports: 3.2.3
-    prettier-plugin-packagejson: 2.4.6
-    simple-git-hooks: 2.9.0
-    tslib: 2.6.2
-    typescript: 5.2.2
-    vite: 4.4.11
-    vitest: 0.34.6
-  languageName: unknown
-  linkType: soft
 
 "run-applescript@npm:^5.0.0":
   version: 5.0.0
