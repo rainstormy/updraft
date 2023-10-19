@@ -16,6 +16,7 @@
 		"noImplicitReturns": true,
 		"paths": {
 			"+changelogs": ["./src/changelogs/index"],
+			"+packages": ["./src/packages/index"],
 			"+utilities": ["./src/utilities/index"]
 		},
 		"resolveJsonModule": true,
