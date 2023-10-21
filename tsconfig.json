@@ -10,13 +10,14 @@
 		"importHelpers": true,
 		"isolatedModules": true,
 		"lib": ["ES2022"],
-		"module": "ES2022",
+		"module": "ESNext",
 		"moduleResolution": "Node",
 		"noEmit": true,
 		"noImplicitReturns": true,
 		"paths": {
 			"+adapters": ["./src/adapters/index"],
 			"+changelogs": ["./src/changelogs/index"],
+			"+configuration": ["./src/configuration/index"],
 			"+packages": ["./src/packages/index"],
 			"+utilities": ["./src/utilities/index"]
 		},

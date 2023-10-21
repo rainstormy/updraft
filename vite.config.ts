@@ -10,7 +10,7 @@ export default defineConfig(() => ({
 	build: {
 		emptyOutDir: true,
 		lib: {
-			entry: { sample: "./src/sample.ts" },
+			entry: { sample: "./src/main.ts" },
 			formats: ["es" as const],
 		},
 		rollupOptions: {
