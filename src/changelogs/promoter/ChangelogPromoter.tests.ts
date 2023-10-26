@@ -1,5 +1,6 @@
-import type { Changelog, PromoteChangelogResult } from "+changelogs"
-import { promoteChangelog } from "+changelogs"
+import type { Changelog } from "+changelogs"
+import type { ChangelogPromotion } from "./ChangelogPromoter"
+import { promoteChangelog } from "./ChangelogPromoter"
 import { assumeNotNullish, dedent } from "+utilities"
 import { describe, expect, it } from "vitest"
 
@@ -23,9 +24,7 @@ describe("when the changelog has no sections", () => {
 
 		it("raises an error", () => {
 			assumeFailed(result)
-			expect(result.errorMessage).toBe(
-				"The changelog must have an 'Unreleased' section",
-			)
+			expect(result.errorMessage).toBe("must have an 'Unreleased' section")
 		})
 	})
 })
@@ -58,7 +57,7 @@ describe("when the changelog contains an empty unreleased section", () => {
 		it("raises an error", () => {
 			assumeFailed(result)
 			expect(result.errorMessage).toBe(
-				"The 'Unreleased' section in the changelog must contain at least one item",
+				"must have at least one item in the 'Unreleased' section",
 			)
 		})
 	})
@@ -95,7 +94,7 @@ describe("when the changelog contains a non-empty unreleased section without a l
 		it("raises an error", () => {
 			assumeFailed(result)
 			expect(result.errorMessage).toBe(
-				"The 'Unreleased' section in the changelog must include a link to the GitHub repository",
+				"must have a link to the GitHub repository in the 'Unreleased' section",
 			)
 		})
 	})
@@ -360,16 +359,16 @@ describe("when the changelog contains a non-empty unreleased section and two pri
 })
 
 function assumeSucceeded(
-	result: PromoteChangelogResult,
-): asserts result is PromoteChangelogResult.Succeeded {
+	result: ChangelogPromotion,
+): asserts result is ChangelogPromotion.Succeeded {
 	if (result.status !== "succeeded") {
 		expect.fail(`Expected a succeeded result, but it ${result.status}`)
 	}
 }
 
 function assumeFailed(
-	result: PromoteChangelogResult,
-): asserts result is PromoteChangelogResult.Failed {
+	result: ChangelogPromotion,
+): asserts result is ChangelogPromotion.Failed {
 	if (result.status !== "failed") {
 		expect.fail(`Expected a failed result, but it ${result.status}`)
 	}

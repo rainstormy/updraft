@@ -1,4 +1,4 @@
-import { parseAsciidocChangelog } from "+changelogs"
+import { parseAsciidocChangelog } from "./AsciidocChangelogParser"
 import { assumeNotNullish, dedent } from "+utilities"
 import { describe, expect, it } from "vitest"
 

@@ -15,6 +15,7 @@
 		"noEmit": true,
 		"noImplicitReturns": true,
 		"paths": {
+			"+adapters": ["./src/adapters/index"],
 			"+changelogs": ["./src/changelogs/index"],
 			"+packages": ["./src/packages/index"],
 			"+utilities": ["./src/utilities/index"]

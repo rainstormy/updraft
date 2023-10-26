@@ -1,4 +1,4 @@
-import { serializeChangelogToAsciidoc } from "+changelogs"
+import { serializeChangelogToAsciidoc } from "./AsciidocChangelogSerializer"
 import type { Changelog } from "+changelogs"
 import { dedent } from "+utilities"
 import { describe, expect, it } from "vitest"

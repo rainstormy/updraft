@@ -21,6 +21,7 @@
 		"pre-commit": "yarn run concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'"
 	},
 	"dependencies": {
+		"fast-glob": "3.3.2",
 		"tslib": "2.6.2"
 	},
 	"devDependencies": {
@@ -42,6 +43,7 @@
 	},
 	"//": {
 		"dependencies": {
+			"fast-glob": "A runtime library that enables glob patterns in the file system.",
 			"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 		},
 		"devDependencies": {

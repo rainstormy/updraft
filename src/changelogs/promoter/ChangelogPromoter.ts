@@ -1,10 +1,10 @@
 import type { Changelog } from "+changelogs"
 
-export type PromoteChangelogResult =
-	| PromoteChangelogResult.Succeeded
-	| PromoteChangelogResult.Failed
+export type ChangelogPromotion =
+	| ChangelogPromotion.Succeeded
+	| ChangelogPromotion.Failed
 
-export namespace PromoteChangelogResult {
+export namespace ChangelogPromotion {
 	export type Succeeded = {
 		readonly status: "succeeded"
 		readonly promotedChangelog: Changelog
@@ -19,24 +19,22 @@ export namespace PromoteChangelogResult {
 export function promoteChangelog(
 	changelog: Changelog,
 	newRelease: Changelog.Release,
-): PromoteChangelogResult {
+): ChangelogPromotion {
 	const unreleasedSection =
 		changelog.sections.find((section) => section.release === null) ?? null
 
 	if (unreleasedSection === null) {
-		return failed("The changelog must have an 'Unreleased' section")
+		return failed("must have an 'Unreleased' section")
 	}
 
 	if (unreleasedSection.repositoryUrl === null) {
 		return failed(
-			"The 'Unreleased' section in the changelog must include a link to the GitHub repository",
+			"must have a link to the GitHub repository in the 'Unreleased' section",
 		)
 	}
 
 	if (unreleasedSection.sectionBody === "") {
-		return failed(
-			"The 'Unreleased' section in the changelog must contain at least one item",
-		)
+		return failed("must have at least one item in the 'Unreleased' section")
 	}
 
 	const releasedSections = changelog.sections.filter(
@@ -63,18 +61,10 @@ export function promoteChangelog(
 	})
 }
 
-function failed(errorMessage: string): PromoteChangelogResult.Failed {
-	return {
-		status: "failed",
-		errorMessage: errorMessage,
-	}
+function failed(errorMessage: string): ChangelogPromotion.Failed {
+	return { status: "failed", errorMessage }
 }
 
-function succeeded(
-	promotedChangelog: Changelog,
-): PromoteChangelogResult.Succeeded {
-	return {
-		status: "succeeded",
-		promotedChangelog,
-	}
+function succeeded(promotedChangelog: Changelog): ChangelogPromotion.Succeeded {
+	return { status: "succeeded", promotedChangelog }
 }

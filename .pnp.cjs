@@ -32,6 +32,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@vitest/coverage-v8", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:0.34.6"],\
             ["@vitest/ui", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:0.34.6"],\
             ["concurrently", "npm:8.2.1"],\
+            ["fast-glob", "npm:3.3.2"],\
             ["prettier", "npm:3.0.3"],\
             ["prettier-plugin-organize-imports", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:3.2.3"],\
             ["prettier-plugin-packagejson", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:2.4.6"],\
@@ -602,6 +603,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@vitest/coverage-v8", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:0.34.6"],\
             ["@vitest/ui", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:0.34.6"],\
             ["concurrently", "npm:8.2.1"],\
+            ["fast-glob", "npm:3.3.2"],\
             ["prettier", "npm:3.0.3"],\
             ["prettier-plugin-organize-imports", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:3.2.3"],\
             ["prettier-plugin-packagejson", "virtual:e269ac9b619967393cb6c4b75c1181332df2734d7d453cd2fcc6101490c079b6cd7ccdb0438219356eac069c4b085d7e6bbc285841b9c76f094d548097b300bc#npm:2.4.6"],\
@@ -1457,6 +1459,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/fast-glob-npm-3.3.1-8045ff8f4d-b6f3add640.zip/node_modules/fast-glob/",\
           "packageDependencies": [\
             ["fast-glob", "npm:3.3.1"],\
+            ["@nodelib/fs.stat", "npm:2.0.5"],\
+            ["@nodelib/fs.walk", "npm:1.2.8"],\
+            ["glob-parent", "npm:5.1.2"],\
+            ["merge2", "npm:1.4.1"],\
+            ["micromatch", "npm:4.0.5"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:3.3.2", {\
+          "packageLocation": "./.yarn/cache/fast-glob-npm-3.3.2-0a8cb4f2ca-900e4979f4.zip/node_modules/fast-glob/",\
+          "packageDependencies": [\
+            ["fast-glob", "npm:3.3.2"],\
             ["@nodelib/fs.stat", "npm:2.0.5"],\
             ["@nodelib/fs.walk", "npm:1.2.8"],\
             ["glob-parent", "npm:5.1.2"],\
