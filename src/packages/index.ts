@@ -1,1 +1,1 @@
-export * from "./PromotePackage"
+export * from "./PackageModule"
