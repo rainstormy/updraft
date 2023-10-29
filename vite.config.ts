@@ -1,7 +1,7 @@
 import { builtinModules } from "node:module"
-import { defineConfig } from "vitest/config"
 import { join as joinPath, resolve as resolvePath } from "node:path"
 import { fileURLToPath } from "node:url"
+import { defineConfig } from "vitest/config"
 import tsconfigJson from "./tsconfig.json"
 
 const projectDirectory = joinPath(fileURLToPath(import.meta.url), "..")

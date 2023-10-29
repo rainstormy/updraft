@@ -1,8 +1,8 @@
 import type { Changelog } from "+changelogs"
-import type { ChangelogPromotion } from "./ChangelogPromoter"
-import { promoteChangelog } from "./ChangelogPromoter"
 import { assumeNotNullish, dedent } from "+utilities"
 import { describe, expect, it } from "vitest"
+import type { ChangelogPromotion } from "./ChangelogPromoter"
+import { promoteChangelog } from "./ChangelogPromoter"
 
 describe("when the changelog has no sections", () => {
 	const changelog: Changelog = {

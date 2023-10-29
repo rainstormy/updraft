@@ -1,3 +1,6 @@
+import organizeImportsPlugin from "prettier-plugin-organize-imports"
+import packageJsonPlugin from "prettier-plugin-packagejson"
+
 /**
  * @type {import("prettier").Options}
  *
@@ -8,12 +11,12 @@ export default {
 		/**
 		 * @see https://github.com/simonhaenisch/prettier-plugin-organize-imports
 		 */
-		import("prettier-plugin-organize-imports"),
+		organizeImportsPlugin,
 
 		/**
 		 * @see https://github.com/matzkoh/prettier-plugin-packagejson
 		 */
-		import("prettier-plugin-packagejson"),
+		packageJsonPlugin,
 	],
 	/**
 	 * We prefer to take advantage of Automatic Semicolon Insertion (ASI), which is always present in JavaScript.

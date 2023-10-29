@@ -1,6 +1,6 @@
-import { parseAsciidocChangelog } from "./AsciidocChangelogParser"
 import { assumeNotNullish, dedent } from "+utilities"
 import { describe, expect, it } from "vitest"
+import { parseAsciidocChangelog } from "./AsciidocChangelogParser"
 
 const preamble = dedent`
 	= Changelog
