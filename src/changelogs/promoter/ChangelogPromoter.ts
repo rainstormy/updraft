@@ -1,4 +1,4 @@
-import type { Changelog } from "+changelogs"
+import { type Changelog } from "+changelogs/Changelog"
 
 export type ChangelogPromotion =
 	| ChangelogPromotion.Succeeded

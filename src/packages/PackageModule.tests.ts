@@ -1,7 +1,7 @@
-import type { PromotePackages } from "+packages"
-import { promotePackages } from "+packages"
-import type { PathsWithContent, SemanticVersionString } from "+utilities"
-import { dedent } from "+utilities"
+import { promotePackages, type PromotePackages } from "+packages/PackageModule"
+import { type PathsWithContent } from "+utilities/io-types"
+import { dedent } from "+utilities/string-transformations"
+import { type SemanticVersionString } from "+utilities/string-types"
 import { describe, expect, it } from "vitest"
 
 describe("when there are no input files", () => {

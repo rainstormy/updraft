@@ -1,4 +1,5 @@
-import { assumeNotNullish, dedent } from "+utilities"
+import { assumeNotNullish } from "+utilities/assertions"
+import { dedent } from "+utilities/string-transformations"
 import { describe, expect, it } from "vitest"
 import { parseAsciidocChangelog } from "./AsciidocChangelogParser"
 

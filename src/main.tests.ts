@@ -1,13 +1,17 @@
-import type {
-	OnDisplayingMessage,
-	OnReadingMatchingFiles,
-	OnWritingToFiles,
-} from "+adapters"
-import type { OnPromotingChangelogs, PromoteChangelogs } from "+changelogs"
-import type { Configuration } from "+configuration"
-import type { OnPromotingPackages, PromotePackages } from "+packages"
-import type { SemanticVersionString } from "+utilities"
-import { dedent } from "+utilities"
+import { type OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
+import { type OnReadingMatchingFiles } from "+adapters/OnReadingMatchingFiles"
+import { type OnWritingToFiles } from "+adapters/OnWritingToFiles"
+import {
+	type OnPromotingChangelogs,
+	type PromoteChangelogs,
+} from "+changelogs/ChangelogModule"
+import { type Configuration } from "+configuration/Configuration"
+import {
+	type OnPromotingPackages,
+	type PromotePackages,
+} from "+packages/PackageModule"
+import { dedent } from "+utilities/string-transformations"
+import { type SemanticVersionString } from "+utilities/string-types"
 import { describe, expect, it, vi } from "vitest"
 import { version as toolVersion } from "../package.json" assert { type: "json" }
 import { main, usageInstructions } from "./main"

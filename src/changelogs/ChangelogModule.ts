@@ -1,8 +1,10 @@
-import type { PathsWithContent } from "+utilities"
-import type { Changelog } from "./Changelog"
+import { type PathsWithContent } from "+utilities/io-types"
+import { type Changelog } from "./Changelog"
 import { parseAsciidocChangelog } from "./parsers/AsciidocChangelogParser"
-import type { ChangelogPromotion } from "./promoter/ChangelogPromoter"
-import { promoteChangelog } from "./promoter/ChangelogPromoter"
+import {
+	promoteChangelog,
+	type ChangelogPromotion,
+} from "./promoter/ChangelogPromoter"
 import { serializeChangelogToAsciidoc } from "./serializers/AsciidocChangelogSerializer"
 
 export type OnPromotingChangelogs = typeof promoteChangelogs

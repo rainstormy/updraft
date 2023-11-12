@@ -1,5 +1,8 @@
-import type { Changelog } from "+changelogs"
-import type { DateString, SemanticVersionString } from "+utilities"
+import { type Changelog } from "+changelogs/Changelog"
+import {
+	type DateString,
+	type SemanticVersionString,
+} from "+utilities/string-types"
 
 export function parseAsciidocChangelog(content: string): Changelog {
 	const [preamble, ...rawSections] = content.split(/(?=^== .+)/mu)

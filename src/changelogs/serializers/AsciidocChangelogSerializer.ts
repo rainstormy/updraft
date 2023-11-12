@@ -1,4 +1,4 @@
-import type { Changelog } from "+changelogs"
+import { type Changelog } from "+changelogs/Changelog"
 
 export function serializeChangelogToAsciidoc(changelog: Changelog): string {
 	return (

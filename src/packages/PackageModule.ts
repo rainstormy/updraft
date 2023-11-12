@@ -1,6 +1,9 @@
-import type { PathsWithContent, SemanticVersionString } from "+utilities"
-import type { PackagePromotion } from "./promoter/PackagePromoter"
-import { promotePackage } from "./promoter/PackagePromoter"
+import { type PathsWithContent } from "+utilities/io-types"
+import { type SemanticVersionString } from "+utilities/string-types"
+import {
+	promotePackage,
+	type PackagePromotion,
+} from "./promoter/PackagePromoter"
 
 export type OnPromotingPackages = typeof promotePackages
 

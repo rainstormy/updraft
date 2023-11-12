@@ -1,7 +1,9 @@
-import type { DateString, SemanticVersionString } from "+utilities"
+import {
+	type DateString,
+	type SemanticVersionString,
+} from "+utilities/string-types"
 import { describe, expect, it } from "vitest"
-import type { Configuration } from "./Configuration"
-import { getConfigurationFromArgs } from "./Configuration"
+import { getConfigurationFromArgs, type Configuration } from "./Configuration"
 
 const dummyToday: DateString = "2022-05-29"
 const dummyToolVersion: SemanticVersionString = "1.0.0"

@@ -1,4 +1,7 @@
-import type { PathsWithContent, PathWithContent } from "+utilities"
+import {
+	type PathsWithContent,
+	type PathWithContent,
+} from "+utilities/io-types"
 import { glob } from "fast-glob"
 import { readFile } from "node:fs/promises"
 

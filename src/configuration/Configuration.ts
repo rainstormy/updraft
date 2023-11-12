@@ -1,5 +1,8 @@
-import type { DateString, SemanticVersionString } from "+utilities"
-import { isSemanticVersionString } from "+utilities"
+import {
+	isSemanticVersionString,
+	type DateString,
+	type SemanticVersionString,
+} from "+utilities/string-types"
 
 export type Configuration =
 	| Configuration.DisplayHelpScreen

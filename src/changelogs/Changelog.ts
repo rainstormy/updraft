@@ -1,8 +1,8 @@
-import type {
-	DateString,
-	HyperlinkString,
-	SemanticVersionString,
-} from "+utilities"
+import {
+	type DateString,
+	type HyperlinkString,
+	type SemanticVersionString,
+} from "+utilities/string-types"
 
 export type Changelog = {
 	readonly preamble: string

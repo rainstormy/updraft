@@ -1,4 +1,4 @@
-import type { SemanticVersionString } from "+utilities"
+import { type SemanticVersionString } from "+utilities/string-types"
 
 export type PackagePromotion =
 	| PackagePromotion.Succeeded

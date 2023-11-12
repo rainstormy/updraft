@@ -15,11 +15,11 @@
 		"noEmit": true,
 		"noImplicitReturns": true,
 		"paths": {
-			"+adapters": ["./src/adapters/index"],
-			"+changelogs": ["./src/changelogs/index"],
-			"+configuration": ["./src/configuration/index"],
-			"+packages": ["./src/packages/index"],
-			"+utilities": ["./src/utilities/index"]
+			"+adapters/*": ["./src/adapters/*"],
+			"+changelogs/*": ["./src/changelogs/*"],
+			"+configuration/*": ["./src/configuration/*"],
+			"+packages/*": ["./src/packages/*"],
+			"+utilities/*": ["./src/utilities/*"]
 		},
 		"resolveJsonModule": true,
 		"skipLibCheck": true,

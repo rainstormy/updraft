@@ -1,12 +1,11 @@
-import type {
-	DateString,
-	PathsWithContent,
-	SemanticVersionString,
-} from "+utilities"
-import { dedent } from "+utilities"
+import { type PathsWithContent } from "+utilities/io-types"
+import { dedent } from "+utilities/string-transformations"
+import {
+	type DateString,
+	type SemanticVersionString,
+} from "+utilities/string-types"
 import { describe, expect, it } from "vitest"
-import type { PromoteChangelogs } from "./ChangelogModule"
-import { promoteChangelogs } from "./ChangelogModule"
+import { promoteChangelogs, type PromoteChangelogs } from "./ChangelogModule"
 
 describe("when there are no input files", () => {
 	const pathsWithContent: PathsWithContent = []

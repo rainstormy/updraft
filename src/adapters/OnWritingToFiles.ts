@@ -1,4 +1,4 @@
-import type { PathsWithContent } from "+utilities"
+import { type PathsWithContent } from "+utilities/io-types"
 import { writeFile } from "node:fs/promises"
 
 export type OnWritingToFiles = typeof onWritingToFilesOnDisk

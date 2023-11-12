@@ -1,21 +1,33 @@
-import type {
-	OnDisplayingMessage,
-	OnReadingMatchingFiles,
-	OnWritingToFiles,
-} from "+adapters"
 import {
 	onDisplayingMessageInConsole,
+	type OnDisplayingMessage,
+} from "+adapters/OnDisplayingMessage"
+import {
 	onReadingMatchingFilesFromDisk,
+	type OnReadingMatchingFiles,
+} from "+adapters/OnReadingMatchingFiles"
+import {
 	onWritingToFilesOnDisk,
-} from "+adapters"
-import type { OnPromotingChangelogs } from "+changelogs"
-import { promoteChangelogs } from "+changelogs"
-import type { Configuration } from "+configuration"
-import { getConfigurationFromArgs } from "+configuration"
-import type { OnPromotingPackages } from "+packages"
-import { promotePackages } from "+packages"
-import type { DateString, ExitCode, SemanticVersionString } from "+utilities"
-import { dedent } from "+utilities"
+	type OnWritingToFiles,
+} from "+adapters/OnWritingToFiles"
+import {
+	promoteChangelogs,
+	type OnPromotingChangelogs,
+} from "+changelogs/ChangelogModule"
+import {
+	getConfigurationFromArgs,
+	type Configuration,
+} from "+configuration/Configuration"
+import {
+	promotePackages,
+	type OnPromotingPackages,
+} from "+packages/PackageModule"
+import { type ExitCode } from "+utilities/ExitCode"
+import { dedent } from "+utilities/string-transformations"
+import {
+	type DateString,
+	type SemanticVersionString,
+} from "+utilities/string-types"
 import { argv } from "node:process"
 import { version as toolVersion } from "../package.json" assert { type: "json" }
 

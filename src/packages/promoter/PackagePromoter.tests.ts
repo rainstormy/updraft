@@ -1,8 +1,7 @@
-import type { SemanticVersionString } from "+utilities"
-import { dedent } from "+utilities"
+import { dedent } from "+utilities/string-transformations"
+import { type SemanticVersionString } from "+utilities/string-types"
 import { describe, expect, it } from "vitest"
-import type { PackagePromotion } from "./PackagePromoter"
-import { promotePackage } from "./PackagePromoter"
+import { promotePackage, type PackagePromotion } from "./PackagePromoter"
 
 describe("when the 'package.json' file does not have a 'version' field", () => {
 	const packageJson = dedent`
