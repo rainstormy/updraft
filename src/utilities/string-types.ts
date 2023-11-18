@@ -7,12 +7,6 @@ export namespace DateString {
 	export type Day = `${number}${number}`
 }
 
-const iso8601DateRegex = /^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})$/
-
-export function isDateString(value: string): value is DateString {
-	return iso8601DateRegex.test(value)
-}
-
 export type HyperlinkString = `https://${string}.${string}` | `/${string}`
 
 export type SemanticVersionString =

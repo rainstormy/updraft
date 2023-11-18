@@ -1,4 +1,5 @@
 import { type Changelog } from "+changelogs/Changelog"
+import { type Release } from "+utilities/Release"
 import {
 	type DateString,
 	type SemanticVersionString,
@@ -83,7 +84,7 @@ function getRepositoryUrl(
 	) as Changelog.RepositoryUrlString
 }
 
-function getRelease(heading: string): Changelog.Release | null {
+function getRelease(heading: string): Release | null {
 	if (!heading.includes("/compare/") && !heading.includes("/releases/tag/")) {
 		return null
 	}

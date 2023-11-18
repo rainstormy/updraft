@@ -1,10 +1,10 @@
 import { dedent } from "+utilities/string-transformations"
 import { type SemanticVersionString } from "+utilities/string-types"
 import { describe, expect, it } from "vitest"
-import { promotePackage, type PackagePromotion } from "./PackagePromoter"
+import { promotePackage } from "./PackagePromoter"
 
 describe("when the 'package.json' file does not have a 'version' field", () => {
-	const packageJson = dedent`
+	const originalPackageContent = dedent`
 		{
 			"$schema": "https://json.schemastore.org/package.json",
 			"private": true,
@@ -14,11 +14,16 @@ describe("when the 'package.json' file does not have a 'version' field", () => {
 	`
 
 	describe("promoting the package", () => {
-		const result = promotePackage(packageJson, "1.0.0")
+		const throwingAction = () =>
+			promotePackage({
+				originalPackageContent,
+				newRelease: { version: "1.0.0", date: "2023-10-01" },
+			})
 
-		it("raises an error", () => {
-			assumeFailed(result)
-			expect(result.errorMessage).toBe("must have a 'version' field")
+		it("raises an error", async () => {
+			await expect(throwingAction).rejects.toThrow(
+				"must have a 'version' field",
+			)
 		})
 	})
 })
@@ -35,7 +40,7 @@ describe.each`
 	}) => {
 		const { currentVersion, versionToRelease } = releaseInput
 
-		const packageJson = dedent`
+		const originalPackageContent = dedent`
 			{
 				"$schema": "https://json.schemastore.org/package.json",
 				"name": "@rainstormy/preset-prettier-base",
@@ -48,12 +53,14 @@ describe.each`
 			}
 		`
 
-		describe(`promoting the package to version ${versionToRelease}`, () => {
-			const result = promotePackage(packageJson, versionToRelease)
+		describe(`promoting the package to version ${versionToRelease}`, async () => {
+			const promotedPackageContent = await promotePackage({
+				originalPackageContent,
+				newRelease: { version: versionToRelease, date: "2023-10-01" },
+			})
 
 			it(`updates the 'version' field to ${versionToRelease}`, () => {
-				assumeSucceeded(result)
-				expect(result.promotedPackageContent).toBe(dedent`
+				expect(promotedPackageContent).toBe(dedent`
 					{
 						"$schema": "https://json.schemastore.org/package.json",
 						"name": "@rainstormy/preset-prettier-base",
@@ -69,19 +76,3 @@ describe.each`
 		})
 	},
 )
-
-function assumeSucceeded(
-	result: PackagePromotion,
-): asserts result is PackagePromotion.Succeeded {
-	if (result.status !== "succeeded") {
-		expect.fail(`Expected a succeeded result, but it ${result.status}`)
-	}
-}
-
-function assumeFailed(
-	result: PackagePromotion,
-): asserts result is PackagePromotion.Failed {
-	if (result.status !== "failed") {
-		expect.fail(`Expected a failed result, but it ${result.status}`)
-	}
-}

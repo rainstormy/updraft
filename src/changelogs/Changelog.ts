@@ -1,8 +1,5 @@
-import {
-	type DateString,
-	type HyperlinkString,
-	type SemanticVersionString,
-} from "+utilities/string-types"
+import { type Release } from "+utilities/Release"
+import { type HyperlinkString } from "+utilities/string-types"
 
 export type Changelog = {
 	readonly preamble: string
@@ -19,9 +16,4 @@ export namespace Changelog {
 
 	export type RepositoryUrlString = CustomAttributeString | HyperlinkString
 	type CustomAttributeString = `{${string}}`
-
-	export type Release = {
-		readonly version: SemanticVersionString
-		readonly date: DateString
-	}
 }

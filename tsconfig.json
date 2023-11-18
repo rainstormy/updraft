@@ -17,7 +17,6 @@
 		"paths": {
 			"+adapters/*": ["./src/adapters/*"],
 			"+changelogs/*": ["./src/changelogs/*"],
-			"+configuration/*": ["./src/configuration/*"],
 			"+packages/*": ["./src/packages/*"],
 			"+utilities/*": ["./src/utilities/*"]
 		},

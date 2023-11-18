@@ -1,4 +1,3 @@
-import { assumeNotNullish } from "+utilities/assertions"
 import { dedent } from "+utilities/string-transformations"
 import { describe, expect, it } from "vitest"
 import { parseAsciidocChangelog } from "./AsciidocChangelogParser"
@@ -351,3 +350,11 @@ describe("when the changelog contains a non-empty unreleased section and two ear
 		})
 	})
 })
+
+function assumeNotNullish(
+	value: unknown,
+): asserts value is NonNullable<typeof value> {
+	if (value === null || value === undefined) {
+		throw new Error(`Assumed a non-nullish value, but got ${value}`)
+	}
+}

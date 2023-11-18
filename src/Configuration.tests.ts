@@ -114,12 +114,12 @@ describe.each`
 
 				it(`contains a release version of '${expectedReleaseVersion}'`, () => {
 					assumePrepareRelease(configuration)
-					expect(configuration.release.version).toBe(expectedReleaseVersion)
+					expect(configuration.newRelease.version).toBe(expectedReleaseVersion)
 				})
 
 				it(`contains a release date of '${today}'`, () => {
 					assumePrepareRelease(configuration)
-					expect(configuration.release.date).toBe(today)
+					expect(configuration.newRelease.date).toBe(today)
 				})
 
 				it(`contains changelog glob patterns of [${expectedChangelogGlobPatterns}]`, () => {
@@ -188,7 +188,7 @@ describe.each`
 			})
 
 			it(`contains the provided release version of '${expectedProvidedReleaseVersion}'`, () => {
-				assumeErrorReleaseVersionNotSemantic(configuration)
+				assumeErrorReleaseVersionInvalid(configuration)
 				expect(configuration.providedReleaseVersion).toBe(
 					expectedProvidedReleaseVersion,
 				)
@@ -258,7 +258,7 @@ function assumeDisplayToolVersion(
 	}
 }
 
-function assumeErrorReleaseVersionNotSemantic(
+function assumeErrorReleaseVersionInvalid(
 	configuration: Configuration,
 ): asserts configuration is Configuration.ErrorReleaseVersionInvalid {
 	if (configuration.type !== "error-release-version-invalid") {

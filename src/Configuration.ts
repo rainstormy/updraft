@@ -44,7 +44,7 @@ export namespace Configuration {
 		readonly type: "prepare-release"
 		readonly changelogGlobPatterns: ReadonlyArray<string>
 		readonly packageGlobPatterns: ReadonlyArray<string>
-		readonly release: {
+		readonly newRelease: {
 			readonly date: DateString
 			readonly version: SemanticVersionString
 		}
@@ -113,7 +113,7 @@ export function getConfigurationFromArgs(input: {
 		type: "prepare-release",
 		changelogGlobPatterns: changelogGlobPatterns ?? [],
 		packageGlobPatterns: packageGlobPatterns ?? [],
-		release: {
+		newRelease: {
 			date: today,
 			version: releaseVersion as SemanticVersionString,
 		},
