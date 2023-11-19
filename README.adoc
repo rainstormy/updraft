@@ -1,4 +1,4 @@
-= Release Automation
+= Updraft &ndash; Release Automation
 :experimental:
 :source-highlighter: highlight.js
 

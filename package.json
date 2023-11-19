@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@rainstormy/release-automation",
+	"name": "@rainstormy/updraft",
 	"version": "1.0.0-alpha.0",
 	"type": "module",
 	"scripts": {

@@ -475,9 +475,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainstormy/release-automation@workspace:.":
+"@rainstormy/updraft@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@rainstormy/release-automation@workspace:."
+  resolution: "@rainstormy/updraft@workspace:."
   dependencies:
     "@types/node": 20.8.3
     "@vitest/coverage-v8": 0.34.6

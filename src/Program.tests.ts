@@ -75,7 +75,7 @@ describe("the program with a 'help-screen' configuration", async () => {
 describe("the usage instructions", () => {
 	it("is a list of program arguments and options", () => {
 		expect(usageInstructions).toBe(dedent`
-			Usage: release [options]
+			Usage: updraft [options]
 
 			This tool prepares a repository for an upcoming release by updating changelogs
 			and bumping version numbers in package.json files.

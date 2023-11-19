@@ -16,7 +16,7 @@ import {
 } from "+utilities/StringUtilities"
 import { type Configuration } from "./Configuration"
 
-export const usageInstructions = `Usage: release [options]
+export const usageInstructions = `Usage: updraft [options]
 
 This tool prepares a repository for an upcoming release by updating changelogs
 and bumping version numbers in package.json files.

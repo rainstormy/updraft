@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/release-automation.iml" filepath="$PROJECT_DIR$/.idea/release-automation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/updraft.iml" filepath="$PROJECT_DIR$/.idea/updraft.iml" />
     </modules>
   </component>
 </project>
