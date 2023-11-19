@@ -492,6 +492,8 @@ __metadata:
     typescript: 5.2.2
     vite: 4.4.11
     vitest: 0.34.6
+  bin:
+    updraft: ./src/entry.cli.js
   languageName: unknown
   linkType: soft
 

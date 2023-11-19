@@ -2,8 +2,57 @@
 :experimental:
 :source-highlighter: highlight.js
 
-This repository implements a generic CLI tool that prepares repositories for upcoming releases.
+Updraft is a generic command-line tool that prepares a repository for an upcoming release by updating changelogs and bumping version numbers in `package.json` files.
+
+It saves the changes to the files, but it does not make any Git commits or GitHub releases.
+You can automate these things in your CI/CD pipeline or do them manually after running the Updraft tool.
+
+Supported file formats:
+
+* AsciiDoc-based changelogs (`*.adoc`) in https://keepachangelog.com/en/1.1.0[Keep a Changelog] format.
+* `package.json` files.
+
+== Usage
+=== From a Local Installation
+. Install the `@rainstormy/updraft` package locally in your repository:
++
+[source,shell]
+----
+# npm:
+npm install --save-dev @rainstormy/updraft
+
+# pnpm:
+pnpm install --save-dev @rainstormy/updraft
+
+# Yarn:
+yarn add --dev @rainstormy/updraft
+----
+
+. Define a `package.json` script to run the program, for example:
++
+[source,json]
+----
+{
+	"scripts": {
+		"release.prepare": "updraft --files CHANGELOG.adoc packages/**/package.json --release-version"
+	}
+}
+----
+
+. Run the `package.json` script and supply the necessary arguments, for example:
++
+[source,shell]
+----
+# npm, requires `--`:
+npm run release.prepare -- 1.1.0
+
+# pnpm:
+pnpm run release.prepare 1.1.0
+
+# Yarn:
+yarn run release.prepare 1.1.0
+----
 
 == Contributing
-
-Please take a look at link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] for detailed instructions on how to contribute to this project 😀
+Contributions to this project are welcome!
+Please take a look at link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] 😀

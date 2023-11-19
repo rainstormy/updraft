@@ -1,4 +1,3 @@
-import { builtinModules } from "node:module"
 import { join as joinPath, resolve as resolvePath } from "node:path"
 import { fileURLToPath } from "node:url"
 import { defineConfig } from "vitest/config"
@@ -9,16 +8,8 @@ const projectDirectory = joinPath(fileURLToPath(import.meta.url), "..")
 export default defineConfig(() => ({
 	build: {
 		emptyOutDir: true,
-		lib: {
-			entry: { sample: "./src/main.ts" },
-			formats: ["es" as const],
-		},
-		rollupOptions: {
-			external: [
-				...builtinModules,
-				...builtinModules.map((moduleName) => `node:${moduleName}`),
-			],
-		},
+		minify: "esbuild" as const,
+		reportCompressedSize: false,
 	},
 	plugins: [],
 	resolve: {

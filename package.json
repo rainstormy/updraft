@@ -3,8 +3,14 @@
 	"name": "@rainstormy/updraft",
 	"version": "1.0.0-alpha.0",
 	"type": "module",
+	"bin": "./src/entry.cli.js",
+	"files": [
+		"./dist/main.js",
+		"./src/entry.cli.js"
+	],
 	"scripts": {
-		"build": "vite build",
+		"build.dist": "vite build --ssr ./src/main.ts",
+		"build.pack": "yarn pack --out %s-%v.tgz",
 		"setup": "yarn install && simple-git-hooks",
 		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'",
 		"validate.format": "        prettier './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache --check",
