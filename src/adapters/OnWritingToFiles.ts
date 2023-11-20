@@ -1,5 +1,5 @@
-import { assertError } from "+utilities/assertions"
-import { type PathsWithContent } from "+utilities/io-types"
+import { assertError } from "+utilities/ErrorUtilities"
+import { type PathsWithContent } from "+utilities/FileUtilities"
 import { writeFile } from "node:fs/promises"
 
 export type OnWritingToFiles = typeof onWritingToFilesOnDisk
@@ -21,7 +21,10 @@ export async function onWritingToFilesOnDisk(input: {
 	)
 }
 
-export function fakeWritingToFiles(
+/**
+ * For unit testing purposes.
+ */
+export function onWritingToFakeFiles(
 	sabotagedPaths: ReadonlyArray<
 		readonly [path: string, errorMessage: () => string]
 	>,

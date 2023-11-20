@@ -1,5 +1,5 @@
 import { type Release } from "+utilities/Release"
-import { type HyperlinkString } from "+utilities/string-types"
+import { type HyperlinkString } from "+utilities/StringUtilities"
 
 export type Changelog = {
 	readonly preamble: string

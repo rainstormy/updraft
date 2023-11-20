@@ -1,5 +1,5 @@
+import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
-import { dedent } from "./string-transformations"
 
 describe("dedenting an empty string", () => {
 	const result = dedent``

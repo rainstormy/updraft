@@ -1,6 +1,6 @@
 import { type Changelog } from "+changelogs/Changelog"
 import { type Release } from "+utilities/Release"
-import { dedent } from "+utilities/string-transformations"
+import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
 import { promoteChangelog } from "./ChangelogPromoter"
 

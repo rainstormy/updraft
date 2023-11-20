@@ -1,9 +1,3 @@
-export function assertError(error: unknown): asserts error is Error {
-	if (!(error instanceof Error)) {
-		throw error
-	}
-}
-
 export function isFulfilled<Value>(
 	result: PromiseSettledResult<Value>,
 ): result is PromiseFulfilledResult<Value> {

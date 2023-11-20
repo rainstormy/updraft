@@ -1,245 +1,119 @@
-import {
-	type DateString,
-	type SemanticVersionString,
-} from "+utilities/string-types"
+import { type SemanticVersionString } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
 import { getConfigurationFromArgs, type Configuration } from "./Configuration"
-
-const dummyToday: DateString = "2022-05-29"
-const dummyToolVersion: SemanticVersionString = "1.0.0"
 
 describe.each`
 	argsString
 	${""}
 	${"--help"}
 	${"--help --version"}
-	${"--changelogs CHANGELOG.adoc --help"}
-	${"--packages --help package.json"}
-`("when the args are $argsString", (input: { readonly argsString: string }) => {
-	const { argsString } = input
-	const args = splitArgsString(argsString)
+	${"--release-version 1.1 --help"}
+	${"--files --help package.json"}
+`(
+	"a configuration from $argsString",
+	(input: { readonly argsString: string }) => {
+		const { argsString } = input
+		const args = splitArgsString(argsString)
 
-	describe("deriving a configuration from args", () => {
-		const configuration = getConfigurationFromArgs({
-			args,
-			today: dummyToday,
-			toolVersion: dummyToolVersion,
-		})
+		const configuration = getConfigurationFromArgs(args)
 
-		it("is 'display-help-screen'", () => {
-			expect(configuration.type).toBe("display-help-screen")
+		it("is 'help-screen'", () => {
+			expect(configuration.type).toBe("help-screen")
 		})
-	})
-})
+	},
+)
 
 describe.each`
 	argsString
 	${"--version"}
-	${"--changelogs CHANGELOG.adoc --version"}
-	${"--packages --version package.json"}
+	${"--release-version 2.2 --version"}
+	${"--files --version CHANGELOG.adoc"}
 `(
-	"when the args are $argsString",
-	(argsInput: { readonly argsString: string }) => {
-		const { argsString } = argsInput
+	"a configuration from $argsString",
+	(input: { readonly argsString: string }) => {
+		const { argsString } = input
 		const args = splitArgsString(argsString)
 
-		describe.each`
-			toolVersion
-			${"1.1.0"}
-			${"2.0.0-beta.1"}
-		`(
-			"deriving a configuration from args under tool version $toolVersion",
-			(toolVersionInput: { readonly toolVersion: SemanticVersionString }) => {
-				const { toolVersion } = toolVersionInput
+		const configuration = getConfigurationFromArgs(args)
 
-				const configuration = getConfigurationFromArgs({
-					args,
-					today: dummyToday,
-					toolVersion,
-				})
-
-				it("is 'display-tool-version'", () => {
-					expect(configuration.type).toBe("display-tool-version")
-				})
-
-				it(`contains a tool version of '${toolVersion}'`, () => {
-					assumeDisplayToolVersion(configuration)
-					expect(configuration.toolVersion).toBe(toolVersion)
-				})
-			},
-		)
+		it("is 'tool-version'", () => {
+			expect(configuration.type).toBe("tool-version")
+		})
 	},
 )
 
 describe.each`
-	argsString                                                                                                                            | expectedReleaseVersion    | expectedChangelogGlobPatterns            | expectedPackageGlobPatterns
-	${"1.1.0"}                                                                                                                            | ${"1.1.0"}                | ${[]}                                    | ${[]}
-	${"2.0.0-beta.1 --changelogs CHANGELOG.adoc"}                                                                                         | ${"2.0.0-beta.1"}         | ${["CHANGELOG.adoc"]}                    | ${[]}
-	${"v3.5.3 --packages package.json"}                                                                                                   | ${"3.5.3"}                | ${[]}                                    | ${["package.json"]}
-	${"4.11.3-alpha+d06f00d --changelogs CHANGES.adoc lib/RELEASES.adoc  --packages lib/package.json"}                                    | ${"4.11.3-alpha+d06f00d"} | ${["CHANGES.adoc", "lib/RELEASES.adoc"]} | ${["lib/package.json"]}
-	${"v6.0.0-beta.1 --packages packages/**/package.json lib/package.json dist/package.json --changelogs packages/**/*.adoc dist/*.adoc"} | ${"6.0.0-beta.1"}         | ${["packages/**/*.adoc", "dist/*.adoc"]} | ${["packages/**/package.json", "lib/package.json", "dist/package.json"]}
+	argsString                                                                              | expectedErrorMessage
+	${"--file-patterns"}                                                                    | ${"Unknown option '--file-patterns'."}
+	${"--release"}                                                                          | ${"Unknown option '--release'."}
+	${"--check"}                                                                            | ${"Unknown option '--check'."}
+	${"--help --help"}                                                                      | ${"--help must be specified only once."}
+	${"--version --version"}                                                                | ${"--version must be specified only once."}
+	${"--release-version 1.1.0 --release-version 2.1.0"}                                    | ${"--release-version must be specified only once."}
+	${"--files packages/**/package.json packages/**/CHANGELOG.adoc --files CHANGELOG.adoc"} | ${"--files must be specified only once."}
+	${"--files CHANGELOG.adoc"}                                                             | ${"--release-version must be specified."}
+	${"--files CHANGELOG.adoc --release-version"}                                           | ${"--release-version must specify a value."}
+	${"--files CHANGELOG.adoc --release-version 1.0.1 v1.0.2"}                              | ${"--release-version must not specify more than one value."}
+	${" --files CHANGELOG.adoc --release-version 1.1"}                                      | ${"--release-version has an invalid value '1.1'."}
+	${" --files CHANGELOG.adoc --release-version v2"}                                       | ${"--release-version has an invalid value 'v2'."}
+	${" --files CHANGELOG.adoc --release-version next"}                                     | ${"--release-version has an invalid value 'next'."}
+	${"--release-version 1.0.1"}                                                            | ${"--files must be specified."}
+	${"--release-version 1.0.1 --files"}                                                    | ${"--files must specify a value."}
 `(
-	"when the args are $argsString",
-	(argsInput: {
-		readonly argsString: string
-		readonly expectedReleaseVersion: SemanticVersionString
-		readonly expectedChangelogGlobPatterns: ReadonlyArray<string>
-		readonly expectedPackageGlobPatterns: ReadonlyArray<string>
-	}) => {
-		const {
-			argsString,
-			expectedReleaseVersion,
-			expectedChangelogGlobPatterns,
-			expectedPackageGlobPatterns,
-		} = argsInput
-		const args = splitArgsString(argsString)
-
-		describe.each`
-			today
-			${"2023-03-30"}
-			${"2024-02-12"}
-		`(
-			"deriving a configuration from args on $today",
-			(todayInput: { readonly today: DateString }) => {
-				const { today } = todayInput
-				const configuration = getConfigurationFromArgs({
-					args,
-					today,
-					toolVersion: dummyToolVersion,
-				})
-
-				it("is 'prepare-release'", () => {
-					expect(configuration.type).toBe("prepare-release")
-				})
-
-				it(`contains a release version of '${expectedReleaseVersion}'`, () => {
-					assumePrepareRelease(configuration)
-					expect(configuration.newRelease.version).toBe(expectedReleaseVersion)
-				})
-
-				it(`contains a release date of '${today}'`, () => {
-					assumePrepareRelease(configuration)
-					expect(configuration.newRelease.date).toBe(today)
-				})
-
-				it(`contains changelog glob patterns of [${expectedChangelogGlobPatterns}]`, () => {
-					assumePrepareRelease(configuration)
-					expect(configuration.changelogGlobPatterns).toStrictEqual(
-						expectedChangelogGlobPatterns,
-					)
-				})
-
-				it(`contains package glob patterns of [${expectedPackageGlobPatterns}]`, () => {
-					assumePrepareRelease(configuration)
-					expect(configuration.packageGlobPatterns).toStrictEqual(
-						expectedPackageGlobPatterns,
-					)
-				})
-			},
-		)
-	},
-)
-
-describe.each`
-	argsString
-	${"--changelogs 1.0.4 CHANGELOG.adoc"}
-	${"--packages package.json lib/package.json 2.0.1"}
-	${"--changelogs CHANGELOG.adoc --packages package.json"}
-`("when the args are $argsString", (input: { readonly argsString: string }) => {
-	const { argsString } = input
-	const args = splitArgsString(argsString)
-
-	describe("deriving a configuration from args", () => {
-		const configuration = getConfigurationFromArgs({
-			args,
-			today: dummyToday,
-			toolVersion: dummyToolVersion,
-		})
-
-		it("is 'error-release-version-missing'", () => {
-			expect(configuration.type).toBe("error-release-version-missing")
-		})
-	})
-})
-
-describe.each`
-	argsString                            | expectedProvidedReleaseVersion
-	${"next --changelogs CHANGELOG.adoc"} | ${"next"}
-	${"5.1 --packages package.json"}      | ${"5.1"}
-	${"v2"}                               | ${"2"}
-`(
-	"when the args are $argsString",
+	"a configuration from $argsString on $today",
 	(input: {
 		readonly argsString: string
-		readonly expectedProvidedReleaseVersion: string
+		readonly expectedErrorMessage: string
 	}) => {
-		const { argsString, expectedProvidedReleaseVersion } = input
+		const { argsString, expectedErrorMessage } = input
 		const args = splitArgsString(argsString)
 
-		describe("deriving a configuration from args", () => {
-			const configuration = getConfigurationFromArgs({
-				args,
-				today: dummyToday,
-				toolVersion: dummyToolVersion,
-			})
+		const configuration = getConfigurationFromArgs(args)
 
-			it("is 'error-release-version-invalid'", () => {
-				expect(configuration.type).toBe("error-release-version-invalid")
-			})
+		it("is 'invalid'", () => {
+			expect(configuration.type).toBe("invalid")
+		})
 
-			it(`contains the provided release version of '${expectedProvidedReleaseVersion}'`, () => {
-				assumeErrorReleaseVersionInvalid(configuration)
-				expect(configuration.providedReleaseVersion).toBe(
-					expectedProvidedReleaseVersion,
-				)
-			})
+		it(`has an error message of '${expectedErrorMessage}'`, () => {
+			assumeInvalid(configuration)
+			expect(configuration.errorMessage).toBe(expectedErrorMessage)
 		})
 	},
 )
 
 describe.each`
-	argsString
-	${"0.1.7 --changelogs"}
-	${"10.5.6-rc.4 --packages package.json lib/package.json --changelogs"}
-	${"7.3.2 --changelogs --packages packages/**/package.json"}
-	${"8.0.0+0ff1ce --packages --changelogs"}
-`("when the args are $argsString", (input: { readonly argsString: string }) => {
-	const { argsString } = input
-	const args = splitArgsString(argsString)
+	argsString                                                                                                                             | expectedReleaseVersion    | expectedFilePatterns
+	${"--release-version 1.1.0 --files CHANGELOG.adoc"}                                                                                    | ${"1.1.0"}                | ${["CHANGELOG.adoc"]}
+	${"--files packages/**/package.json packages/**/*.adoc lib/package.json dist/package.json dist/*.adoc --release-version 6.0.0-beta.1"} | ${"6.0.0-beta.1"}         | ${["packages/**/package.json", "packages/**/*.adoc", "lib/package.json", "dist/package.json", "dist/*.adoc"]}
+	${"--release-version v3.5.3 --files CHANGELOG.adoc package.json"}                                                                      | ${"3.5.3"}                | ${["CHANGELOG.adoc", "package.json"]}
+	${"--files CHANGES.adoc lib/RELEASES.adoc lib/package.json --release-version v4.11.3-alpha+d06f00d"}                                   | ${"4.11.3-alpha+d06f00d"} | ${["CHANGES.adoc", "lib/RELEASES.adoc", "lib/package.json"]}
+`(
+	"a configuration from $argsString on $today",
+	(input: {
+		readonly argsString: string
+		readonly expectedReleaseVersion: SemanticVersionString
+		readonly expectedFilePatterns: ReadonlyArray<string>
+	}) => {
+		const { argsString, expectedReleaseVersion, expectedFilePatterns } = input
+		const args = splitArgsString(argsString)
 
-	describe("deriving a configuration from args", () => {
-		const configuration = getConfigurationFromArgs({
-			args,
-			today: dummyToday,
-			toolVersion: dummyToolVersion,
+		const configuration = getConfigurationFromArgs(args)
+
+		it("is 'release'", () => {
+			expect(configuration.type).toBe("release")
 		})
 
-		it("is 'error-changelog-file-pattern-missing'", () => {
-			expect(configuration.type).toBe("error-changelog-file-pattern-missing")
-		})
-	})
-})
-
-describe.each`
-	argsString
-	${"0.5.2 --changelogs CHANGELOG.adoc RELEASES.adoc --packages"}
-	${"3.0.1 --packages --changelogs packages/**/CHANGELOG.adoc"}
-`("when the args are $argsString", (input: { readonly argsString: string }) => {
-	const { argsString } = input
-	const args = splitArgsString(argsString)
-
-	describe("deriving a configuration from args", () => {
-		const configuration = getConfigurationFromArgs({
-			args,
-			today: dummyToday,
-			toolVersion: dummyToolVersion,
+		it(`has a release version of '${expectedReleaseVersion}'`, () => {
+			assumeRelease(configuration)
+			expect(configuration.releaseVersion).toBe(expectedReleaseVersion)
 		})
 
-		it("is 'error-package-file-pattern-missing'", () => {
-			expect(configuration.type).toBe("error-package-file-pattern-missing")
+		it(`has ${expectedFilePatterns.length} file pattern(s)`, () => {
+			assumeRelease(configuration)
+			expect(configuration.filePatterns).toStrictEqual(expectedFilePatterns)
 		})
-	})
-})
+	},
+)
 
 function splitArgsString(argsString: string): ReadonlyArray<string> {
 	return argsString
@@ -248,30 +122,22 @@ function splitArgsString(argsString: string): ReadonlyArray<string> {
 		.filter((arg) => arg !== "")
 }
 
-function assumeDisplayToolVersion(
+function assumeInvalid(
 	configuration: Configuration,
-): asserts configuration is Configuration.DisplayToolVersion {
-	if (configuration.type !== "display-tool-version") {
+): asserts configuration is Configuration.Invalid {
+	if (configuration.type !== "invalid") {
 		expect.fail(
-			`Expected 'display-tool-version', but it was ${configuration.type}`,
+			`Expected the configuration to be 'invalid', but it was ${configuration.type}`,
 		)
 	}
 }
 
-function assumeErrorReleaseVersionInvalid(
+function assumeRelease(
 	configuration: Configuration,
-): asserts configuration is Configuration.ErrorReleaseVersionInvalid {
-	if (configuration.type !== "error-release-version-invalid") {
+): asserts configuration is Configuration.Release {
+	if (configuration.type !== "release") {
 		expect.fail(
-			`Expected 'error-release-version-invalid', but it was ${configuration.type}`,
+			`Expected the configuration to be 'release', but it was ${configuration.type}`,
 		)
-	}
-}
-
-function assumePrepareRelease(
-	configuration: Configuration,
-): asserts configuration is Configuration.PrepareRelease {
-	if (configuration.type !== "prepare-release") {
-		expect.fail(`Expected 'prepare-release', but it was ${configuration.type}`)
 	}
 }

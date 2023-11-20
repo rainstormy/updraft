@@ -1,5 +1,5 @@
 import { type Changelog } from "+changelogs/Changelog"
-import { dedent } from "+utilities/string-transformations"
+import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
 import { serializeChangelogToAsciidoc } from "./AsciidocChangelogSerializer"
 

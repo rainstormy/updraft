@@ -1,129 +1,114 @@
 import { type OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
-import { type OnReadingMatchingFiles } from "+adapters/OnReadingMatchingFiles"
+import { type OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
+import { type OnReadingFiles } from "+adapters/OnReadingFiles"
 import { type OnWritingToFiles } from "+adapters/OnWritingToFiles"
 import { parseAsciidocChangelog } from "+changelogs/AsciidocChangelogParser"
 import { serializeChangelogToAsciidoc } from "+changelogs/AsciidocChangelogSerializer"
 import { promoteChangelog } from "+changelogs/ChangelogPromoter"
 import { promotePackage } from "+packages/PackagePromoter"
-import { type ExitCode } from "+utilities/ExitCode"
-import { assertError, isFulfilled, isRejected } from "+utilities/assertions"
+import { isFulfilled, isRejected } from "+utilities/assertions"
+import { assertError, type ExitCode } from "+utilities/ErrorUtilities"
+import { type FileType, type PathWithContent } from "+utilities/FileUtilities"
+import { type Release } from "+utilities/Release"
 import {
-	type PathWithContent,
-	type PathsWithContent,
-} from "+utilities/io-types"
-import { dedent } from "+utilities/string-transformations"
+	type DateString,
+	type SemanticVersionString,
+} from "+utilities/StringUtilities"
 import { type Configuration } from "./Configuration"
 
-export const usageInstructions = dedent`
-	Usage: release <semantic-version> [options]
+export const usageInstructions = `Usage: release [options]
 
-	This tool prepares a new release by updating certain files accordingly.
+This tool prepares a repository for an upcoming release by updating changelogs
+and bumping version numbers in package.json files.
 
-	  <semantic-version>  The semantic version of the new release.
-	                      Mandatory except for --help and --version.
-	                      Format: major.minor.patch[-prerelease][+buildinfo]
+Supported file formats:
+  * AsciiDoc changelogs in Keep a Changelog format (*.adoc)
+  * package.json
 
-	Options:
-	  --changelogs <patterns>  Update changelog files matching the glob patterns.
-	                           Supported formats: AsciiDoc (*.adoc).
+Options:
+  --files <patterns>           Update files matching the glob patterns.
+                               Mandatory when --release-version is specified.
 
-	  --help                   Display this help screen and exit.
+                               Use whitespace to separate multiple patterns:
+                               <pattern-1> <pattern-2> <pattern-3>
 
-	  --packages <patterns>    Update package.json files matching the glob patterns.
+  --help                       Display this help screen and exit.
 
-	  --version                Display the version of this tool and exit.
-`
+  --release-version <version>  The semantic version of the upcoming release.
+                               Mandatory when --files is specified.
+
+                               Expected format (optional parts in brackets):
+                               [v]major.minor.patch[-prerelease][+buildinfo]
+
+  --version                    Display the version of this tool and exit.`
+
+const usageInstructionsReminder =
+	"\nFor usage instructions, please run the program with the --help option."
 
 export async function runProgram(
 	input: {
 		readonly configuration: Configuration
+		readonly today: DateString
+		readonly toolVersion: SemanticVersionString
 	},
 	sideEffects: {
 		readonly onDisplayingMessage: OnDisplayingMessage
-		readonly onReadingMatchingFiles: OnReadingMatchingFiles
+		readonly onListingMatchingFiles: OnListingMatchingFiles
+		readonly onReadingFiles: OnReadingFiles
 		readonly onWritingToFiles: OnWritingToFiles
 	},
 ): Promise<ExitCode> {
-	const { configuration } = input
-	const { onDisplayingMessage, onReadingMatchingFiles, onWritingToFiles } =
-		sideEffects
+	const { configuration, today, toolVersion } = input
+	const {
+		onDisplayingMessage,
+		onListingMatchingFiles,
+		onReadingFiles,
+		onWritingToFiles,
+	} = sideEffects
 
 	switch (configuration.type) {
-		case "display-help-screen": {
-			return await displayInformation({ message: usageInstructions })
-		}
-		case "display-tool-version": {
-			return await displayInformation({ message: configuration.toolVersion })
-		}
-		case "error-release-version-missing": {
-			return await raiseInvalidInputErrors({
-				messages: [
-					dedent`
-						Expected the first argument to be the semantic version of the new release.
-						For usage instructions, run the program with the --help option.
-					`,
-				],
+		case "help-screen": {
+			return await displayInformation({
+				message: usageInstructions,
 			})
 		}
-		case "error-release-version-invalid": {
-			return await raiseInvalidInputErrors({
-				messages: [
-					dedent`
-						Expected the first argument to be a valid semantic version number, but was '${configuration.providedReleaseVersion}'.
-						For usage instructions, run the program with the --help option.
-					`,
-				],
+		case "invalid": {
+			return await displayInvalidInputError({
+				message: configuration.errorMessage + usageInstructionsReminder,
 			})
 		}
-		case "error-changelog-file-pattern-missing": {
-			return await raiseInvalidInputErrors({
-				messages: [
-					dedent`
-						Expected one or more glob patterns to follow the --changelogs option.
-						For usage instructions, run the program with the --help option.
-					`,
-				],
-			})
-		}
-		case "error-package-file-pattern-missing": {
-			return await raiseInvalidInputErrors({
-				messages: [
-					dedent`
-						Expected one or more glob patterns to follow the --packages option.
-						For usage instructions, run the program with the --help option.
-					`,
-				],
+		case "tool-version": {
+			return await displayInformation({
+				message: toolVersion,
 			})
 		}
 	}
 
-	const { changelogGlobPatterns, packageGlobPatterns, newRelease } =
-		configuration
+	const { filePatterns, releaseVersion } = configuration
+	const newRelease: Release = { version: releaseVersion, date: today }
 
 	try {
-		const pathsWithOriginalChangelogContent = await readMatchingFiles({
-			globPatterns: changelogGlobPatterns,
-		})
-		const pathsWithOriginalPackageContent = await readMatchingFiles({
-			globPatterns: packageGlobPatterns,
+		const matchingFiles = await onListingMatchingFiles({ filePatterns })
+
+		if (matchingFiles.length === 0) {
+			return await displayWarning({
+				message: `${filePatterns.join(", ")} did not match any files.`,
+			})
+		}
+
+		const pathsWithOriginalContent = await onReadingFiles({
+			paths: matchingFiles,
 		})
 
-		const promotionResults = await Promise.allSettled<PathWithContent>([
-			...pathsWithOriginalChangelogContent.map(
-				async ([path, originalChangelogContent]) =>
+		const promotionResults = await Promise.allSettled<PathWithContent>(
+			pathsWithOriginalContent.map(
+				async ([path, originalContent]) =>
 					[
 						path,
-						await promoteChangelogFile({ path, originalChangelogContent }),
+						await promoteFile({ path, originalContent, newRelease }),
 					] as const,
 			),
-			...pathsWithOriginalPackageContent.map(
-				async ([path, originalPackageContent]) =>
-					[
-						path,
-						await promotePackageFile({ path, originalPackageContent }),
-					] as const,
-			),
-		])
+		)
 
 		const errors = promotionResults.filter(isRejected).map(({ reason }) => {
 			assertError(reason)
@@ -131,21 +116,18 @@ export async function runProgram(
 		})
 
 		if (errors.length > 0) {
-			return await raiseGeneralErrors({ messages: errors })
+			return await displayGeneralErrors({ messages: errors })
 		}
 
 		const outputPathsWithContent = promotionResults
 			.filter(isFulfilled)
 			.map(({ value }) => value)
 
-		if (outputPathsWithContent.length > 0) {
-			await onWritingToFiles({ outputPathsWithContent })
-		}
-
+		await onWritingToFiles({ outputPathsWithContent })
 		return 0
 	} catch (error) {
 		assertError(error)
-		return await raiseGeneralErrors({ messages: [error.message] })
+		return await displayGeneralErrors({ messages: [error.message] })
 	}
 
 	async function displayInformation(input: {
@@ -157,81 +139,102 @@ export async function runProgram(
 		return 0
 	}
 
-	async function raiseGeneralErrors(input: {
+	async function displayWarning(input: {
+		readonly message: string
+	}): Promise<ExitCode.Success> {
+		const { message } = input
+
+		await onDisplayingMessage({ severity: "warning", message })
+		return 0
+	}
+
+	async function displayGeneralErrors(input: {
 		readonly messages: ReadonlyArray<string>
 	}): Promise<ExitCode.GeneralError> {
-		await raiseErrors(input)
-		return 1
-	}
-
-	async function raiseInvalidInputErrors(input: {
-		readonly messages: ReadonlyArray<string>
-	}): Promise<ExitCode.InvalidInput> {
-		await raiseErrors(input)
-		return 2
-	}
-
-	async function raiseErrors(input: {
-		readonly messages: ReadonlyArray<string>
-	}): Promise<void> {
 		const { messages } = input
 
 		for (const message of messages) {
 			await onDisplayingMessage({ severity: "error", message })
 		}
+
+		return 1
 	}
 
-	async function readMatchingFiles(input: {
-		globPatterns: ReadonlyArray<string>
-	}): Promise<PathsWithContent> {
-		const { globPatterns } = input
+	async function displayInvalidInputError(input: {
+		readonly message: string
+	}): Promise<ExitCode.InvalidInput> {
+		const { message } = input
 
-		if (globPatterns.length === 0) {
-			return []
-		}
-
-		const pathsWithContent = await onReadingMatchingFiles({ globPatterns })
-
-		if (pathsWithContent.length === 0 && globPatterns.length > 0) {
-			await onDisplayingMessage({
-				severity: "warning",
-				message: `${globPatterns.join(", ")} did not match any files.`,
-			})
-		}
-
-		return pathsWithContent
+		await onDisplayingMessage({ severity: "error", message: message })
+		return 2
 	}
+}
 
-	async function promoteChangelogFile(input: {
-		readonly path: string
-		readonly originalChangelogContent: string
-	}): Promise<string> {
-		const { path, originalChangelogContent } = input
+async function promoteFile(input: {
+	readonly path: string
+	readonly originalContent: string
+	readonly newRelease: Release
+}): Promise<string> {
+	const { path, originalContent, newRelease } = input
+	const fileType = detectFileType({ path })
 
-		try {
-			const originalChangelog = parseAsciidocChangelog(originalChangelogContent)
-			const promotedChangelog = await promoteChangelog({
-				originalChangelog,
-				newRelease,
-			})
-			return serializeChangelogToAsciidoc(promotedChangelog)
-		} catch (error) {
-			assertError(error)
-			throw new Error(`${path} ${error.message}.`)
+	switch (fileType) {
+		case "changelog-asciidoc": {
+			return promoteChangelogFile({ path, originalContent, newRelease })
+		}
+		case "node-package-json": {
+			return promotePackageJsonFile({ path, originalContent, newRelease })
 		}
 	}
+}
 
-	async function promotePackageFile(input: {
-		readonly path: string
-		readonly originalPackageContent: string
-	}): Promise<string> {
-		const { path, originalPackageContent } = input
+function detectFileType(input: { readonly path: string }): FileType {
+	const { path } = input
+	const filename = path.split("/").at(-1) ?? ""
 
-		try {
-			return await promotePackage({ originalPackageContent, newRelease })
-		} catch (error) {
-			assertError(error)
-			throw new Error(`${path} ${error.message}.`)
-		}
+	if (filename === "package.json") {
+		return "node-package-json"
+	}
+	if (filename.endsWith(".adoc")) {
+		return "changelog-asciidoc"
+	}
+	throw new Error(`${path} is not a supported file format.`)
+}
+
+async function promoteChangelogFile(input: {
+	readonly path: string
+	readonly originalContent: string
+	readonly newRelease: Release
+}): Promise<string> {
+	const { path, originalContent, newRelease } = input
+
+	try {
+		const originalChangelog = parseAsciidocChangelog(originalContent)
+		const promotedChangelog = await promoteChangelog({
+			originalChangelog,
+			newRelease,
+		})
+		return serializeChangelogToAsciidoc(promotedChangelog)
+	} catch (error) {
+		assertError(error)
+		throw new Error(`${path} ${error.message}.`)
+	}
+}
+
+async function promotePackageJsonFile(input: {
+	readonly path: string
+	readonly originalContent: string
+	readonly newRelease: Release
+}): Promise<string> {
+	const { path, originalContent, newRelease } = input
+
+	try {
+		return await promotePackage({
+			originalPackageContent: originalContent,
+			newRelease,
+		})
+	} catch (error) {
+		assertError(error)
+		throw new Error(`${path} ${error.message}.`)
 	}
 }

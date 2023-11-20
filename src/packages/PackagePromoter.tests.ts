@@ -1,5 +1,4 @@
-import { dedent } from "+utilities/string-transformations"
-import { type SemanticVersionString } from "+utilities/string-types"
+import { dedent, type SemanticVersionString } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
 import { promotePackage } from "./PackagePromoter"
 

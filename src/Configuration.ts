@@ -1,121 +1,133 @@
 import {
 	isSemanticVersionString,
-	type DateString,
 	type SemanticVersionString,
-} from "+utilities/string-types"
+} from "+utilities/StringUtilities"
+
+export function getConfigurationFromArgs(
+	args: ReadonlyArray<string>,
+): Configuration {
+	const parsedArgs: Record<Option, Array<string> | null> = {
+		"--files": null,
+		"--help": null,
+		"--release-version": null,
+		"--version": null,
+	}
+	let currentOption: Option | null = null
+
+	for (const arg of args) {
+		if (isOption(arg)) {
+			if (parsedArgs[arg] !== null) {
+				return invalid({ message: `${arg} must be specified only once.` })
+			}
+			currentOption = arg
+			parsedArgs[currentOption] = [] as Array<string>
+			continue
+		}
+		if (arg.startsWith("-")) {
+			return invalid({ message: `Unknown option '${arg}'.` })
+		}
+		if (currentOption !== null) {
+			parsedArgs[currentOption]?.push(arg)
+		}
+	}
+
+	if (args.length === 0 || parsedArgs["--help"] !== null) {
+		return helpScreen()
+	}
+	if (parsedArgs["--version"] !== null) {
+		return toolVersion()
+	}
+
+	const rawReleaseVersions = parsedArgs["--release-version"]
+
+	if (rawReleaseVersions === null) {
+		return invalid({ message: "--release-version must be specified." })
+	}
+	if (rawReleaseVersions.length === 0) {
+		return invalid({ message: "--release-version must specify a value." })
+	}
+	if (rawReleaseVersions.length > 1) {
+		return invalid({
+			message: "--release-version must not specify more than one value.",
+		})
+	}
+
+	const rawReleaseVersion = rawReleaseVersions[0]
+
+	const releaseVersion = rawReleaseVersion.startsWith("v")
+		? rawReleaseVersion.slice(1)
+		: rawReleaseVersion
+
+	if (!isSemanticVersionString(releaseVersion)) {
+		return invalid({
+			message: `--release-version has an invalid value '${rawReleaseVersion}'.`,
+		})
+	}
+
+	const files = parsedArgs["--files"]
+
+	if (files === null) {
+		return invalid({ message: "--files must be specified." })
+	}
+	if (files.length === 0) {
+		return invalid({ message: "--files must specify a value." })
+	}
+
+	return release({ files, releaseVersion })
+}
+
+const options = ["--files", "--help", "--release-version", "--version"] as const
+
+type Option = (typeof options)[number]
+
+function isOption(arg: string): arg is Option {
+	return (options as ReadonlyArray<string>).includes(arg)
+}
 
 export type Configuration =
-	| Configuration.DisplayHelpScreen
-	| Configuration.DisplayToolVersion
-	| Configuration.ErrorChangeLogFilePatternMissing
-	| Configuration.ErrorPackageFilePatternMissing
-	| Configuration.ErrorReleaseVersionMissing
-	| Configuration.ErrorReleaseVersionInvalid
-	| Configuration.PrepareRelease
+	| Configuration.HelpScreen
+	| Configuration.Invalid
+	| Configuration.Release
+	| Configuration.ToolVersion
 
 export namespace Configuration {
-	export type DisplayHelpScreen = {
-		readonly type: "display-help-screen"
+	export type HelpScreen = {
+		readonly type: "help-screen"
 	}
 
-	export type DisplayToolVersion = {
-		readonly type: "display-tool-version"
-		readonly toolVersion: SemanticVersionString
+	export type Invalid = {
+		readonly type: "invalid"
+		readonly errorMessage: string
 	}
 
-	export type ErrorChangeLogFilePatternMissing = {
-		readonly type: "error-changelog-file-pattern-missing"
+	export type Release = {
+		readonly type: "release"
+		readonly filePatterns: ReadonlyArray<string>
+		readonly releaseVersion: SemanticVersionString
 	}
 
-	export type ErrorPackageFilePatternMissing = {
-		readonly type: "error-package-file-pattern-missing"
-	}
-
-	export type ErrorReleaseVersionInvalid = {
-		readonly type: "error-release-version-invalid"
-		readonly providedReleaseVersion: string
-	}
-
-	export type ErrorReleaseVersionMissing = {
-		readonly type: "error-release-version-missing"
-	}
-
-	export type PrepareRelease = {
-		readonly type: "prepare-release"
-		readonly changelogGlobPatterns: ReadonlyArray<string>
-		readonly packageGlobPatterns: ReadonlyArray<string>
-		readonly newRelease: {
-			readonly date: DateString
-			readonly version: SemanticVersionString
-		}
+	export type ToolVersion = {
+		readonly type: "tool-version"
 	}
 }
 
-export function getConfigurationFromArgs(input: {
-	readonly args: ReadonlyArray<string>
-	readonly today: DateString
-	readonly toolVersion: SemanticVersionString
-}): Configuration {
-	const { args, today, toolVersion } = input
+function helpScreen(): Configuration.HelpScreen {
+	return { type: "help-screen" }
+}
 
-	function getOptionArguments(name: string): ReadonlyArray<string> | null {
-		const optionIndex = args.indexOf(name)
+function invalid(input: { readonly message: string }): Configuration.Invalid {
+	const { message } = input
+	return { type: "invalid", errorMessage: message }
+}
 
-		if (optionIndex === -1) {
-			return null
-		}
+function release(input: {
+	readonly files: Array<string>
+	readonly releaseVersion: SemanticVersionString
+}): Configuration.Release {
+	const { files, releaseVersion } = input
+	return { type: "release", filePatterns: files, releaseVersion }
+}
 
-		const nextOptionIndex = args.findIndex(
-			(arg, index) => index > optionIndex && arg.startsWith("--"),
-		)
-
-		return nextOptionIndex === -1
-			? args.slice(optionIndex + 1)
-			: args.slice(optionIndex + 1, nextOptionIndex)
-	}
-
-	if (args.length === 0 || getOptionArguments("--help") !== null) {
-		return { type: "display-help-screen" }
-	}
-
-	if (getOptionArguments("--version") !== null) {
-		return {
-			type: "display-tool-version",
-			toolVersion: toolVersion,
-		}
-	}
-
-	const releaseVersion = args[0].startsWith("v") ? args[0].slice(1) : args[0]
-
-	if (releaseVersion.startsWith("--")) {
-		return { type: "error-release-version-missing" }
-	}
-	if (!isSemanticVersionString(releaseVersion)) {
-		return {
-			type: "error-release-version-invalid",
-			providedReleaseVersion: releaseVersion,
-		}
-	}
-
-	const changelogGlobPatterns = getOptionArguments("--changelogs")
-
-	if (changelogGlobPatterns?.length === 0) {
-		return { type: "error-changelog-file-pattern-missing" }
-	}
-
-	const packageGlobPatterns = getOptionArguments("--packages")
-
-	if (packageGlobPatterns?.length === 0) {
-		return { type: "error-package-file-pattern-missing" }
-	}
-
-	return {
-		type: "prepare-release",
-		changelogGlobPatterns: changelogGlobPatterns ?? [],
-		packageGlobPatterns: packageGlobPatterns ?? [],
-		newRelease: {
-			date: today,
-			version: releaseVersion as SemanticVersionString,
-		},
-	}
+function toolVersion(): Configuration.ToolVersion {
+	return { type: "tool-version" }
 }

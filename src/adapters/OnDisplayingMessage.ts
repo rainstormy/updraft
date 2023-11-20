@@ -1,6 +1,8 @@
 export type OnDisplayingMessage = typeof onDisplayingMessageInConsole
 
 export namespace OnDisplayingMessage {
+	export type Payload = Parameters<OnDisplayingMessage>[0]
+
 	export type Severity = "info" | "error" | "warning"
 }
 

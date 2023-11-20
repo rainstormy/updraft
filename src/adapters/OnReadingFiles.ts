@@ -1,19 +1,16 @@
-import { assertError } from "+utilities/assertions"
-import { type PathsWithContent } from "+utilities/io-types"
-import { glob } from "fast-glob"
+import { assertError } from "+utilities/ErrorUtilities"
+import { type PathsWithContent } from "+utilities/FileUtilities"
 import { readFile } from "node:fs/promises"
 
-export type OnReadingMatchingFiles = typeof onReadingMatchingFilesFromDisk
+export type OnReadingFiles = typeof onReadingFilesFromDisk
 
-export async function onReadingMatchingFilesFromDisk(input: {
-	readonly globPatterns: ReadonlyArray<string>
+export async function onReadingFilesFromDisk(input: {
+	readonly paths: ReadonlyArray<string>
 }): Promise<PathsWithContent> {
-	const { globPatterns } = input
-
-	const matchingPaths = await glob([...globPatterns], { dot: true })
+	const { paths } = input
 
 	return Promise.all(
-		matchingPaths.map(async (path) => {
+		paths.map(async (path) => {
 			try {
 				const content = await readFile(path, "utf-8")
 				return [path, content]
@@ -25,14 +22,17 @@ export async function onReadingMatchingFilesFromDisk(input: {
 	)
 }
 
-export function fakeReadingMatchingFiles(
+/**
+ * For unit testing purposes.
+ */
+export function onReadingFakeFiles(
 	pathsWithContent: ReadonlyArray<
 		readonly [path: string, contentOrErrorMessage: string | (() => string)]
 	>,
-): OnReadingMatchingFiles {
-	return async ({ globPatterns }) =>
+): OnReadingFiles {
+	return async ({ paths }) =>
 		pathsWithContent
-			.filter(([path]) => globPatterns.includes(path))
+			.filter(([path]) => paths.includes(path))
 			.map(([path, content]) => {
 				if (typeof content === "string") {
 					return [path, content]

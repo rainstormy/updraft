@@ -1,4 +1,4 @@
-import { dedent } from "+utilities/string-transformations"
+import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
 import { parseAsciidocChangelog } from "./AsciidocChangelogParser"
 

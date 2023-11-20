@@ -1,7 +1,7 @@
 import {
 	type DateString,
 	type SemanticVersionString,
-} from "+utilities/string-types"
+} from "+utilities/StringUtilities"
 
 export type Release = {
 	readonly date: DateString

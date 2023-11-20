@@ -1,26 +1,32 @@
 import { onDisplayingMessageInConsole } from "+adapters/OnDisplayingMessage"
-import { onReadingMatchingFilesFromDisk } from "+adapters/OnReadingMatchingFiles"
+import { onListingMatchingFilesFromDisk } from "+adapters/OnListingMatchingFiles"
+import { onReadingFilesFromDisk } from "+adapters/OnReadingFiles"
 import { onWritingToFilesOnDisk } from "+adapters/OnWritingToFiles"
 import {
 	type DateString,
 	type SemanticVersionString,
-} from "+utilities/string-types"
+} from "+utilities/StringUtilities"
 import { argv } from "node:process"
-import { version as toolVersion } from "../package.json" assert { type: "json" }
+import { version as packageJsonVersion } from "../package.json" assert { type: "json" }
 import { getConfigurationFromArgs } from "./Configuration"
 import { runProgram } from "./Program"
 
+const today = new Date()
+	.toISOString()
+	.slice(0, "yyyy-mm-dd".length) as DateString
+
+const toolVersion = packageJsonVersion as SemanticVersionString
+
 runProgram(
 	{
-		configuration: getConfigurationFromArgs({
-			args: argv.slice(2),
-			today: new Date().toISOString().slice(0, 10) as DateString,
-			toolVersion: toolVersion as SemanticVersionString,
-		}),
+		configuration: getConfigurationFromArgs(argv.slice(2)),
+		today,
+		toolVersion,
 	},
 	{
 		onDisplayingMessage: onDisplayingMessageInConsole,
-		onReadingMatchingFiles: onReadingMatchingFilesFromDisk,
+		onListingMatchingFiles: onListingMatchingFilesFromDisk,
+		onReadingFiles: onReadingFilesFromDisk,
 		onWritingToFiles: onWritingToFilesOnDisk,
 	},
 ).catch((error) => {

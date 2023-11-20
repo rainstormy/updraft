@@ -3,7 +3,7 @@ import { type Release } from "+utilities/Release"
 import {
 	type DateString,
 	type SemanticVersionString,
-} from "+utilities/string-types"
+} from "+utilities/StringUtilities"
 
 export function parseAsciidocChangelog(content: string): Changelog {
 	const [preamble, ...rawSections] = content.split(/(?=^== .+)/mu)
