@@ -1,0 +1,15 @@
+name: Prepare Node.js and Yarn
+description: Defines common steps for GitHub Actions workflows in this repository that use Node.js and Yarn.
+runs:
+  using: composite
+  steps:
+    # While `actions/checkout` is also a common step, it must be declared separately in every job.
+    # Otherwise, the GitHub Actions runner won't be able to locate this `action.yml` file.
+    - name: Prepare Node.js
+      uses: actions/setup-node@v4 # https://github.com/actions/setup-node
+      with:
+        cache: yarn
+        node-version: 20
+    - name: Install unplugged dependencies
+      run: yarn install --immutable
+      shell: bash
