@@ -14,3 +14,4 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 * New option: `--help`.
 * New option: `--release-version`.
 * New option: `--version`.
+* https://choosealicense.com/licenses/mit[MIT license].
