@@ -16,8 +16,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4 # https://github.com/actions/checkout
-      - name: Prepare Node.js and Yarn
-        uses: ./.github/actions/prepare-node-and-yarn
+      - name: Install Node.js, npm, and Yarn
+        uses: ./.github/actions/install-node-npm-yarn
       - name: Validate
         run: yarn run validate.types
 
@@ -28,8 +28,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4 # https://github.com/actions/checkout
-      - name: Prepare Node.js and Yarn
-        uses: ./.github/actions/prepare-node-and-yarn
+      - name: Install Node.js, npm, and Yarn
+        uses: ./.github/actions/install-node-npm-yarn
       - name: Validate
         run: yarn run validate.format
 
@@ -40,16 +40,16 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4 # https://github.com/actions/checkout
-      - name: Prepare Node.js and Yarn
-        uses: ./.github/actions/prepare-node-and-yarn
+      - name: Install Node.js, npm, and Yarn
+        uses: ./.github/actions/install-node-npm-yarn
       - name: Validate
         run: yarn run validate.test
 
   validate-commit-messages:
     name: Commit messages
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     timeout-minutes: 1
-    if: github.event_name == 'pull_request'
     steps:
       - name: Validate
         uses: rainstormy/github-action-validate-commit-messages@v1 # https://github.com/rainstormy/github-action-validate-commit-messages

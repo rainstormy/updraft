@@ -2,7 +2,13 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@rainstormy/updraft",
 	"version": "1.0.0-alpha.0",
+	"bugs": "https://github.com/rainstormy/updraft/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rainstormy/updraft.git"
+	},
 	"license": "MIT",
+	"author": "Steffen Diswal",
 	"type": "module",
 	"bin": "./src/entry.cli.js",
 	"files": [
@@ -10,8 +16,8 @@
 		"./src/entry.cli.js"
 	],
 	"scripts": {
-		"build.dist": "vite build --ssr ./src/main.ts",
-		"build.pack": "yarn pack --out %s-%v.tgz",
+		"build": "vite build --ssr ./src/main.ts",
+		"release.prepare": "yarn node ./src/entry.cli.js --files package.json --release-version",
 		"setup": "yarn install && simple-git-hooks",
 		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'",
 		"validate.format": "        prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache --check",
