@@ -1,0 +1,19 @@
+name: Prepare Node.js, npm, and Yarn
+description: Sets up Node.js, npm, and Yarn and installs third-party dependencies of the repository.
+author: Steffen Diswal
+inputs:
+  registry-url:
+    description: Supplied to `actions/setup-node`.
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Prepare Node.js, npm, and Yarn
+      uses: actions/setup-node@v4 # https://github.com/actions/setup-node
+      with:
+        cache: yarn
+        node-version: 20
+        registry-url: ${{ inputs.registry-url }}
+    - name: Install unplugged dependencies
+      run: yarn install --immutable
+      shell: bash

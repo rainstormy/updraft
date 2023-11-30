@@ -1,0 +1,48 @@
+name: Initiate release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The semantic version number of the new release.
+        type: string
+        required: true
+
+env:
+  RELEASE_VERSION: ${{ github.event.inputs.version }}
+
+jobs:
+  create-release-commit-and-pull-request:
+    name: Release commit
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
+      - name: Prepare Node.js, npm, and Yarn
+        uses: ./.github/actions/node-prepare
+      - name: Generate build artifacts
+        run: yarn run build
+      - name: Prepare the release
+        run: yarn run release.prepare "${RELEASE_VERSION}"
+      - name: Use Nimbus (Bot) in Git
+        uses: ./.github/actions/git-use-rainstormybot-nimbus
+        with:
+          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+      - name: Create a release branch
+        run: git checkout -b "release/${RELEASE_VERSION}"
+      - name: Stage and commit modified files
+        run: |
+          git add .
+          git commit --message "Prepare the release of ${RELEASE_VERSION}"
+          git push
+      - name: Erase the SSH configuration
+        if: always()
+        uses: ./.github/actions/ssh-erase-all
+      - name: Create a pull request from the release branch
+        run: |
+          gh auth login --with-token <<< "${BOT_NIMBUS_GH_AUTH_TOKEN}"
+          gh pr create --base main --fill --body "This pull request was automatically created by the \`release-1-initiate\` workflow in GitHub Actions."
+        env:
+          BOT_NIMBUS_GH_AUTH_TOKEN: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}

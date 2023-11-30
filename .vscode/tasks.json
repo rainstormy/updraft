@@ -2,15 +2,9 @@
 	"tasks": [
 		{
 			"type": "npm",
-			"script": "build.dist",
+			"script": "build",
 			"problemMatcher": [],
-			"label": "build.dist"
-		},
-		{
-			"type": "npm",
-			"script": "build.pack",
-			"problemMatcher": [],
-			"label": "build.pack"
+			"label": "build"
 		},
 		{
 			"type": "npm",

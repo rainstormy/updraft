@@ -38,8 +38,7 @@
 node_modules/
 
 # Build artifacts.
-dist/*
-!dist/main.js
+dist/
 
 # Operating system artifacts.
 *~
