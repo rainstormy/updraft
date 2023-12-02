@@ -39,3 +39,9 @@ runs:
         BOT_NIMBUS_SSH_PUBLIC_KEY: ${{ inputs.bot-nimbus-ssh-public-key }}
         BOT_NIMBUS_SSH___THE___PRIVATE___KEY: ${{ inputs.bot-nimbus-ssh-the-private-key }}
       shell: bash
+    - name: Start the SSH agent
+      run: eval "$(ssh-agent -s)"
+      shell: bash
+    - name: Add the signing key to the SSH agent
+      run: ssh-add ~/.ssh/id_ed25519
+      shell: bash
