@@ -6,7 +6,7 @@ import {
 	type DateString,
 	type SemanticVersionString,
 } from "+utilities/StringUtilities"
-import { argv } from "node:process"
+import process, { argv } from "node:process"
 import { version as packageJsonVersion } from "../package.json" assert { type: "json" }
 import { getConfigurationFromArgs } from "./Configuration"
 import { runProgram } from "./Program"
@@ -29,6 +29,4 @@ runProgram(
 		onReadingFiles: onReadingFilesFromDisk,
 		onWritingToFiles: onWritingToFilesOnDisk,
 	},
-).catch((error) => {
-	console.error(error)
-})
+).then((exitCode) => process.exit(exitCode))
