@@ -7,9 +7,6 @@ on:
     types:
       - closed
 
-env:
-  RELEASE_BRANCH_NAME: ${{ github.head_ref }}
-
 jobs:
   create-tag-and-draft-release:
     name: GitHub release
@@ -24,11 +21,14 @@ jobs:
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
           bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
       - name: Push a release tag
         run: |
           RELEASE_VERSION="${RELEASE_BRANCH_NAME#release/}"
           git tag --annotate --message "Release ${RELEASE_VERSION}" "v${RELEASE_VERSION}"
           git push --tags
+        env:
+          RELEASE_BRANCH_NAME: ${{ github.head_ref }}
       - name: Erase the SSH configuration
         if: always()
         uses: ./.github/actions/ssh-erase-all
@@ -39,3 +39,4 @@ jobs:
           gh release create --draft --verify-tag --title "Release ${RELEASE_VERSION}" --notes "This release was automatically created by the \`release-2-github\` workflow in GitHub Actions." "v${RELEASE_VERSION}"
         env:
           BOT_NIMBUS_GH_AUTH_TOKEN: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+          RELEASE_BRANCH_NAME: ${{ github.head_ref }}
