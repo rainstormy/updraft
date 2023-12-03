@@ -8,6 +8,8 @@ on:
 jobs:
   publish-package-to-npm:
     name: npm package
+    permissions:
+      id-token: write
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     steps:

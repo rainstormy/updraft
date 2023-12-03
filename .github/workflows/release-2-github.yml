@@ -33,7 +33,7 @@ jobs:
         run: |
           RELEASE_VERSION="${RELEASE_BRANCH_NAME#release/}"
           gh auth login --with-token <<< "${BOT_NIMBUS_GH_AUTH_TOKEN}"
-          gh release create --draft --verify-tag --title "Release ${RELEASE_VERSION}" --notes "This release was automatically created by the \`release-2-github\` workflow in GitHub Actions." "v${RELEASE_VERSION}"
+          gh release create --draft --verify-tag --title "${RELEASE_VERSION}" --notes "This release was automatically created by the \`release-2-github\` workflow in GitHub Actions." "v${RELEASE_VERSION}"
         env:
           BOT_NIMBUS_GH_AUTH_TOKEN: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
           RELEASE_BRANCH_NAME: ${{ github.head_ref }}
