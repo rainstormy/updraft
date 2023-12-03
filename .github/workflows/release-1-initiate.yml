@@ -16,8 +16,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4 # https://github.com/actions/checkout
-      - name: Prepare Node.js, npm, and Yarn
-        uses: ./.github/actions/node-prepare
+      - name: Install Node.js, npm, and Yarn
+        uses: ./.github/actions/install-node-npm-yarn
       - name: Generate build artifacts
         run: yarn run build
       - name: Prepare the release
@@ -25,7 +25,7 @@ jobs:
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
       - name: Use Nimbus (Bot) in Git
-        uses: ./.github/actions/git-use-rainstormybot-nimbus
+        uses: ./.github/actions/git-config-user-rainstormybot-nimbus
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
           bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
@@ -41,9 +41,6 @@ jobs:
           git push
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
-      - name: Erase the SSH configuration (precautionary measure)
-        if: always()
-        uses: ./.github/actions/ssh-erase-precautionarily
       - name: Create a pull request from the release branch
         run: |
           gh auth login --with-token <<< "${BOT_NIMBUS_GH_AUTH_TOKEN}"

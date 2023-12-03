@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4 # https://github.com/actions/checkout
-      - name: Prepare Node.js, npm, and Yarn
-        uses: ./.github/actions/node-prepare
+      - name: Install Node.js, npm, and Yarn
+        uses: ./.github/actions/install-node-npm-yarn
         with:
           registry-url: https://registry.npmjs.org
       - name: Generate build artifacts

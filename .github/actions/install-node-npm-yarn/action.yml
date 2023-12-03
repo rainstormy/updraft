@@ -1,5 +1,5 @@
-name: Prepare Node.js, npm, and Yarn
-description: Sets up Node.js, npm, and Yarn and installs third-party dependencies of the repository.
+name: Install Node.js, npm, and Yarn
+description: Runs `actions/setup-node` and installs unplugged dependencies with Yarn.
 author: Steffen Diswal
 inputs:
   registry-url:
@@ -8,7 +8,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Prepare Node.js, npm, and Yarn
+    - name: Install Node.js, npm, and Yarn
       uses: actions/setup-node@v4 # https://github.com/actions/setup-node
       with:
         cache: yarn
