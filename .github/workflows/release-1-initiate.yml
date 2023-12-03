@@ -38,7 +38,7 @@ jobs:
         run: |
           git add .
           git commit --message "Prepare the release of ${RELEASE_VERSION}"
-          git push
+          git push --set-upstream origin "release/${RELEASE_VERSION}"
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
       - name: Create a pull request from the release branch
