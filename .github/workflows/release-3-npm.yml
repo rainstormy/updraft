@@ -1,0 +1,29 @@
+name: Publish package to npm
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-package-to-npm:
+    name: npm package
+    permissions:
+      id-token: write
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
+      - name: Install Node.js, npm, and Yarn
+        uses: ./.github/actions/install-node-npm-yarn
+        with:
+          registry-url: https://registry.npmjs.org
+      - name: Generate build artifacts
+        run: yarn run build
+      - name: Optimise package.json for publishing
+        run: npm pkg delete "scripts" "simple-git-hooks" "devDependencies" "packageManager" "//"
+      - name: Generate a package tarball
+        run: yarn pack --out package.tgz
+      - name: Publish the package to npm
+        run: npm publish package.tgz --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.BOT_NIMBUS_NPM_TOKEN }}
