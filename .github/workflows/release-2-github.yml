@@ -29,6 +29,9 @@ jobs:
           git push --tags
         env:
           RELEASE_BRANCH_NAME: ${{ github.head_ref }}
+      - name: Erase the SSH configuration (precautionary measure)
+        if: always()
+        uses: ./.github/actions/ssh-erase-precautionarily
       - name: Create a draft release in GitHub from the release tag
         run: |
           RELEASE_VERSION="${RELEASE_BRANCH_NAME#release/}"
