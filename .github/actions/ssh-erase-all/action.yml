@@ -1,9 +1,0 @@
-name: Erase SSH configuration
-description: Erases the entire SSH configuration, including all private keys, from the GitHub Actions runner.
-author: Steffen Diswal
-runs:
-  using: composite
-  steps:
-    - name: Erase the SSH configuration
-      run: rm --recursive --force ~/.ssh
-      shell: bash

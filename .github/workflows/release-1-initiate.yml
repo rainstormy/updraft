@@ -41,9 +41,9 @@ jobs:
           git push
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
-      - name: Erase the SSH configuration
+      - name: Erase the SSH configuration (precautionary measure)
         if: always()
-        uses: ./.github/actions/ssh-erase-all
+        uses: ./.github/actions/ssh-erase-precautionarily
       - name: Create a pull request from the release branch
         run: |
           gh auth login --with-token <<< "${BOT_NIMBUS_GH_AUTH_TOKEN}"

@@ -1,0 +1,14 @@
+name: Erase SSH configuration
+description: Erases the entire SSH configuration, including all private keys, from the GitHub Actions runner as a precautionary measure in case the automatic cleanup procedure fails.
+author: Steffen Diswal
+runs:
+  using: composite
+  steps:
+    - name: Stop the SSH Agent
+      if: always()
+      run: kill $SSH_AGENT_PID
+      shell: bash
+    - name: Erase the SSH configuration
+      if: always()
+      run: rm --recursive --force ~/.ssh
+      shell: bash
