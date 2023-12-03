@@ -24,23 +24,39 @@ jobs:
         run: yarn run release.prepare "${RELEASE_VERSION}"
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
-      - name: Use Nimbus (Bot) in Git
-        uses: ./.github/actions/git-use-rainstormybot-nimbus
-        with:
-          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
-          bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
-          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
+      #      - name: Use Nimbus (Bot) in Git
+      #        uses: ./.github/actions/git-use-rainstormybot-nimbus
+      #        with:
+      #          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+      #          bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+      #          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
       - name: Create a release branch
         run: git checkout -b "release/${RELEASE_VERSION}"
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
       - name: Stage and commit modified files
         run: |
+          mkdir ~/.ssh
+          echo "${SSH_KEY_FINGERPRINTS_GITHUB}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          git config user.email "146315497+rainstormybot-nimbus@users.noreply.github.com"
+          git config user.name "Nimbus (Bot)"
+          git config user.signingkey "${BOT_NIMBUS_SSH_PUBLIC_KEY}"
+          git config gpg.format "ssh"
+          git config commit.gpgsign "true"
+          git config tag.gpgsign "true"
+          echo "${BOT_NIMBUS_SSH___THE___PRIVATE___KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
           git add .
           git commit --message "Prepare the release of ${RELEASE_VERSION}"
           git push
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
+          BOT_NIMBUS_SSH_PUBLIC_KEY: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          BOT_NIMBUS_SSH___THE___PRIVATE___KEY: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          SSH_KEY_FINGERPRINTS_GITHUB: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
       - name: Create a pull request from the release branch
         run: |
           gh auth login --with-token <<< "${BOT_NIMBUS_GH_AUTH_TOKEN}"
