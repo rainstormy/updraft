@@ -36,11 +36,13 @@ jobs:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
       - name: Stage and commit modified files
         run: |
-          git add .
+          git add CHANGELOG.adoc package.json
           git commit --message "Prepare the release of ${RELEASE_VERSION}"
           git push --set-upstream origin "release/${RELEASE_VERSION}"
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
+      - name: Fetch the main branch
+        run: git fetch origin main # See https://github.com/cli/cli/issues/5896.
       - name: Create a pull request from the release branch
         run: |
           gh auth login --with-token <<< "${BOT_NIMBUS_GH_AUTH_TOKEN}"
