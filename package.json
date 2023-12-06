@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@rainstormy/updraft",
-	"version": "1.0.0-alpha.1",
+	"version": "1.0.0-alpha.2",
 	"bugs": "https://github.com/rainstormy/updraft/issues",
 	"repository": {
 		"type": "git",
