@@ -329,6 +329,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:0.34.6"
     "@vitest/ui": "npm:0.34.7"
     concurrently: "npm:8.2.2"
+    downdoc: "npm:1.0.2-stable"
     fast-glob: "npm:3.3.2"
     prettier: "npm:3.1.0"
     prettier-plugin-organize-imports: "npm:3.2.4"
@@ -1003,6 +1004,15 @@ __metadata:
   dependencies:
     path-type: "npm:^4.0.0"
   checksum: fa05e18324510d7283f55862f3161c6759a3f2f8dbce491a2fc14c8324c498286c54282c1f0e933cb930da8419b30679389499b919122952a4f8592362ef4615
+  languageName: node
+  linkType: hard
+
+"downdoc@npm:1.0.2-stable":
+  version: 1.0.2-stable
+  resolution: "downdoc@npm:1.0.2-stable"
+  bin:
+    downdoc: bin/downdoc
+  checksum: b0696c728a0c67e37000d7f792c3037a60bd48019fc0309073fb793a9c87fc46f9ae37d780bb299f37d9457455ccdfe1dea41e739a1f507a5727a4d391dabb4b
   languageName: node
   linkType: hard
 

@@ -19,6 +19,10 @@ jobs:
           registry-url: https://registry.npmjs.org
       - name: Generate build artifacts
         run: yarn run build
+      - name: Convert README.adoc to Markdown
+        run: |
+          yarn run release.readme
+          rm README.adoc
       - name: Optimise package.json for publishing
         run: npm pkg delete "scripts" "simple-git-hooks" "devDependencies" "packageManager" "//"
       - name: Generate a package tarball

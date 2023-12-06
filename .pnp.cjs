@@ -30,6 +30,7 @@ const RAW_RUNTIME_STATE =
           ["@vitest/coverage-v8", "virtual:57a2ca6564988cc80c9e9ce5a9dc778a21827b61f83a657b0e6f4f6ccd822d654fff5b9b93b3c97e81bd8e36f8cb3bca9d257e1b46f065e81d120aa1e2d490a0#npm:0.34.6"],\
           ["@vitest/ui", "virtual:57a2ca6564988cc80c9e9ce5a9dc778a21827b61f83a657b0e6f4f6ccd822d654fff5b9b93b3c97e81bd8e36f8cb3bca9d257e1b46f065e81d120aa1e2d490a0#npm:0.34.7"],\
           ["concurrently", "npm:8.2.2"],\
+          ["downdoc", "npm:1.0.2-stable"],\
           ["fast-glob", "npm:3.3.2"],\
           ["prettier", "npm:3.1.0"],\
           ["prettier-plugin-organize-imports", "virtual:57a2ca6564988cc80c9e9ce5a9dc778a21827b61f83a657b0e6f4f6ccd822d654fff5b9b93b3c97e81bd8e36f8cb3bca9d257e1b46f065e81d120aa1e2d490a0#npm:3.2.4"],\
@@ -447,6 +448,7 @@ const RAW_RUNTIME_STATE =
           ["@vitest/coverage-v8", "virtual:57a2ca6564988cc80c9e9ce5a9dc778a21827b61f83a657b0e6f4f6ccd822d654fff5b9b93b3c97e81bd8e36f8cb3bca9d257e1b46f065e81d120aa1e2d490a0#npm:0.34.6"],\
           ["@vitest/ui", "virtual:57a2ca6564988cc80c9e9ce5a9dc778a21827b61f83a657b0e6f4f6ccd822d654fff5b9b93b3c97e81bd8e36f8cb3bca9d257e1b46f065e81d120aa1e2d490a0#npm:0.34.7"],\
           ["concurrently", "npm:8.2.2"],\
+          ["downdoc", "npm:1.0.2-stable"],\
           ["fast-glob", "npm:3.3.2"],\
           ["prettier", "npm:3.1.0"],\
           ["prettier-plugin-organize-imports", "virtual:57a2ca6564988cc80c9e9ce5a9dc778a21827b61f83a657b0e6f4f6ccd822d654fff5b9b93b3c97e81bd8e36f8cb3bca9d257e1b46f065e81d120aa1e2d490a0#npm:3.2.4"],\
@@ -1248,6 +1250,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["dir-glob", "npm:3.0.1"],\
           ["path-type", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["downdoc", [\
+      ["npm:1.0.2-stable", {\
+        "packageLocation": "./.yarn/cache/downdoc-npm-1.0.2-stable-b6b1eac1df-b0696c728a.zip/node_modules/downdoc/",\
+        "packageDependencies": [\
+          ["downdoc", "npm:1.0.2-stable"]\
         ],\
         "linkType": "HARD"\
       }]\

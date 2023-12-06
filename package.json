@@ -18,6 +18,7 @@
 	"scripts": {
 		"build": "vite build --ssr ./src/main.ts",
 		"release.prepare": "yarn node ./src/entry.cli.js --files package.json --release-version",
+		"release.readme": "downdoc README.adoc",
 		"setup": "yarn install && simple-git-hooks",
 		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'",
 		"validate.format": "        prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache --check",
@@ -42,6 +43,7 @@
 		"@vitest/coverage-v8": "0.34.6",
 		"@vitest/ui": "0.34.7",
 		"concurrently": "8.2.2",
+		"downdoc": "1.0.2-stable",
 		"prettier": "3.1.0",
 		"prettier-plugin-organize-imports": "3.2.4",
 		"prettier-plugin-packagejson": "2.4.6",
@@ -64,6 +66,7 @@
 			"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
 			"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
 			"concurrently": "A tool that executes multiple Yarn script commands in parallel.",
+			"downdoc": "A tool that converts AsciiDoc documents to Markdown to improve compatibility with npm.",
 			"prettier": "An opinionated code formatter.",
 			"prettier-plugin-organize-imports": "A Prettier plugin that sorts import statements and removes unused ones.",
 			"prettier-plugin-packagejson": "A Prettier plugin that sorts properties in the `package.json` file.",
