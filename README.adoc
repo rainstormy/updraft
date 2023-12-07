@@ -13,44 +13,90 @@ Supported file formats:
 * `package.json` files.
 
 == Usage
-=== From a Local Installation
-. Install the `@rainstormy/updraft` package locally in your repository:
+[source,shell]
+----
+updraft --files <glob patterns> --release-version <major.minor.patch[-prerelease][+buildinfo]>
+----
+
+=== Local Installation (Recommended)
+. Install the `@rainstormy/updraft` package locally in your project:
 +
 [source,shell]
 ----
-# npm:
 npm install --save-dev @rainstormy/updraft
-
-# pnpm:
+----
++
+[source,shell]
+----
 pnpm install --save-dev @rainstormy/updraft
-
-# Yarn:
+----
++
+[source,shell]
+----
 yarn add --dev @rainstormy/updraft
 ----
 
-. Define a `package.json` script to run the program, for example:
+. Define a package script to run the program, for example with a constant set of files and a variable release version:
 +
 [source,json]
 ----
-{
-	"scripts": {
-		"release.prepare": "updraft --files CHANGELOG.adoc packages/**/package.json --release-version"
-	}
-}
+"scripts": {
+	"release.prepare": "updraft --files CHANGELOG.adoc packages/**/package.json --release-version"
+},
 ----
 
-. Run the `package.json` script and supply the necessary arguments, for example:
+. Run the package script from the project root directory and supply the necessary arguments, for example:
 +
 [source,shell]
 ----
-# npm, requires `--`:
 npm run release.prepare -- 1.1.0
-
-# pnpm:
+----
++
+[source,shell]
+----
 pnpm run release.prepare 1.1.0
-
-# Yarn:
+----
++
+[source,shell]
+----
 yarn run release.prepare 1.1.0
+----
+
+This approach is faster and more reliable in the long run than downloading and running Updraft in a temporary environment for every release of your project.
+
+* If you don't want to define a package script, you can also run the locally installed tool directly, for example:
++
+[source,shell]
+----
+npm exec updraft -- --files CHANGELOG.adoc packages/**/package.json --release-version 1.1.0
+----
++
+[source,shell]
+----
+pnpm exec updraft --files CHANGELOG.adoc packages/**/package.json --release-version 1.1.0
+----
++
+[source,shell]
+----
+yarn run updraft --files CHANGELOG.adoc packages/**/package.json --release-version 1.1.0
+----
+
+=== Temporary Environment
+. Download and run the `@rainstormy/updraft` package in a temporary environment without installing it as a dependency to your project, for example:
++
+[source,shell]
+----
+npx @rainstormy/updraft --files CHANGELOG.adoc packages/**/package.json --release-version 1.1.0
+----
++
+[source,shell]
+----
+pnpm dlx @rainstormy/updraft --files CHANGELOG.adoc packages/**/package.json --release-version 1.1.0
+----
++
+[source,shell]
+----
+yarn dlx @rainstormy/updraft --files CHANGELOG.adoc packages/**/package.json --release-version 1.1.0
 ----
 
 == Contributing
