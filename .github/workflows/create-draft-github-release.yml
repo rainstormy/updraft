@@ -8,8 +8,8 @@ on:
       - closed
 
 jobs:
-  create-tag-and-draft-release:
-    name: GitHub release
+  create-release-tag-and-draft-github-release:
+    name: Create release tag and draft GitHub release
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-22.04
     timeout-minutes: 1

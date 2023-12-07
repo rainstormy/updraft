@@ -5,7 +5,7 @@ on:
 
 jobs:
   publish-package-to-npm:
-    name: npm package
+    name: Publish package to npm
     permissions:
       id-token: write
     runs-on: ubuntu-22.04

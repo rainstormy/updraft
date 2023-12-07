@@ -10,7 +10,7 @@ on:
 
 jobs:
   validate-static-types:
-    name: Static types (TypeScript)
+    name: Validate static types (TypeScript)
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     steps:
@@ -22,7 +22,7 @@ jobs:
         run: yarn run validate.types
 
   validate-code-format:
-    name: Code format (Prettier)
+    name: Validate code format (Prettier)
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     steps:
@@ -34,7 +34,7 @@ jobs:
         run: yarn run validate.format
 
   validate-unit-tests:
-    name: Unit tests (Vitest)
+    name: Validate unit tests (Vitest)
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     steps:
@@ -46,7 +46,7 @@ jobs:
         run: yarn run validate.test
 
   validate-commit-messages:
-    name: Commit messages
+    name: Validate commit messages
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     timeout-minutes: 1

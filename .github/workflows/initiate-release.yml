@@ -9,8 +9,8 @@ on:
         required: true
 
 jobs:
-  create-release-commit-and-pull-request:
-    name: Release commit
+  create-release-branch-and-pull-request:
+    name: Create release branch and pull request
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     steps:
