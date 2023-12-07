@@ -2,6 +2,19 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@rainstormy/updraft",
 	"version": "1.0.0-alpha.2",
+	"description": "Updraft updates changelogs and bumps version numbers when you are about to release a new version of your project.",
+	"keywords": [
+		"automation",
+		"changelog",
+		"package",
+		"publish",
+		"release",
+		"semantic",
+		"semver",
+		"update",
+		"upgrade",
+		"version"
+	],
 	"bugs": "https://github.com/rainstormy/updraft/issues",
 	"repository": {
 		"type": "git",
