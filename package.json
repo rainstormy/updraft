@@ -30,7 +30,7 @@
 	],
 	"scripts": {
 		"build": "vite build --ssr ./src/main.ts",
-		"release.prepare": "yarn node ./src/entry.cli.js --files package.json --release-version",
+		"release.prepare": "yarn node ./src/entry.cli.js --files CHANGELOG.adoc package.json --release-version",
 		"release.readme": "downdoc README.adoc",
 		"setup": "yarn install && simple-git-hooks",
 		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'",
