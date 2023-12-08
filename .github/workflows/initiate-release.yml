@@ -46,7 +46,7 @@ jobs:
       - name: Create a pull request from the release branch
         run: |
           gh auth login --with-token <<< "${BOT_NIMBUS_GH_AUTH_TOKEN}"
-          gh pr create --base main --title "Release ${RELEASE_VERSION}" --body "This pull request was automatically created by the \`release-1-initiate\` workflow in GitHub Actions."
+          gh pr create --base main --title "Release ${RELEASE_VERSION}" --body "This pull request was automatically created by the \`initiate-release\` workflow in GitHub Actions."
         env:
           BOT_NIMBUS_GH_AUTH_TOKEN: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
           RELEASE_VERSION: ${{ github.event.inputs.version }}
