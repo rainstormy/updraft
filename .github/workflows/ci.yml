@@ -1,0 +1,114 @@
+# This workflow validates the software quality.
+#
+# It is triggered automatically by pull requests towards the `main` branch.
+#
+# It can be triggered manually via the GitHub CLI:
+#   gh workflow run ci.yml [--ref <branch-name>]
+#   gh run watch
+#
+# It can be triggered manually via the GitHub web interface:
+#   https://github.com/rainstormy/updraft/actions/workflows/ci.yml
+
+name: Continuous integration
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+  workflow_dispatch:
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  # For `workflow_call` events, `github.workflow` is the caller workflow instead of this workflow.
+  # The `ci-` prefix here prevents collisions with other jobs in the caller workflow.
+  # https://docs.github.com/en/actions/using-workflows/reusing-workflows
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimise the permission scope of the default GitHub access token in this workflow.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+permissions:
+  contents: read # Allows the workflow to check out the repository.
+
+jobs:
+  validate-commit-messages:
+    name: Has standardised commit messages
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Run the validation task
+        uses: rainstormy/github-action-validate-commit-messages@158b8e35c5e89cf6a10b611efe20ac70cd51983a # https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.1.4 (pinned to the commit SHA)
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          rules: acknowledged-author-email-addresses, acknowledged-author-names, acknowledged-committer-email-addresses, acknowledged-committer-names, capitalised-subject-lines, empty-line-after-subject-lines, imperative-subject-lines, limit-length-of-body-lines, limit-length-of-subject-lines, multi-word-subject-lines, no-co-authors, no-merge-commits, no-revert-revert-commits, no-squash-commits, no-trailing-punctuation-in-subject-lines, no-unexpected-whitespace, unique-subject-lines
+          acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com' # A personal noreply email address on GitHub.
+          acknowledged-author-names--patterns: '\p{Lu}.*\s.+' # A name of at least two words where the first word starts with a capital letter.
+          acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com' # A personal noreply email address on GitHub.
+          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+' # A name of at least two words where the first word starts with a capital letter.
+
+  validate-build:
+    name: Can build the project (Vite)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1 (pinned to the commit SHA)
+      - name: Revalidate the build artifacts
+        uses: ./.github/actions/build-artifacts/revalidate
+
+  validate-format:
+    name: Has well-formatted code (Prettier)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1 (pinned to the commit SHA)
+      - name: Restore the Prettier cache
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # https://github.com/actions/cache/releases/tag/v3.3.2 (pinned to the commit SHA)
+        with:
+          path: ./.cache/prettier/
+          key: ${{ runner.os }}-prettier-${{ hashFiles('prettier.config.js', 'yarn.lock') }}
+          # We omit `restore-keys` to prevent cache restoration when the Prettier configuration or any third-party dependencies have changed.
+      - name: Install Yarn and third-party dependencies
+        uses: ./.github/actions/yarn-zero-install-cache
+      - name: Run the validation task
+        run: yarn run validate.format
+
+  validate-types:
+    name: Is type-safe (TypeScript)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1 (pinned to the commit SHA)
+      - name: Restore the TypeScript cache
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # https://github.com/actions/cache/releases/tag/v3.3.2 (pinned to the commit SHA)
+        with:
+          path: ./.cache/typescript/
+          key: ${{ runner.os }}-typescript-${{ hashFiles('tsconfig.json', 'yarn.lock') }}
+          # We omit `restore-keys` to prevent cache restoration when the TypeScript configuration or any third-party dependencies have changed.
+      - name: Install Yarn and third-party dependencies
+        uses: ./.github/actions/yarn-zero-install-cache
+      - name: Run the validation task
+        run: yarn run validate.types
+
+  validate-unit-tests:
+    name: Validate unit tests (Vitest)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
+      - name: Restore the Vitest cache
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # https://github.com/actions/cache/releases/tag/v3.3.2 (pinned to the commit SHA)
+        with:
+          path: ./.cache/vitest/
+          key: ${{ runner.os }}-typescript-${{ hashFiles('vite.config.ts', 'yarn.lock') }}
+          # We omit `restore-keys` to prevent cache restoration when the Vite configuration or any third-party dependencies have changed.
+      - name: Install Yarn and third-party dependencies
+        uses: ./.github/actions/yarn-zero-install-cache
+      - name: Run the validation task
+        run: yarn run validate.test
