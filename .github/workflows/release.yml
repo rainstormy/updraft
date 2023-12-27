@@ -1,4 +1,12 @@
-name: Initiate release
+# This workflow creates a release branch and a pull request towards the default branch.
+#
+# GitHub CLI:
+#   gh workflow run release.yml [--ref <branch-name>] --field version=<major.minor.patch[-prerelease][+buildinfo]>
+#
+# GitHub web interface:
+#   https://github.com/rainstormy/presets-web/actions/workflows/release.yml
+
+name: Release
 
 on:
   workflow_dispatch:

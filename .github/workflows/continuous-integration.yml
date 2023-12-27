@@ -1,3 +1,11 @@
+# This workflow validates the quality of the changes being delivered to the default branch.
+#
+# GitHub CLI:
+#   gh workflow run continuous-integration.yml [--ref <branch-name>]
+#
+# GitHub web interface:
+#   https://github.com/rainstormy/presets-web/actions/workflows/continuous-integration.yml
+
 name: Continuous integration
 
 on:
@@ -7,6 +15,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   validate-static-types:
