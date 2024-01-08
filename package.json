@@ -32,14 +32,14 @@
 		"build": "vite build --ssr ./src/main.ts",
 		"setup": "yarn install && simple-git-hooks",
 		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'",
-		"validate.format": "        prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache --check",
-		"validate.format.fix": "    prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --cache         --list-different --write",
-		"validate.format.nocache": "prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn         --check",
+		"validate.format": "        prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --check --cache --cache-location './.cache/prettier/.prettier-cache'",
+		"validate.format.fix": "    prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn         --cache --cache-location './.cache/prettier/.prettier-cache' --list-different --write",
+		"validate.format.nocache": "prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --check",
 		"validate.test": "         vitest run",
 		"validate.test.coverage": "vitest run   --coverage",
 		"validate.test.overview": "vitest watch --coverage --ui",
 		"validate.test.watch": "   vitest watch",
-		"validate.types": "        tsc --incremental --tsBuildInfoFile './node_modules/.cache/typescript/.tsbuildinfo'",
+		"validate.types": "        tsc --incremental --tsBuildInfoFile './.cache/typescript/.tsbuildinfo'",
 		"validate.types.nocache": "tsc"
 	},
 	"simple-git-hooks": {

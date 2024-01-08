@@ -16,11 +16,14 @@ export default defineConfig(() => ({
 		alias: getAliasesFromTsconfig(),
 	},
 	test: {
+		cache: {
+			dir: inProjectDirectory(".cache/vitest/cache"),
+		},
 		coverage: {
 			include: ["src/**/*.ts"],
 			exclude: ["src/**/*.tests.ts"],
 			provider: "v8" as const,
-			reportsDirectory: inProjectDirectory("node_modules/.vitest/coverage"),
+			reportsDirectory: inProjectDirectory(".cache/vitest/coverage"),
 		},
 		include: ["src/**/*.tests.ts"],
 	},
