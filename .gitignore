@@ -35,9 +35,9 @@
 !.yarn/releases/
 !.yarn/sdks/
 !.yarn/versions/
-node_modules/
 
 # Build artifacts.
+.cache/
 dist/
 
 # Operating system artifacts.

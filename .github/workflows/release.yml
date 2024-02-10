@@ -1,0 +1,66 @@
+# This workflow creates a release commit and a pull request towards the `main` branch.
+#
+# It can be triggered manually via the GitHub CLI:
+#   gh workflow run release.yml [--ref <branch-name>] --field version=<major.minor.patch[-prerelease][+buildinfo]>
+#   gh run watch
+#
+# It can be triggered manually via the GitHub web interface:
+#   https://github.com/rainstormy/updraft/actions/workflows/release.yml
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The semantic version number of the new release on the form major.minor.patch[-prerelease][+buildinfo].
+        type: string
+        required: true
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimise the permission scope of the default GitHub access token in this workflow.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+permissions:
+  contents: read # Allows the workflow to call the reusable `ci` workflow.
+
+run-name: ${{ inputs.version }}
+
+jobs:
+  validate-software-quality:
+    name: Validate software quality
+    uses: ./.github/workflows/ci.yml
+
+  create-pull-request:
+    needs: validate-software-quality
+    name: Create pull request
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1 (pinned to the commit SHA)
+        with:
+          # Use a separate access token with permission to commit and push.
+          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+      - name: Install Yarn and third-party dependencies
+        uses: ./.github/actions/yarn-zero-install-cache
+      - name: Prepare the release
+        # Run the newest version of Updraft on itself.
+        run: yarn node ./src/entry.cli.js --files CHANGELOG.adoc package.json --release-version $RELEASE_VERSION
+        env:
+          RELEASE_VERSION: ${{ github.event.inputs.version }}
+      - name: Use Nimbus (Bot) in Git
+        uses: rainstormy/github-action-rainstorm-release-use-bot-nimbus@12afc27c4f3dc9a48789b924b396396d5522afb8 # https://github.com/rainstormy/github-action-rainstorm-release-use-bot-nimbus (pinned to the commit SHA)
+        with:
+          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
+      - name: Create a release commit and a pull request
+        uses: rainstormy/github-action-release-pull-request@602f3e88713e2db65ffba8d8d50557db4c143bfc # https://github.com/rainstormy/github-action-release-pull-request (pinned to the commit SHA)
+        with:
+          gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+          release-version: ${{ github.event.inputs.version }}

@@ -1,0 +1,51 @@
+# This workflow creates a Git tag for the release commit on the `main` branch.
+#
+# It is triggered automatically by merging a pull request from a branch with a `release/` prefix, as created by the `release` workflow.
+
+name: Release / Create Git tag
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: release-tag-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimise the permission scope of the default GitHub access token in this workflow.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+permissions: {}
+
+jobs:
+  create-git-tag:
+    name: Create Git tag
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1 (pinned to the commit SHA)
+        with:
+          # Use a separate access token to allow the push tag event in this workflow to trigger the `release-to-github` and `release-to-npm` workflows subsequently.
+          # https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
+          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+      - name: Extract the release version from the branch name
+        id: get-release-version
+        run: echo "RELEASE_VERSION=${BRANCH_NAME#release/}" >> $GITHUB_OUTPUT
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+      - name: Use Nimbus (Bot) in Git
+        uses: rainstormy/github-action-rainstorm-release-use-bot-nimbus@12afc27c4f3dc9a48789b924b396396d5522afb8 # https://github.com/rainstormy/github-action-rainstorm-release-use-bot-nimbus (pinned to the commit SHA)
+        with:
+          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
+      - name: Create and push a release tag
+        uses: rainstormy/github-action-release-tag@2b4af8152c766159f98aa0f4444eb51f77045dca # https://github.com/rainstormy/github-action-release-tag (pinned to the commit SHA)
+        with:
+          release-version: ${{ steps.get-release-version.outputs.RELEASE_VERSION }}

@@ -1,0 +1,64 @@
+# This workflow publishes the package to the npm registry.
+#
+# It is triggered automatically by pushing a Git tag with a `v` prefix, as done by the `release-tag` workflow.
+#
+# It can be triggered manually via the GitHub CLI:
+#   gh workflow run release-to-npm.yml --ref <tag-name>
+#   gh run watch
+#
+# It can be triggered manually via the GitHub web interface:
+#   https://github.com/rainstormy/updraft/actions/workflows/release-to-npm.yml
+
+name: Release / Publish npm package
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: release-to-npm-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimise the permission scope of the default GitHub access token in this workflow.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+permissions:
+  contents: read # Allows the workflow to check out the repository and to call the reusable `ci` workflow.
+  id-token: write # Allows the workflow to publish the npm package with provenance.
+
+jobs:
+  validate-software-quality:
+    name: Validate software quality
+    uses: ./.github/workflows/ci.yml
+
+  publish-npm-package:
+    needs: validate-software-quality
+    name: Publish '@rainstormy/updraft' to npm
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1 (pinned to the commit SHA)
+      - name: Restore the build artifacts
+        uses: ./.github/actions/build-artifacts/restore
+      - name: Install Yarn and third-party dependencies
+        uses: ./.github/actions/yarn-zero-install-cache
+        with:
+          registry-url: https://registry.npmjs.org
+      - name: Convert README.adoc to Markdown
+        # npm has better compatibility for Markdown documents than AsciiDoc documents.
+        run: |
+          yarn run downdoc README.adoc
+          rm README.adoc
+      - name: Delete unnecessary fields in package.json
+        run: npm pkg delete "scripts" "simple-git-hooks" "packageManager" "//"
+      - name: Generate a package tarball
+        # `yarn pack` resolves dependencies with Yarn-specific protocols such as `workspace:` before publishing.
+        run: yarn pack --out updraft.tgz
+      - name: Publish the package to npm
+        run: npm publish updraft.tgz --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.BOT_NIMBUS_NPM_TOKEN }}
