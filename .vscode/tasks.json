@@ -20,24 +20,6 @@
 		},
 		{
 			"type": "npm",
-			"script": "validate.format",
-			"problemMatcher": [],
-			"label": "validate.format"
-		},
-		{
-			"type": "npm",
-			"script": "validate.format.fix",
-			"problemMatcher": [],
-			"label": "validate.format.fix"
-		},
-		{
-			"type": "npm",
-			"script": "validate.format.nocache",
-			"problemMatcher": [],
-			"label": "validate.format.nocache"
-		},
-		{
-			"type": "npm",
 			"script": "validate.test",
 			"problemMatcher": [],
 			"label": "validate.test"

@@ -31,10 +31,7 @@
 	"scripts": {
 		"build": "vite build --ssr ./src/main.ts",
 		"setup": "yarn install && simple-git-hooks",
-		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'",
-		"validate.format": "        prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --check --cache --cache-location './.cache/prettier/.prettier-cache'",
-		"validate.format.fix": "    prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn         --cache --cache-location './.cache/prettier/.prettier-cache' --list-different --write",
-		"validate.format.nocache": "prettier './.github/**/*.yml' './.vscode/**/*.json' './src/**/*.ts' './*.config.{js,ts}' './*.{json,yml}' --log-level warn --check",
+		"validate": "yarn validate.types && yarn validate.test",
 		"validate.test": "         vitest run",
 		"validate.test.coverage": "vitest run   --coverage",
 		"validate.test.overview": "vitest watch --coverage --ui",
@@ -43,7 +40,7 @@
 		"validate.types.nocache": "tsc"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "yarn run concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.test' --group --names 'types','format','test' --prefix-colors 'blue.bold','magenta.bold','yellow.bold'"
+		"pre-commit": "yarn validate.types && yarn validate.test"
 	},
 	"dependencies": {
 		"fast-glob": "3.3.2",
@@ -53,11 +50,7 @@
 		"@types/node": "20.10.4",
 		"@vitest/coverage-v8": "1.0.2",
 		"@vitest/ui": "1.0.2",
-		"concurrently": "8.2.2",
 		"downdoc": "1.0.2-stable",
-		"prettier": "3.1.0",
-		"prettier-plugin-organize-imports": "3.2.4",
-		"prettier-plugin-packagejson": "2.4.7",
 		"simple-git-hooks": "2.9.0",
 		"typescript": "5.3.3",
 		"vite": "5.0.6",
@@ -76,11 +69,7 @@
 			"@types/node": "Type definitions for Node.js modules.",
 			"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
 			"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
-			"concurrently": "A tool that executes multiple Yarn script commands in parallel.",
 			"downdoc": "A tool that converts AsciiDoc documents to Markdown to improve compatibility with npm.",
-			"prettier": "An opinionated code formatter.",
-			"prettier-plugin-organize-imports": "A Prettier plugin that sorts import statements and removes unused ones.",
-			"prettier-plugin-packagejson": "A Prettier plugin that sorts properties in the `package.json` file.",
 			"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
 			"typescript": "A statically typed programming language that extends the JavaScript syntax.",
 			"vite": "A highly extensible build tool.",

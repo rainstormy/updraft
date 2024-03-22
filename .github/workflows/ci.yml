@@ -59,24 +59,6 @@ jobs:
       - name: Revalidate the build artifacts
         uses: ./.github/actions/build-artifacts/revalidate
 
-  validate-format:
-    name: Has well-formatted code (Prettier)
-    runs-on: ubuntu-22.04
-    timeout-minutes: 1
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1 (pinned to the commit SHA)
-      - name: Restore the Prettier cache
-        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # https://github.com/actions/cache/releases/tag/v3.3.2 (pinned to the commit SHA)
-        with:
-          path: ./.cache/prettier/
-          key: ${{ runner.os }}-prettier-${{ hashFiles('prettier.config.js', 'yarn.lock') }}
-          # We omit `restore-keys` to prevent cache restoration when the Prettier configuration or any third-party dependencies have changed.
-      - name: Install Yarn and third-party dependencies
-        uses: ./.github/actions/yarn-zero-install-cache
-      - name: Run the validation task
-        run: yarn run validate.format
-
   validate-types:
     name: Is type-safe (TypeScript)
     runs-on: ubuntu-22.04

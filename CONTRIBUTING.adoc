@@ -90,7 +90,6 @@ idea .
 . Follow the popup message to install the recommended plugins automatically.
 Alternatively, go to menu:File[Settings > Plugins] and install them manually.
 ** https://plugins.jetbrains.com/plugin/7391-asciidoc[AsciiDoc]
-** https://plugins.jetbrains.com/plugin/10456-prettier[Prettier]
 
 . Go to menu:File[Settings > Languages & Frameworks > Node.js].
 Select the appropriate Node.js interpreter and enable coding assistance.
@@ -108,7 +107,6 @@ code .
 Install the recommended extensions.
 +
 ** https://marketplace.visualstudio.com/items?itemName=asciidoctor.asciidoctor-vscode[AsciiDoc]
-** https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode[Prettier]
 ** https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs[ZipFS] (required by the Yarn SDK)
 
 == Tasks
@@ -125,9 +123,6 @@ It runs the following means of validation:
 
 * *Type checking* via https://www.typescriptlang.org[TypeScript] (`validate.types`).
 ** `validate.types.nocache` runs `validate.types` without caching which is encouraged after an adjustment to the TypeScript configuration.
-* *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
-** `validate.format.fix` reformats the files accordingly.
-** `validate.format.nocache` runs `validate.format` without caching which is encouraged after an adjustment to the formatting configuration.
 * *Unit tests* via https://vitest.dev[Vitest] (`validate.test`).
 ** `validate.test.coverage` creates a code coverage report in the `.cache/vitest/coverage` directory.
 ** `validate.test.overview` launches the https://vitest.dev/guide/ui.html[Vitest user interface] in a web browser.
