@@ -30,8 +30,8 @@
 	],
 	"scripts": {
 		"build": "vite build --ssr ./src/main.ts",
-		"setup": "yarn install && simple-git-hooks",
-		"validate": "yarn validate.types && yarn validate.test",
+		"ready": "pnpm install && simple-git-hooks",
+		"validate": "pnpm validate.types && pnpm validate.test",
 		"validate.test": "         vitest run",
 		"validate.test.coverage": "vitest run   --coverage",
 		"validate.test.overview": "vitest watch --coverage --ui",
@@ -40,11 +40,15 @@
 		"validate.types.nocache": "tsc"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "yarn validate.types && yarn validate.test"
+		"pre-commit": "pnpm validate.types && pnpm validate.test"
 	},
 	"dependencies": {
 		"fast-glob": "3.3.2",
 		"tslib": "2.6.2"
+	},
+	"// dependencies": {
+		"fast-glob": "A runtime library that enables glob patterns in the file system.",
+		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
 		"@types/node": "20.10.4",
@@ -56,24 +60,18 @@
 		"vite": "5.0.6",
 		"vitest": "1.0.2"
 	},
-	"packageManager": "yarn@4.0.2",
+	"// devDependencies": {
+		"@types/node": "Type definitions for Node.js modules.",
+		"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
+		"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
+		"downdoc": "A tool that converts AsciiDoc documents to Markdown to improve compatibility with npm.",
+		"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
+		"typescript": "A statically typed programming language that extends the JavaScript syntax.",
+		"vite": "A highly extensible build tool.",
+		"vitest": "A Vite-based unit testing framework."
+	},
+	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
 	"engines": {
 		"node": ">=20.0.0"
-	},
-	"//": {
-		"dependencies": {
-			"fast-glob": "A runtime library that enables glob patterns in the file system.",
-			"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
-		},
-		"devDependencies": {
-			"@types/node": "Type definitions for Node.js modules.",
-			"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
-			"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
-			"downdoc": "A tool that converts AsciiDoc documents to Markdown to improve compatibility with npm.",
-			"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
-			"typescript": "A statically typed programming language that extends the JavaScript syntax.",
-			"vite": "A highly extensible build tool.",
-			"vitest": "A Vite-based unit testing framework."
-		}
 	}
 }
