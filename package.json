@@ -24,33 +24,32 @@
 	"author": "Steffen Diswal",
 	"type": "module",
 	"bin": "./src/entry.cli.js",
-	"files": [
-		"./dist/main.js",
-		"./src/entry.cli.js"
-	],
+	"files": ["./dist/main.js", "./src/entry.cli.js"],
+	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
+	"engines": {
+		"node": ">=20.11.1"
+	},
 	"scripts": {
 		"build": "vite build --ssr ./src/main.ts",
+		"check": "biome ci . --error-on-warnings && tsc",
+		"fmt": "biome check --apply .",
 		"ready": "pnpm install && simple-git-hooks",
-		"validate": "pnpm validate.types && pnpm validate.test",
-		"validate.test": "         vitest run",
-		"validate.test.coverage": "vitest run   --coverage",
-		"validate.test.overview": "vitest watch --coverage --ui",
-		"validate.test.watch": "   vitest watch",
-		"validate.types": "        tsc --incremental --tsBuildInfoFile './.cache/typescript/.tsbuildinfo'",
-		"validate.types.nocache": "tsc"
+		"test": "vitest run",
+		"vi": "vitest watch --ui"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "pnpm validate.types && pnpm validate.test"
+		"pre-commit": "pnpm check && pnpm test"
 	},
 	"dependencies": {
 		"fast-glob": "3.3.2",
 		"tslib": "2.6.2"
 	},
 	"// dependencies": {
-		"fast-glob": "A runtime library that enables glob patterns in the file system.",
-		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
+		"fast-glob": "This library executes glob patterns in the file system.",
+		"tslib": "This library optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.6.1",
 		"@types/node": "20.10.4",
 		"@vitest/coverage-v8": "1.0.2",
 		"@vitest/ui": "1.0.2",
@@ -61,17 +60,14 @@
 		"vitest": "1.0.2"
 	},
 	"// devDependencies": {
-		"@types/node": "Type definitions for Node.js modules.",
-		"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
-		"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
+		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
+		"@types/node": "These type definitions cover Node.js modules.",
+		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
+		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",
 		"downdoc": "A tool that converts AsciiDoc documents to Markdown to improve compatibility with npm.",
 		"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
-		"typescript": "A statically typed programming language that extends the JavaScript syntax.",
-		"vite": "A highly extensible build tool.",
-		"vitest": "A Vite-based unit testing framework."
-	},
-	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
-	"engines": {
-		"node": ">=20.0.0"
+		"typescript": "TypeScript is a statically typed programming language on top of JavaScript.",
+		"vite": "Vite is a development server and a bundler.",
+		"vitest": "Vitest is a unit testing framework."
 	}
 }

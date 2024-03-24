@@ -1,17 +1,16 @@
-import { type Changelog } from "+changelogs/Changelog"
+import type { Changelog } from "+changelogs/Changelog"
 
 export function serializeChangelogToAsciidoc(changelog: Changelog): string {
 	return (
 		changelog.preamble +
-		changelog.sections
-			.map(
-				(section) =>
-					"\n\n\n" +
-					serializeSectionHeadingToAsciidoc(section) +
-					serializeSectionBodyToAsciidoc(section),
-			)
-			.join("")
+		changelog.sections.map(serializeSectionToAsciidoc).join("")
 	)
+}
+
+function serializeSectionToAsciidoc(section: Changelog.Section): string {
+	return `\n\n\n${serializeSectionHeadingToAsciidoc(
+		section,
+	)}${serializeSectionBodyToAsciidoc(section)}`
 }
 
 function serializeSectionHeadingToAsciidoc(section: Changelog.Section): string {
@@ -36,6 +35,6 @@ function serializeSectionHeadingToAsciidoc(section: Changelog.Section): string {
 	}[${section.release.version}] - ${section.release.date}`
 }
 
-function serializeSectionBodyToAsciidoc(section: Changelog.Section) {
-	return section.sectionBody !== "" ? "\n\n" + section.sectionBody : ""
+function serializeSectionBodyToAsciidoc(section: Changelog.Section): string {
+	return section.sectionBody !== "" ? `\n\n${section.sectionBody}` : ""
 }

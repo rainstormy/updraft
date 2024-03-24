@@ -1,20 +1,20 @@
-import { type OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
-import { type OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
-import { type OnReadingFiles } from "+adapters/OnReadingFiles"
-import { type OnWritingToFiles } from "+adapters/OnWritingToFiles"
+import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
+import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
+import type { OnReadingFiles } from "+adapters/OnReadingFiles"
+import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
 import { parseAsciidocChangelog } from "+changelogs/AsciidocChangelogParser"
 import { serializeChangelogToAsciidoc } from "+changelogs/AsciidocChangelogSerializer"
 import { promoteChangelog } from "+changelogs/ChangelogPromoter"
+import type { Configuration } from "+configuration/Configuration"
 import { promotePackage } from "+packages/PackagePromoter"
-import { isFulfilled, isRejected } from "+utilities/assertions"
-import { assertError, type ExitCode } from "+utilities/ErrorUtilities"
-import { type FileType, type PathWithContent } from "+utilities/FileUtilities"
-import { type Release } from "+utilities/Release"
-import {
-	type DateString,
-	type SemanticVersionString,
+import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
+import type { FileType, PathWithContent } from "+utilities/FileUtilities"
+import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
+import type { Release } from "+utilities/Release"
+import type {
+	DateString,
+	SemanticVersionString,
 } from "+utilities/StringUtilities"
-import { type Configuration } from "./Configuration"
 
 export const usageInstructions = `Usage: updraft [options]
 
@@ -47,15 +47,15 @@ const usageInstructionsReminder =
 
 export async function runProgram(
 	input: {
-		readonly configuration: Configuration
-		readonly today: DateString
-		readonly toolVersion: SemanticVersionString
+		configuration: Configuration
+		today: DateString
+		toolVersion: SemanticVersionString
 	},
 	sideEffects: {
-		readonly onDisplayingMessage: OnDisplayingMessage
-		readonly onListingMatchingFiles: OnListingMatchingFiles
-		readonly onReadingFiles: OnReadingFiles
-		readonly onWritingToFiles: OnWritingToFiles
+		onDisplayingMessage: OnDisplayingMessage
+		onListingMatchingFiles: OnListingMatchingFiles
+		onReadingFiles: OnReadingFiles
+		onWritingToFiles: OnWritingToFiles
 	},
 ): Promise<ExitCode> {
 	const { configuration, today, toolVersion } = input
@@ -66,22 +66,18 @@ export async function runProgram(
 		onWritingToFiles,
 	} = sideEffects
 
-	switch (configuration.type) {
-		case "help-screen": {
-			return await displayInformation({
-				message: usageInstructions,
-			})
-		}
-		case "invalid": {
-			return await displayInvalidInputError({
-				message: configuration.errorMessage + usageInstructionsReminder,
-			})
-		}
-		case "tool-version": {
-			return await displayInformation({
-				message: toolVersion,
-			})
-		}
+	if (configuration.type === "help-screen") {
+		return displayInformation({ message: usageInstructions })
+	}
+
+	if (configuration.type === "invalid") {
+		return displayInvalidInputError({
+			message: configuration.errorMessage + usageInstructionsReminder,
+		})
+	}
+
+	if (configuration.type === "tool-version") {
+		return displayInformation({ message: toolVersion })
 	}
 
 	const { filePatterns, releaseVersion } = configuration
@@ -91,7 +87,7 @@ export async function runProgram(
 		const matchingFiles = await onListingMatchingFiles({ filePatterns })
 
 		if (matchingFiles.length === 0) {
-			return await displayWarning({
+			return displayWarning({
 				message: `${filePatterns.join(", ")} did not match any files.`,
 			})
 		}
@@ -106,7 +102,7 @@ export async function runProgram(
 					[
 						path,
 						await promoteFile({ path, originalContent, newRelease }),
-					] as const,
+					] satisfies PathWithContent,
 			),
 		)
 
@@ -116,7 +112,7 @@ export async function runProgram(
 		})
 
 		if (errors.length > 0) {
-			return await displayGeneralErrors({ messages: errors })
+			return displayGeneralErrors({ messages: errors })
 		}
 
 		const outputPathsWithContent = promotionResults
@@ -127,11 +123,11 @@ export async function runProgram(
 		return 0
 	} catch (error) {
 		assertError(error)
-		return await displayGeneralErrors({ messages: [error.message] })
+		return displayGeneralErrors({ messages: [error.message] })
 	}
 
 	async function displayInformation(input: {
-		readonly message: string
+		message: string
 	}): Promise<ExitCode.Success> {
 		const { message } = input
 
@@ -140,7 +136,7 @@ export async function runProgram(
 	}
 
 	async function displayWarning(input: {
-		readonly message: string
+		message: string
 	}): Promise<ExitCode.Success> {
 		const { message } = input
 
@@ -149,7 +145,7 @@ export async function runProgram(
 	}
 
 	async function displayGeneralErrors(input: {
-		readonly messages: ReadonlyArray<string>
+		messages: Array<string>
 	}): Promise<ExitCode.GeneralError> {
 		const { messages } = input
 
@@ -161,19 +157,19 @@ export async function runProgram(
 	}
 
 	async function displayInvalidInputError(input: {
-		readonly message: string
+		message: string
 	}): Promise<ExitCode.InvalidInput> {
 		const { message } = input
 
-		await onDisplayingMessage({ severity: "error", message: message })
+		await onDisplayingMessage({ severity: "error", message })
 		return 2
 	}
 }
 
 async function promoteFile(input: {
-	readonly path: string
-	readonly originalContent: string
-	readonly newRelease: Release
+	path: string
+	originalContent: string
+	newRelease: Release
 }): Promise<string> {
 	const { path, originalContent, newRelease } = input
 	const fileType = detectFileType({ path })
@@ -188,7 +184,7 @@ async function promoteFile(input: {
 	}
 }
 
-function detectFileType(input: { readonly path: string }): FileType {
+function detectFileType(input: { path: string }): FileType {
 	const { path } = input
 	const filename = path.split("/").at(-1) ?? ""
 
@@ -202,9 +198,9 @@ function detectFileType(input: { readonly path: string }): FileType {
 }
 
 async function promoteChangelogFile(input: {
-	readonly path: string
-	readonly originalContent: string
-	readonly newRelease: Release
+	path: string
+	originalContent: string
+	newRelease: Release
 }): Promise<string> {
 	const { path, originalContent, newRelease } = input
 
@@ -222,9 +218,9 @@ async function promoteChangelogFile(input: {
 }
 
 async function promotePackageJsonFile(input: {
-	readonly path: string
-	readonly originalContent: string
-	readonly newRelease: Release
+	path: string
+	originalContent: string
+	newRelease: Release
 }): Promise<string> {
 	const { path, originalContent, newRelease } = input
 

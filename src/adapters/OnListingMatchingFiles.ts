@@ -3,17 +3,17 @@ import fg from "fast-glob"
 export type OnListingMatchingFiles = typeof onListingMatchingFilesFromDisk
 
 export async function onListingMatchingFilesFromDisk(input: {
-	readonly filePatterns: ReadonlyArray<string>
-}): Promise<ReadonlyArray<string>> {
+	filePatterns: Array<string>
+}): Promise<Array<string>> {
 	const { filePatterns } = input
-	return await fg.glob([...filePatterns], { dot: true })
+	return fg.glob([...filePatterns], { dot: true })
 }
 
 /**
  * For unit testing purposes.
  */
 export function onListingFakeMatchingFiles(
-	paths: ReadonlyArray<string>,
+	paths: Array<string>,
 ): OnListingMatchingFiles {
 	return async ({ filePatterns }) => {
 		const regexes = filePatterns.map(convertGlobPatternToRegex)

@@ -1,18 +1,18 @@
-import { assertError } from "+utilities/ErrorUtilities"
-import { type PathsWithContent } from "+utilities/FileUtilities"
 import { writeFile } from "node:fs/promises"
+import { assertError } from "+utilities/ErrorUtilities"
+import type { PathsWithContent } from "+utilities/FileUtilities"
 
 export type OnWritingToFiles = typeof onWritingToFilesOnDisk
 
 export async function onWritingToFilesOnDisk(input: {
-	readonly outputPathsWithContent: PathsWithContent
+	outputPathsWithContent: PathsWithContent
 }): Promise<void> {
 	const { outputPathsWithContent } = input
 
 	await Promise.all(
 		outputPathsWithContent.map(async ([path, contents]) => {
 			try {
-				await writeFile(path, contents, "utf-8")
+				await writeFile(path, contents, "utf8")
 			} catch (error) {
 				assertError(error)
 				raiseError({ path, errorMessage: error.message })
@@ -25,9 +25,7 @@ export async function onWritingToFilesOnDisk(input: {
  * For unit testing purposes.
  */
 export function onWritingToFakeFiles(
-	sabotagedPaths: ReadonlyArray<
-		readonly [path: string, errorMessage: () => string]
-	>,
+	sabotagedPaths: Array<[path: string, errorMessage: () => string]>,
 ): OnWritingToFiles {
 	return async ({ outputPathsWithContent }) => {
 		const sabotagedPath = sabotagedPaths.find(([path]) =>
@@ -42,8 +40,8 @@ export function onWritingToFakeFiles(
 }
 
 function raiseError(input: {
-	readonly path: string
-	readonly errorMessage: string
+	path: string
+	errorMessage: string
 }): never {
 	const { path, errorMessage } = input
 	throw new Error(`Failed to write changes to ${path}: ${errorMessage}.`)

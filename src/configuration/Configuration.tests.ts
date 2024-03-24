@@ -1,6 +1,9 @@
-import { type SemanticVersionString } from "+utilities/StringUtilities"
+import {
+	type Configuration,
+	getConfigurationFromArgs,
+} from "+configuration/Configuration"
+import type { SemanticVersionString } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
-import { getConfigurationFromArgs, type Configuration } from "./Configuration"
 
 describe.each`
 	argsString
@@ -9,38 +12,32 @@ describe.each`
 	${"--help --version"}
 	${"--release-version 1.1 --help"}
 	${"--files --help package.json"}
-`(
-	"a configuration from $argsString",
-	(input: { readonly argsString: string }) => {
-		const { argsString } = input
-		const args = splitArgsString(argsString)
+`("a configuration from $argsString", (input: { argsString: string }) => {
+	const { argsString } = input
+	const args = splitArgsString(argsString)
 
-		const configuration = getConfigurationFromArgs(args)
+	const configuration = getConfigurationFromArgs(args)
 
-		it("is 'help-screen'", () => {
-			expect(configuration.type).toBe("help-screen")
-		})
-	},
-)
+	it("is 'help-screen'", () => {
+		expect(configuration.type).toBe("help-screen")
+	})
+})
 
 describe.each`
 	argsString
 	${"--version"}
 	${"--release-version 2.2 --version"}
 	${"--files --version CHANGELOG.adoc"}
-`(
-	"a configuration from $argsString",
-	(input: { readonly argsString: string }) => {
-		const { argsString } = input
-		const args = splitArgsString(argsString)
+`("a configuration from $argsString", (input: { argsString: string }) => {
+	const { argsString } = input
+	const args = splitArgsString(argsString)
 
-		const configuration = getConfigurationFromArgs(args)
+	const configuration = getConfigurationFromArgs(args)
 
-		it("is 'tool-version'", () => {
-			expect(configuration.type).toBe("tool-version")
-		})
-	},
-)
+	it("is 'tool-version'", () => {
+		expect(configuration.type).toBe("tool-version")
+	})
+})
 
 describe.each`
 	argsString                                                                              | expectedErrorMessage
@@ -62,8 +59,8 @@ describe.each`
 `(
 	"a configuration from $argsString on $today",
 	(input: {
-		readonly argsString: string
-		readonly expectedErrorMessage: string
+		argsString: string
+		expectedErrorMessage: string
 	}) => {
 		const { argsString, expectedErrorMessage } = input
 		const args = splitArgsString(argsString)
@@ -90,9 +87,9 @@ describe.each`
 `(
 	"a configuration from $argsString on $today",
 	(input: {
-		readonly argsString: string
-		readonly expectedReleaseVersion: SemanticVersionString
-		readonly expectedFilePatterns: ReadonlyArray<string>
+		argsString: string
+		expectedReleaseVersion: SemanticVersionString
+		expectedFilePatterns: Array<string>
 	}) => {
 		const { argsString, expectedReleaseVersion, expectedFilePatterns } = input
 		const args = splitArgsString(argsString)
@@ -115,7 +112,7 @@ describe.each`
 	},
 )
 
-function splitArgsString(argsString: string): ReadonlyArray<string> {
+function splitArgsString(argsString: string): Array<string> {
 	return argsString
 		.split(" ")
 		.map((arg) => arg.trim())

@@ -1,6 +1,7 @@
+import { parseAsciidocChangelog } from "+changelogs/AsciidocChangelogParser"
+import { assertNotNullish } from "+utilities/ObjectUtilities"
 import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
-import { parseAsciidocChangelog } from "./AsciidocChangelogParser"
 
 const preamble = dedent`
 	= Changelog
@@ -106,9 +107,9 @@ describe.each`
 `(
 	"when the changelog contains a non-empty unreleased section with a heading of $heading",
 	(testRow: {
-		readonly heading: string
-		readonly body: string
-		readonly expectedRepositoryUrl: string | null
+		heading: string
+		body: string
+		expectedRepositoryUrl: string | null
 	}) => {
 		const { heading, body, expectedRepositoryUrl } = testRow
 		const asciidoc = dedent`
@@ -131,22 +132,22 @@ describe.each`
 
 			describe("the section", () => {
 				it(`has a repository URL of '${expectedRepositoryUrl}'`, () => {
-					assumeNotNullish(result.sections[0])
+					assertNotNullish(result.sections[0])
 					expect(result.sections[0].repositoryUrl).toBe(expectedRepositoryUrl)
 				})
 
 				it("does not have a previous release", () => {
-					assumeNotNullish(result.sections[0])
+					assertNotNullish(result.sections[0])
 					expect(result.sections[0].previousRelease).toBeNull()
 				})
 
 				it("is unreleased", () => {
-					assumeNotNullish(result.sections[0])
+					assertNotNullish(result.sections[0])
 					expect(result.sections[0].release).toBeNull()
 				})
 
 				it("has a section body", () => {
-					assumeNotNullish(result.sections[0])
+					assertNotNullish(result.sections[0])
 					expect(result.sections[0].sectionBody).toBe(body)
 				})
 			})
@@ -177,59 +178,59 @@ describe("when the changelog contains an empty unreleased section and a non-empt
 
 		describe("the latest section", () => {
 			it("has a repository URL", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].repositoryUrl).toBe(
 					"https://github.com/spdiswal/coolciv",
 				)
 			})
 
 			it("has a previous release", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].previousRelease).not.toBeNull()
 
-				assumeNotNullish(result.sections[0].previousRelease)
+				assertNotNullish(result.sections[0].previousRelease)
 				expect(result.sections[0].previousRelease.version).toBe("0.5.1")
 				expect(result.sections[0].previousRelease.date).toBe("2022-12-22")
 			})
 
 			it("is unreleased", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].release).toBeNull()
 			})
 
 			it("has an empty section body", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].sectionBody).toBe("")
 			})
 		})
 
 		describe("the earliest section", () => {
 			it("has a repository URL", () => {
-				assumeNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1])
 				expect(result.sections[1].repositoryUrl).toBe(
 					"https://github.com/spdiswal/coolciv",
 				)
 			})
 
 			it("does not have a previous release", () => {
-				assumeNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1])
 				expect(result.sections[1].previousRelease).toBeNull()
 			})
 
 			it("has a release version", () => {
-				assumeNotNullish(result.sections[1])
-				assumeNotNullish(result.sections[1].release)
+				assertNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1].release)
 				expect(result.sections[1].release.version).toBe("0.5.1")
 			})
 
 			it("has a release date", () => {
-				assumeNotNullish(result.sections[1])
-				assumeNotNullish(result.sections[1].release)
+				assertNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1].release)
 				expect(result.sections[1].release.date).toBe("2022-12-22")
 			})
 
 			it("has a section body", () => {
-				assumeNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1])
 				expect(result.sections[1].sectionBody).toBe(sectionOfOfficeAppliances)
 			})
 		})
@@ -263,98 +264,90 @@ describe("when the changelog contains a non-empty unreleased section and two ear
 
 		describe("the latest section", () => {
 			it("has a repository URL", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].repositoryUrl).toBe("{url-owner-repo}")
 			})
 
 			it("has a previous release", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].previousRelease).not.toBeNull()
 
-				assumeNotNullish(result.sections[0].previousRelease)
+				assertNotNullish(result.sections[0].previousRelease)
 				expect(result.sections[0].previousRelease.version).toBe("0.1.2")
 				expect(result.sections[0].previousRelease.date).toBe("2021-06-11")
 			})
 
 			it("is unreleased", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].release).toBeNull()
 			})
 
 			it("has a section body", () => {
-				assumeNotNullish(result.sections[0])
+				assertNotNullish(result.sections[0])
 				expect(result.sections[0].sectionBody).toBe(sectionOfKitchenAppliances)
 			})
 		})
 
 		describe("the middle section", () => {
 			it("has a repository URL", () => {
-				assumeNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1])
 				expect(result.sections[1].repositoryUrl).toBe("{url-owner-repo}")
 			})
 
 			it("has a previous release", () => {
-				assumeNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1])
 				expect(result.sections[1].previousRelease).not.toBeNull()
 
-				assumeNotNullish(result.sections[1].previousRelease)
+				assertNotNullish(result.sections[1].previousRelease)
 				expect(result.sections[1].previousRelease.version).toBe("0.0.1")
 				expect(result.sections[1].previousRelease.date).toBe("2021-05-04")
 			})
 
 			it("has a release version", () => {
-				assumeNotNullish(result.sections[1])
-				assumeNotNullish(result.sections[1].release)
+				assertNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1].release)
 				expect(result.sections[1].release.version).toBe("0.1.2")
 			})
 
 			it("has a release date", () => {
-				assumeNotNullish(result.sections[1])
-				assumeNotNullish(result.sections[1].release)
+				assertNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1].release)
 				expect(result.sections[1].release.date).toBe("2021-06-11")
 			})
 
 			it("has a section body", () => {
-				assumeNotNullish(result.sections[1])
+				assertNotNullish(result.sections[1])
 				expect(result.sections[1].sectionBody).toBe(sectionOfOfficeAppliances)
 			})
 		})
 
 		describe("the earliest section", () => {
 			it("has a repository URL", () => {
-				assumeNotNullish(result.sections[2])
+				assertNotNullish(result.sections[2])
 				expect(result.sections[2].repositoryUrl).toBe("{url-owner-repo}")
 			})
 
 			it("does not have a previous release", () => {
-				assumeNotNullish(result.sections[2])
+				assertNotNullish(result.sections[2])
 				expect(result.sections[2].previousRelease).toBeNull()
 			})
 
 			it("has a release version", () => {
-				assumeNotNullish(result.sections[2])
-				assumeNotNullish(result.sections[2].release)
+				assertNotNullish(result.sections[2])
+				assertNotNullish(result.sections[2].release)
 				expect(result.sections[2].release.version).toBe("0.0.1")
 			})
 
 			it("has a release date", () => {
-				assumeNotNullish(result.sections[2])
-				assumeNotNullish(result.sections[2].release)
+				assertNotNullish(result.sections[2])
+				assertNotNullish(result.sections[2].release)
 				expect(result.sections[2].release.date).toBe("2021-05-04")
 			})
 
 			it("has a section body", () => {
-				assumeNotNullish(result.sections[2])
+				assertNotNullish(result.sections[2])
 				expect(result.sections[2].sectionBody).toBe(sectionOfBathroomAppliances)
 			})
 		})
 	})
 })
-
-function assumeNotNullish(
-	value: unknown,
-): asserts value is NonNullable<typeof value> {
-	if (value === null || value === undefined) {
-		throw new Error(`Assumed a non-nullish value, but got ${value}`)
-	}
-}

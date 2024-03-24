@@ -1,9 +1,9 @@
-import {
-	type DateString,
-	type SemanticVersionString,
+import type {
+	DateString,
+	SemanticVersionString,
 } from "+utilities/StringUtilities"
 
 export type Release = {
-	readonly date: DateString
-	readonly version: SemanticVersionString
+	date: DateString
+	version: SemanticVersionString
 }

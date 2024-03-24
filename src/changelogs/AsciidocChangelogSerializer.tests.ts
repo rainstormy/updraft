@@ -1,7 +1,7 @@
-import { type Changelog } from "+changelogs/Changelog"
+import { serializeChangelogToAsciidoc } from "+changelogs/AsciidocChangelogSerializer"
+import type { Changelog } from "+changelogs/Changelog"
 import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
-import { serializeChangelogToAsciidoc } from "./AsciidocChangelogSerializer"
 
 describe("when the changelog is completely empty", () => {
 	const changelog: Changelog = {
@@ -427,7 +427,7 @@ describe("when the changelog contains a preamble, an unreleased section, and thr
 				sectionBody: dedent`
 					=== Added
 					* New rule: \`unique-subject-lines\`.
-					
+
 					=== Fixed
 					* Ignore semantic version updates (i.e. subject lines that end with \`to X.Y.Z\`) in the \`limit-length-of-subject-lines\` rule.
 					* Ignore lines that contain an \`https://\` URL in the \`limit-length-of-body-lines\` rule.
@@ -447,7 +447,7 @@ describe("when the changelog contains a preamble, an unreleased section, and thr
 				sectionBody: dedent`
 					=== Added
 					* https://choosealicense.com/licenses/mit[MIT license].
-					
+
 					=== Fixed
 					* Recognise \`scaffold\` as a verb in the \`imperative-subject-lines\` rule.
 				`,
@@ -493,38 +493,38 @@ describe("when the changelog contains a preamble, an unreleased section, and thr
 				= Changelog
 				:experimental:
 				:source-highlighter: highlight.js
-				
+
 				This file documents all notable changes to this project.
 				The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
-				
-				
+
+
 				== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0\\...HEAD[Unreleased]
-		
+
 				=== Fixed
 				* Reduce the bundle size downloaded by the GitHub Actions runner. The tarball archive exported by GitHub no longer contains Yarn PnP binaries and development-related files.
-				
-				
+
+
 				== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.1\\...v1.1.0[1.1.0] - 2023-05-04
-		
+
 				=== Added
 				* New rule: \`unique-subject-lines\`.
-				
+
 				=== Fixed
 				* Ignore semantic version updates (i.e. subject lines that end with \`to X.Y.Z\`) in the \`limit-length-of-subject-lines\` rule.
 				* Ignore lines that contain an \`https://\` URL in the \`limit-length-of-body-lines\` rule.
-				
-				
+
+
 				== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.0\\...v1.0.1[1.0.1] - 2023-04-17
-			
+
 				=== Added
 				* https://choosealicense.com/licenses/mit[MIT license].
-				
+
 				=== Fixed
 				* Recognise \`scaffold\` as a verb in the \`imperative-subject-lines\` rule.
-				
-				
+
+
 				== https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.0.0[1.0.0] - 2023-04-01
-				
+
 				=== Added
 				* GitHub Actions entrypoint.
 				* New rule: \`acknowledged-author-email-addresses\`.

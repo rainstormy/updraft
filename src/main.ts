@@ -1,15 +1,17 @@
+import process, { argv } from "node:process"
 import { onDisplayingMessageInConsole } from "+adapters/OnDisplayingMessage"
 import { onListingMatchingFilesFromDisk } from "+adapters/OnListingMatchingFiles"
 import { onReadingFilesFromDisk } from "+adapters/OnReadingFiles"
 import { onWritingToFilesOnDisk } from "+adapters/OnWritingToFiles"
-import {
-	type DateString,
-	type SemanticVersionString,
+import { getConfigurationFromArgs } from "+configuration/Configuration"
+import { runProgram } from "+program/Program"
+import type {
+	DateString,
+	SemanticVersionString,
 } from "+utilities/StringUtilities"
-import process, { argv } from "node:process"
-import { version as packageJsonVersion } from "../package.json" assert { type: "json" }
-import { getConfigurationFromArgs } from "./Configuration"
-import { runProgram } from "./Program"
+import { version as packageJsonVersion } from "../package.json" assert {
+	type: "json",
+}
 
 const today = new Date()
 	.toISOString()

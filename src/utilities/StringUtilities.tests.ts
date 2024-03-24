@@ -30,7 +30,7 @@ describe("dedenting a multi-line string without indents", () => {
 How are you?`
 
 	it("returns the original string", () => {
-		expect(result).toBe("Hello, world!\n" + "How are you?")
+		expect(result).toBe("Hello, world!\nHow are you?")
 	})
 })
 
@@ -40,7 +40,7 @@ Hello, world!
 How are you?`
 
 	it("removes the leading newline", () => {
-		expect(result).toBe("Hello, world!\n" + "How are you?")
+		expect(result).toBe("Hello, world!\nHow are you?")
 	})
 })
 
@@ -50,7 +50,7 @@ How are you?
 `
 
 	it("preserves the trailing newline", () => {
-		expect(result).toBe("Hello, world!\n" + "How are you?")
+		expect(result).toBe("Hello, world!\nHow are you?")
 	})
 })
 
@@ -60,7 +60,7 @@ How are you?
 	`
 
 	it("preserves the indented trailing newline", () => {
-		expect(result).toBe("Hello, world!\n" + "How are you?\n" + "\t")
+		expect(result).toBe("Hello, world!\nHow are you?\n\t")
 	})
 })
 
@@ -71,7 +71,7 @@ How are you?
 `
 
 	it("returns the original string", () => {
-		expect(result).toBe("            Hello, world!\n" + "How are you?")
+		expect(result).toBe("            Hello, world!\nHow are you?")
 	})
 })
 
@@ -82,7 +82,7 @@ describe("dedenting a multi-line string with a common indent level of 4 spaces",
 `
 
 	it("removes 4 leading spaces from every line", () => {
-		expect(result).toBe("    Hello, world!\n" + "How are you?")
+		expect(result).toBe("    Hello, world!\nHow are you?")
 	})
 })
 
@@ -93,7 +93,7 @@ describe("dedenting a multi-line string with a common indent level of 8 spaces",
 `
 
 	it("removes 8 leading spaces from every line", () => {
-		expect(result).toBe("Hello, world!\n" + "How are you?")
+		expect(result).toBe("Hello, world!\nHow are you?")
 	})
 })
 
@@ -104,7 +104,7 @@ describe("dedenting a multi-line string with a common indent level of 1 tab", ()
 `
 
 	it("removes 1 leading tab from every line", () => {
-		expect(result).toBe("Hello, world!\n" + "\tHow are you?")
+		expect(result).toBe("Hello, world!\n\tHow are you?")
 	})
 })
 
@@ -117,7 +117,7 @@ describe("dedenting a multi-line string with an indented trailing newline with a
 
 	it("removes 3 leading tabs from every line and discards the indent of the trailing newline", () => {
 		expect(result).toBe(
-			"function doStuff() {\n" + "\tconsole.log('Hello, world!')\n" + "}",
+			"function doStuff() {\n\tconsole.log('Hello, world!')\n}",
 		)
 	})
 })
@@ -131,7 +131,7 @@ describe("dedenting a string with a single-line interpolation and a common inden
 `
 
 	it("removes 1 leading tab from every line", () => {
-		expect(result).toBe("Hello, world!\n" + "How are you?")
+		expect(result).toBe("Hello, world!\nHow are you?")
 	})
 })
 
@@ -144,7 +144,7 @@ describe("dedenting a string with a single-line interpolation with an extra lead
 `
 
 	it("removes 1 leading tab from every line", () => {
-		expect(result).toBe("Hello, world!\n" + "\tHow are you?")
+		expect(result).toBe("Hello, world!\n\tHow are you?")
 	})
 })
 

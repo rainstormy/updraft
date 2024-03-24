@@ -1,24 +1,24 @@
-import { type OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
+import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
 import {
-	onListingFakeMatchingFiles,
 	type OnListingMatchingFiles,
+	onListingFakeMatchingFiles,
 } from "+adapters/OnListingMatchingFiles"
 import {
-	onReadingFakeFiles,
 	type OnReadingFiles,
+	onReadingFakeFiles,
 } from "+adapters/OnReadingFiles"
 import {
-	onWritingToFakeFiles,
 	type OnWritingToFiles,
+	onWritingToFakeFiles,
 } from "+adapters/OnWritingToFiles"
+import type { Configuration } from "+configuration/Configuration"
+import { runProgram, usageInstructions } from "+program/Program"
 import {
-	dedent,
 	type DateString,
 	type SemanticVersionString,
+	dedent,
 } from "+utilities/StringUtilities"
 import { describe, expect, it, vi } from "vitest"
-import { type Configuration } from "./Configuration"
-import { runProgram, usageInstructions } from "./Program"
 
 const dummyInput = {
 	today: "2022-05-29",
@@ -118,7 +118,7 @@ describe.each`
 	${"3.2.0-beta.1"}
 `(
 	"the program with a 'tool-version' configuration when the tool version is $toolVersion",
-	async (input: { readonly toolVersion: SemanticVersionString }) => {
+	async (input: { toolVersion: SemanticVersionString }) => {
 		const { toolVersion } = input
 
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
@@ -173,7 +173,7 @@ describe.each`
 	${"--files must specify a value."}
 `(
 	"the program with an 'invalid' configuration when the error message is $errorMessage",
-	async (input: { readonly errorMessage: string }) => {
+	async (input: { errorMessage: string }) => {
 		const { errorMessage } = input
 
 		const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
@@ -234,8 +234,8 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $filePatterns does not match any files",
 	async (input: {
-		readonly filePatterns: ReadonlyArray<string>
-		readonly expectedWarning: string
+		filePatterns: Array<string>
+		expectedWarning: string
 	}) => {
 		const { filePatterns, expectedWarning } = input
 
@@ -248,7 +248,7 @@ describe.each`
 
 		const configuration: Configuration = {
 			type: "release",
-			filePatterns: filePatterns,
+			filePatterns,
 			releaseVersion: dummyReleaseVersion,
 		}
 
@@ -291,9 +291,9 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilename matches a changelog file that can be promoted",
 	async (input: {
-		readonly matchedChangelogFilename: string
-		readonly releaseVersion: SemanticVersionString
-		readonly releaseDate: DateString
+		matchedChangelogFilename: string
+		releaseVersion: SemanticVersionString
+		releaseDate: DateString
 	}) => {
 		const { matchedChangelogFilename, releaseVersion, releaseDate } = input
 
@@ -372,7 +372,7 @@ describe.each`
 	${"lib/RELEASES.adoc"}
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilename matches an empty changelog file",
-	async (input: { readonly matchedChangelogFilename: string }) => {
+	async (input: { matchedChangelogFilename: string }) => {
 		const { matchedChangelogFilename } = input
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
@@ -424,7 +424,7 @@ describe.each`
 	${"lib/RELEASES.adoc"}
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilename matches a changelog file that cannot be promoted",
-	async (input: { readonly matchedChangelogFilename: string }) => {
+	async (input: { matchedChangelogFilename: string }) => {
 		const { matchedChangelogFilename } = input
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
@@ -484,11 +484,11 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedFilePatterns matches changelog files that can be promoted and $unmatchedFilePatterns does not match any files",
 	async (input: {
-		readonly matchedFilePatterns: ReadonlyArray<string>
-		readonly unmatchedFilePatterns: ReadonlyArray<string>
-		readonly matchedChangelogFilenames: ReadonlyArray<string>
-		readonly releaseVersion: SemanticVersionString
-		readonly releaseDate: DateString
+		matchedFilePatterns: Array<string>
+		unmatchedFilePatterns: Array<string>
+		matchedChangelogFilenames: Array<string>
+		releaseVersion: SemanticVersionString
+		releaseDate: DateString
 	}) => {
 		const {
 			matchedFilePatterns,
@@ -657,7 +657,7 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilenames matches changelog files of which one cannot be promoted",
 	async (input: {
-		readonly matchedChangelogFilenames: ReadonlyArray<string>
+		matchedChangelogFilenames: Array<string>
 	}) => {
 		const { matchedChangelogFilenames } = input
 
@@ -753,9 +753,9 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedFilePatterns matches changelog files of which one is empty and another one cannot be promoted and $unmatchedFilePatterns does not match any files",
 	async (input: {
-		readonly matchedFilePatterns: ReadonlyArray<string>
-		readonly unmatchedFilePatterns: ReadonlyArray<string>
-		readonly matchedChangelogFilenames: ReadonlyArray<string>
+		matchedFilePatterns: Array<string>
+		unmatchedFilePatterns: Array<string>
+		matchedChangelogFilenames: Array<string>
 	}) => {
 		const {
 			matchedFilePatterns,
@@ -839,9 +839,9 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedPackageJsonFilename matches a package.json file that can be promoted",
 	async (input: {
-		readonly matchedPackageJsonFilename: string
-		readonly releaseVersion: SemanticVersionString
-		readonly releaseDate: DateString
+		matchedPackageJsonFilename: string
+		releaseVersion: SemanticVersionString
+		releaseDate: DateString
 	}) => {
 		const { matchedPackageJsonFilename, releaseVersion, releaseDate } = input
 
@@ -923,7 +923,7 @@ describe.each`
 	${"lib/package.json"}
 `(
 	"the program with a 'release' configuration when $matchedPackageJsonFilename matches an empty package.json file",
-	async (input: { readonly matchedPackageJsonFilename: string }) => {
+	async (input: { matchedPackageJsonFilename: string }) => {
 		const { matchedPackageJsonFilename } = input
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
@@ -975,7 +975,7 @@ describe.each`
 	${"lib/package.json"}
 `(
 	"the program with a 'release' configuration when $matchedPackageJsonFilename matches a package.json file that cannot be promoted",
-	async (input: { readonly matchedPackageJsonFilename: string }) => {
+	async (input: { matchedPackageJsonFilename: string }) => {
 		const { matchedPackageJsonFilename } = input
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
@@ -1038,11 +1038,11 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedFilePatterns matches package.json files that can be promoted and $unmatchedFilePatterns does not match any files",
 	async (input: {
-		readonly matchedFilePatterns: ReadonlyArray<string>
-		readonly unmatchedFilePatterns: ReadonlyArray<string>
-		readonly matchedPackageJsonFilenames: ReadonlyArray<string>
-		readonly releaseVersion: SemanticVersionString
-		readonly releaseDate: DateString
+		matchedFilePatterns: Array<string>
+		unmatchedFilePatterns: Array<string>
+		matchedPackageJsonFilenames: Array<string>
+		releaseVersion: SemanticVersionString
+		releaseDate: DateString
 	}) => {
 		const {
 			matchedFilePatterns,
@@ -1192,7 +1192,7 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedPackageJsonFilenames matches package.json files of which one cannot be promoted",
 	async (input: {
-		readonly matchedPackageJsonFilenames: ReadonlyArray<string>
+		matchedPackageJsonFilenames: Array<string>
 	}) => {
 		const { matchedPackageJsonFilenames } = input
 
@@ -1275,9 +1275,9 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedFilePatterns matches package.json files of which one is empty and another one cannot be promoted and $unmatchedFilePatterns does not match any files",
 	async (input: {
-		readonly matchedFilePatterns: ReadonlyArray<string>
-		readonly unmatchedFilePatterns: ReadonlyArray<string>
-		readonly matchedPackageJsonFilenames: ReadonlyArray<string>
+		matchedFilePatterns: Array<string>
+		unmatchedFilePatterns: Array<string>
+		matchedPackageJsonFilenames: Array<string>
 	}) => {
 		const {
 			matchedFilePatterns,
@@ -1357,10 +1357,10 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilename matches a changelog file that can be promoted and $matchedPackageJsonFilename matches a package.json file that can be promoted",
 	async (input: {
-		readonly matchedChangelogFilename: string
-		readonly matchedPackageJsonFilename: string
-		readonly releaseVersion: SemanticVersionString
-		readonly releaseDate: DateString
+		matchedChangelogFilename: string
+		matchedPackageJsonFilename: string
+		releaseVersion: SemanticVersionString
+		releaseDate: DateString
 	}) => {
 		const {
 			matchedChangelogFilename,
@@ -1464,10 +1464,10 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilenames matches changelog files of which all can be promoted and $matchedPackageJsonFilenames matches package.json files of which all can be promoted",
 	async (input: {
-		readonly matchedChangelogFilenames: ReadonlyArray<string>
-		readonly matchedPackageJsonFilenames: ReadonlyArray<string>
-		readonly releaseVersion: SemanticVersionString
-		readonly releaseDate: DateString
+		matchedChangelogFilenames: Array<string>
+		matchedPackageJsonFilenames: Array<string>
+		releaseVersion: SemanticVersionString
+		releaseDate: DateString
 	}) => {
 		const {
 			matchedChangelogFilenames,
@@ -1665,8 +1665,8 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilenames matches changelog files of which one cannot be promoted and $matchedPackageJsonFilenames matches package.json files of which all can be promoted",
 	async (input: {
-		readonly matchedChangelogFilenames: ReadonlyArray<string>
-		readonly matchedPackageJsonFilenames: ReadonlyArray<string>
+		matchedChangelogFilenames: Array<string>
+		matchedPackageJsonFilenames: Array<string>
 	}) => {
 		const { matchedChangelogFilenames, matchedPackageJsonFilenames } = input
 
@@ -1781,8 +1781,8 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilenames matches changelog files of which all can be promoted and $matchedPackageJsonFilenames matches package.json files of which one cannot be promoted",
 	async (input: {
-		readonly matchedChangelogFilenames: ReadonlyArray<string>
-		readonly matchedPackageJsonFilenames: ReadonlyArray<string>
+		matchedChangelogFilenames: Array<string>
+		matchedPackageJsonFilenames: Array<string>
 	}) => {
 		const { matchedChangelogFilenames, matchedPackageJsonFilenames } = input
 
@@ -1890,7 +1890,7 @@ describe.each`
 	${"packages/apples/tasks.json"}
 `(
 	"the program with a 'release' configuration when $matchedUnsupportedFilename matches a file of an unsupported format",
-	async (input: { readonly matchedUnsupportedFilename: string }) => {
+	async (input: { matchedUnsupportedFilename: string }) => {
 		const { matchedUnsupportedFilename } = input
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
@@ -1943,9 +1943,9 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $matchedChangelogFilename matches a changelog file that can be promoted and $matchedPackageJsonFilename matches a package.json file that can be promoted and $matchedUnsupportedFilename matches a file of an unsupported format",
 	async (input: {
-		readonly matchedChangelogFilename: string
-		readonly matchedPackageJsonFilename: string
-		readonly matchedUnsupportedFilename: string
+		matchedChangelogFilename: string
+		matchedPackageJsonFilename: string
+		matchedUnsupportedFilename: string
 	}) => {
 		const {
 			matchedChangelogFilename,
@@ -2030,11 +2030,11 @@ describe.each`
 `(
 	"the program with a 'release' configuration when $sabotagedFilename cannot be read",
 	async (input: {
-		readonly matchedChangelogFilename: string
-		readonly matchedPackageJsonFilename: string
-		readonly sabotagedFilename: string
-		readonly sabotagedErrorMessage: string
-		readonly expectedErrorMessage: string
+		matchedChangelogFilename: string
+		matchedPackageJsonFilename: string
+		sabotagedFilename: string
+		sabotagedErrorMessage: string
+		expectedErrorMessage: string
 	}) => {
 		const {
 			matchedChangelogFilename,
@@ -2116,11 +2116,11 @@ describe.each`
 `(
 	"the program with a 'release' configuration when the changes to $sabotagedFilename cannot be saved",
 	async (input: {
-		readonly matchedChangelogFilename: string
-		readonly matchedPackageJsonFilename: string
-		readonly sabotagedFilename: string
-		readonly sabotagedErrorMessage: string
-		readonly expectedErrorMessage: string
+		matchedChangelogFilename: string
+		matchedPackageJsonFilename: string
+		sabotagedFilename: string
+		sabotagedErrorMessage: string
+		expectedErrorMessage: string
 	}) => {
 		const {
 			matchedChangelogFilename,
