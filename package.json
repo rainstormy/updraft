@@ -33,12 +33,10 @@
 		"build": "vite build --ssr ./src/main.ts",
 		"check": "biome ci . --error-on-warnings && tsc",
 		"fmt": "biome check --apply .",
-		"ready": "pnpm install && simple-git-hooks",
+		"no-verify": "pnpm lefthook uninstall",
+		"ready": "pnpm install && pnpm lefthook install",
 		"test": "vitest run",
 		"vi": "vitest watch --ui"
-	},
-	"simple-git-hooks": {
-		"pre-commit": "pnpm check && pnpm test"
 	},
 	"dependencies": {
 		"fast-glob": "3.3.2",
@@ -54,7 +52,7 @@
 		"@vitest/coverage-v8": "1.0.2",
 		"@vitest/ui": "1.0.2",
 		"downdoc": "1.0.2-stable",
-		"simple-git-hooks": "2.9.0",
+		"lefthook": "1.6.7",
 		"typescript": "5.3.3",
 		"vite": "5.0.6",
 		"vitest": "1.0.2"
@@ -65,7 +63,7 @@
 		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
 		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",
 		"downdoc": "A tool that converts AsciiDoc documents to Markdown to improve compatibility with npm.",
-		"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
+		"lefthook": "Lefthook is a Git hooks manager.",
 		"typescript": "TypeScript is a statically typed programming language on top of JavaScript.",
 		"vite": "Vite is a development server and a bundler.",
 		"vitest": "Vitest is a unit testing framework."
