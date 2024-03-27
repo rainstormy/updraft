@@ -2,9 +2,11 @@
 # https://git-scm.com/docs/gitignore
 # https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-# AsciiDoctor.
-.asciidoctor/
-.asciidoctorconfig
+# Build artifacts
+dist/
+
+# Caches and third-party dependencies
+node_modules/
 
 # Development tools and IDEs
 .idea/*
@@ -20,13 +22,7 @@
 !.vscode/tasks.json
 lefthook-local.yml
 
-# Operating system artifacts.
+# Operating system artifacts
 *~
 .DS_Store
 Thumbs.db
-
-# pnpm
-node_modules/
-
-# Vite
-dist/*

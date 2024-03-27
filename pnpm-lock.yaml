@@ -25,9 +25,6 @@ devDependencies:
   '@vitest/ui':
     specifier: 1.0.2
     version: 1.0.2(vitest@1.0.2)
-  downdoc:
-    specifier: 1.0.2-stable
-    version: 1.0.2-stable
   lefthook:
     specifier: 1.6.7
     version: 1.6.7
@@ -739,12 +736,6 @@ packages:
   /diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dev: true
-
-  /downdoc@1.0.2-stable:
-    resolution: {integrity: sha512-eYTOmnYp3a6ibweDWLO72Y2NxWtw5YVA5rpfS4+vjWh6K1F9bD3TrwxYxfjfudqwBtYeeIYkn7b9UXN22NkZSw==}
-    engines: {node: '>=16.17.0'}
-    hasBin: true
     dev: true
 
   /esbuild@0.19.12:
