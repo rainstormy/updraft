@@ -1,8 +1,8 @@
-import { type Changelog } from "+changelogs/Changelog"
-import { type Release } from "+utilities/Release"
-import {
-	type DateString,
-	type SemanticVersionString,
+import type { Changelog } from "+changelogs/Changelog"
+import type { Release } from "+utilities/Release"
+import type {
+	DateString,
+	SemanticVersionString,
 } from "+utilities/StringUtilities"
 
 export function parseAsciidocChangelog(content: string): Changelog {
@@ -36,17 +36,17 @@ function getHeadingAndBody(
 
 	if (firstNewlineIndex >= 0) {
 		return [
-			sectionContent.substring("== ".length, firstNewlineIndex).trim(),
-			sectionContent.substring(firstNewlineIndex + 1).trim(),
+			sectionContent.slice("== ".length, firstNewlineIndex).trim(),
+			sectionContent.slice(firstNewlineIndex + 1).trim(),
 		]
 	}
 
-	return [sectionContent.substring("== ".length).trim(), ""]
+	return [sectionContent.slice("== ".length).trim(), ""]
 }
 
 function withPreviousReleases(
-	sections: ReadonlyArray<Changelog.Section>,
-): ReadonlyArray<Changelog.Section> {
+	sections: Array<Changelog.Section>,
+): Array<Changelog.Section> {
 	return sections.map((section, index) => ({
 		...section,
 		previousRelease: sections[index + 1]?.release ?? null,
@@ -57,22 +57,24 @@ function getRepositoryUrl(
 	heading: string,
 ): Changelog.RepositoryUrlString | null {
 	if (
-		!heading.includes("https://") &&
-		!heading.includes("{") &&
-		!heading.includes("}")
+		!(
+			heading.includes("https://") ||
+			heading.includes("{") ||
+			heading.includes("}")
+		)
 	) {
 		return null
 	}
 
 	if (heading.includes("/compare/")) {
-		return heading.substring(
+		return heading.slice(
 			0,
 			heading.indexOf("/compare/"),
 		) as Changelog.RepositoryUrlString
 	}
 
 	if (heading.includes("/releases/tag/")) {
-		return heading.substring(
+		return heading.slice(
 			0,
 			heading.indexOf("/releases/tag/"),
 		) as Changelog.RepositoryUrlString
@@ -80,12 +82,12 @@ function getRepositoryUrl(
 
 	const urlLabelStartIndex = heading.indexOf("[")
 	return (
-		urlLabelStartIndex >= 0 ? heading.substring(0, urlLabelStartIndex) : heading
+		urlLabelStartIndex >= 0 ? heading.slice(0, urlLabelStartIndex) : heading
 	) as Changelog.RepositoryUrlString
 }
 
 function getRelease(heading: string): Release | null {
-	if (!heading.includes("/compare/") && !heading.includes("/releases/tag/")) {
+	if (!(heading.includes("/compare/") || heading.includes("/releases/tag/"))) {
 		return null
 	}
 
@@ -97,10 +99,10 @@ function getRelease(heading: string): Release | null {
 	}
 
 	return {
-		version: heading.substring(
+		version: heading.slice(
 			urlLabelStartIndex + 1,
 			urlLabelEndIndex,
 		) as SemanticVersionString,
-		date: heading.substring(urlLabelEndIndex + "] - ".length) as DateString,
+		date: heading.slice(urlLabelEndIndex + "] - ".length) as DateString,
 	}
 }

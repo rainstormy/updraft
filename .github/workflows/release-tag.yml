@@ -1,0 +1,47 @@
+# This workflow creates a Git tag for the release commit on the `main` branch.
+#
+# It is triggered automatically by merging a pull request from a branch with a `release/` prefix, as created by the `release.yml` workflow.
+
+name: Release / Tag
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: release-tag-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+jobs:
+  create-git-tag:
+    name: Create Git tag
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    permissions: { }
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
+        with:
+          # Use a separate access token to allow the push tag event in this workflow to trigger the subsequent `release-github.yml` and `release-npm.yml` workflows.
+          # https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
+          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+        #
+      - name: Use Nimbus (Bot) in Git
+        uses: rainstormy-actions/rainstorm-release/bot-nimbus@2349446d8d99692944dc519a2e5e67fe5608855c # https://github.com/rainstormy-actions/rainstorm-release
+        with:
+          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          bot-nimbus-ssh-__private__-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
+        #
+      - name: Create a release tag
+        uses: rainstormy-actions/release/tag@e9b2ac5cc4a0a1288cce53dd3021b9ed2c8b42f8 # https://github.com/rainstormy-actions/release
+        with:
+          version: ${{ github.head_ref }}

@@ -1,8 +1,4 @@
 {
-	"recommendations": [
-		"arcanis.vscode-zipfs",
-		"asciidoctor.asciidoctor-vscode",
-		"esbenp.prettier-vscode"
-	],
+	"recommendations": ["biomejs.biome"],
 	"unwantedRecommendations": []
 }

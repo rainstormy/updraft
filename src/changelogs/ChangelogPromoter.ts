@@ -1,9 +1,9 @@
-import { type Changelog } from "+changelogs/Changelog"
-import { type Release } from "+utilities/Release"
+import type { Changelog } from "+changelogs/Changelog"
+import type { Release } from "+utilities/Release"
 
 export async function promoteChangelog(input: {
-	readonly originalChangelog: Changelog
-	readonly newRelease: Release
+	originalChangelog: Changelog
+	newRelease: Release
 }): Promise<Changelog> {
 	const { originalChangelog, newRelease } = input
 

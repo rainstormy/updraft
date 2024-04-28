@@ -8,69 +8,39 @@
 		},
 		{
 			"type": "npm",
-			"script": "setup",
+			"script": "check",
 			"problemMatcher": [],
-			"label": "setup"
+			"label": "check"
 		},
 		{
 			"type": "npm",
-			"script": "validate",
+			"script": "fmt",
 			"problemMatcher": [],
-			"label": "validate"
+			"label": "fmt"
 		},
 		{
 			"type": "npm",
-			"script": "validate.format",
+			"script": "no-verify",
 			"problemMatcher": [],
-			"label": "validate.format"
+			"label": "no-verify"
 		},
 		{
 			"type": "npm",
-			"script": "validate.format.fix",
+			"script": "ready",
 			"problemMatcher": [],
-			"label": "validate.format.fix"
+			"label": "ready"
 		},
 		{
 			"type": "npm",
-			"script": "validate.format.nocache",
+			"script": "test",
 			"problemMatcher": [],
-			"label": "validate.format.nocache"
+			"label": "test"
 		},
 		{
 			"type": "npm",
-			"script": "validate.test",
+			"script": "vi",
 			"problemMatcher": [],
-			"label": "validate.test"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.coverage",
-			"problemMatcher": [],
-			"label": "validate.test.coverage"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.overview",
-			"problemMatcher": [],
-			"label": "validate.test.overview"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.watch",
-			"problemMatcher": [],
-			"label": "validate.test.watch"
-		},
-		{
-			"type": "npm",
-			"script": "validate.types",
-			"problemMatcher": [],
-			"label": "validate.types"
-		},
-		{
-			"type": "npm",
-			"script": "validate.types.nocache",
-			"problemMatcher": [],
-			"label": "validate.types.nocache"
+			"label": "vi"
 		}
 	]
 }

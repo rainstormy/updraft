@@ -1,0 +1,88 @@
+# This workflow creates a release commit and a pull request towards the `main` branch.
+#
+# It can be triggered manually on any branch via the GitHub CLI:
+#
+#   gh workflow run release.yml --field version=<major.minor.patch[-prerelease][+buildinfo]> [--ref <branch-name>]
+#   gh run watch
+#
+# It can be triggered manually via the GitHub web interface:
+#   https://github.com/rainstormy/updraft/actions/workflows/release.yml
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      update-changelog:
+        description: A boolean that determines if the changelog is to be updated to the given `version`.
+        type: boolean
+        required: true
+      #
+      version:
+        description: A string that contains a semantic version number on the form `<major>.<minor>.<patch>[-prerelease][+buildinfo]`.
+        type: string
+        required: true
+
+run-name: ${{ inputs.version }}
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+jobs:
+  validate-software-quality:
+    name: Validate software quality
+    permissions:
+      contents: read # Allow the job to call the reusable `ci.yml` workflow.
+    uses: ./.github/workflows/ci.yml
+
+  create-pull-request:
+    name: Create pull request
+    needs: validate-software-quality
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    permissions: { }
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
+        with:
+          # Use a separate access token with permission to commit and push.
+          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+        #
+      - name: Restore build artifacts
+        uses: ./.github/actions/build-artifacts
+        #
+      - name: Install pnpm and third-party dependencies
+        uses: ./.github/actions/pnpm
+        #
+      - name: Update release artifacts
+        # Run the newest version of Updraft on itself.
+        # Use double quotes to enclose a space-separated list of files to ensure correct shell expansion.
+        run: |
+          VERSION=$(echo "$RAW_VERSION" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?')
+          if [ "$UPDATE_CHANGELOG" = 'true' ]; then
+            FILES="CHANGELOG.adoc package.json"
+          else
+            FILES="package.json"
+          fi
+          node ./src/entry.cli.js --files $FILES --release-version $VERSION
+        env:
+          RAW_VERSION: ${{ inputs.version }}
+          UPDATE_CHANGELOG: ${{ inputs.update-changelog }}
+        #
+      - name: Use Nimbus (Bot) in Git
+        uses: rainstormy-actions/rainstorm-release/bot-nimbus@2349446d8d99692944dc519a2e5e67fe5608855c # https://github.com/rainstormy-actions/rainstorm-release
+        with:
+          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          bot-nimbus-ssh-__private__-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
+        #
+      - name: Create a release pull request
+        uses: rainstormy-actions/release/pr@e9b2ac5cc4a0a1288cce53dd3021b9ed2c8b42f8 # https://github.com/rainstormy-actions/release
+        with:
+          gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+          version: ${{ inputs.version }}

@@ -1,10 +1,10 @@
-import { type Release } from "+utilities/Release"
+import type { Release } from "+utilities/Release"
 
 const versionFieldRegex = /"version":\s*"(?<semanticVersionNumber>[^"]+)"/u
 
 export async function promotePackage(input: {
-	readonly originalPackageContent: string
-	readonly newRelease: Release
+	originalPackageContent: string
+	newRelease: Release
 }): Promise<string> {
 	const { originalPackageContent, newRelease } = input
 

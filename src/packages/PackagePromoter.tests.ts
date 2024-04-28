@@ -1,6 +1,6 @@
-import { dedent, type SemanticVersionString } from "+utilities/StringUtilities"
+import { promotePackage } from "+packages/PackagePromoter"
+import { type SemanticVersionString, dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
-import { promotePackage } from "./PackagePromoter"
 
 describe("when the 'package.json' file does not have a 'version' field", () => {
 	const originalPackageContent = dedent`
@@ -34,8 +34,8 @@ describe.each`
 `(
 	"when the 'package.json' file has a 'version' field of $currentVersion",
 	(releaseInput: {
-		readonly currentVersion: SemanticVersionString
-		readonly versionToRelease: SemanticVersionString
+		currentVersion: SemanticVersionString
+		versionToRelease: SemanticVersionString
 	}) => {
 		const { currentVersion, versionToRelease } = releaseInput
 
