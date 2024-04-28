@@ -30,6 +30,7 @@ jobs:
     name: Validate software quality
     permissions:
       contents: read # Allow the job to call the reusable `ci.yml` workflow.
+      pull-requests: read # `ci.yml` requires `pull-requests` read permissions.
     uses: ./.github/workflows/ci.yml
 
   publish-npm-package:

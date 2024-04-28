@@ -13,13 +13,8 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      update-changelog:
-        description: A boolean that determines if the changelog is to be updated to the given `version`.
-        type: boolean
-        required: true
-      #
       version:
-        description: A string that contains a semantic version number on the form `<major>.<minor>.<patch>[-prerelease][+buildinfo]`.
+        description: The semantic version number of the new release.
         type: string
         required: true
 
@@ -38,6 +33,7 @@ jobs:
     name: Validate software quality
     permissions:
       contents: read # Allow the job to call the reusable `ci.yml` workflow.
+      pull-requests: read # `ci.yml` requires `pull-requests` read permissions.
     uses: ./.github/workflows/ci.yml
 
   create-pull-request:
@@ -64,21 +60,20 @@ jobs:
         # Use double quotes to enclose a space-separated list of files to ensure correct shell expansion.
         run: |
           VERSION=$(echo "$RAW_VERSION" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?')
-          if [ "$UPDATE_CHANGELOG" = 'true' ]; then
-            FILES="CHANGELOG.adoc package.json"
-          else
+          if [[ "$VERSION" == *'-'* || "$VERSION" == *'+'* ]]; then
             FILES="package.json"
+          else
+            FILES="CHANGELOG.adoc package.json"
           fi
           node ./src/entry.cli.js --files $FILES --release-version $VERSION
         env:
           RAW_VERSION: ${{ inputs.version }}
-          UPDATE_CHANGELOG: ${{ inputs.update-changelog }}
         #
       - name: Use Nimbus (Bot) in Git
-        uses: rainstormy-actions/rainstorm-release/bot-nimbus@2349446d8d99692944dc519a2e5e67fe5608855c # https://github.com/rainstormy-actions/rainstorm-release
+        uses: rainstormy-actions/rainstorm-release/bot-nimbus@0acf7e891a6a3db23bea2d429aea04434c0f42f3 # https://github.com/rainstormy-actions/rainstorm-release
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
-          bot-nimbus-ssh-__private__-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
       - name: Create a release pull request

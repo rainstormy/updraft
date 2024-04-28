@@ -35,10 +35,10 @@ jobs:
           token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
         #
       - name: Use Nimbus (Bot) in Git
-        uses: rainstormy-actions/rainstorm-release/bot-nimbus@2349446d8d99692944dc519a2e5e67fe5608855c # https://github.com/rainstormy-actions/rainstorm-release
+        uses: rainstormy-actions/rainstorm-release/bot-nimbus@0acf7e891a6a3db23bea2d429aea04434c0f42f3 # https://github.com/rainstormy-actions/rainstorm-release
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
-          bot-nimbus-ssh-__private__-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
       - name: Create a release tag
