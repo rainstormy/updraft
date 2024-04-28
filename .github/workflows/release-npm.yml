@@ -1,0 +1,56 @@
+# This workflow publishes the package to the npm registry.
+#
+# It is triggered automatically by pushing a Git tag with a `v` prefix, as done by the `release-tag.yml` workflow.
+#
+# It can be triggered manually via the GitHub CLI:
+#   gh workflow run release-npm.yml --ref <tag-name>
+#   gh run watch
+#
+# It can be triggered manually via the GitHub web interface:
+#   https://github.com/rainstormy/updraft/actions/workflows/release-npm.yml
+
+name: Release / npm
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: release-npm-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+jobs:
+  validate-software-quality:
+    name: Validate software quality
+    permissions:
+      contents: read # Allow the job to call the reusable `ci.yml` workflow.
+    uses: ./.github/workflows/ci.yml
+
+  publish-npm-package:
+    name: Publish '@rainstormy/updraft' to npm
+    needs: validate-software-quality
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
+      id-token: write # Allow npm to publish the package with provenance.
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
+        #
+      - name: Restore build artifacts
+        uses: ./.github/actions/build-artifacts
+        #
+      - name: Install pnpm and third-party dependencies
+        uses: ./.github/actions/pnpm
+        #
+      - name: Publish the package to npm
+        uses: rainstormy-actions/release/npm@e9b2ac5cc4a0a1288cce53dd3021b9ed2c8b42f8 # https://github.com/rainstormy-actions/release
+        with:
+          npm-auth-token: ${{ secrets.BOT_NIMBUS_NPM_TOKEN }}

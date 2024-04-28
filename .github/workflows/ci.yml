@@ -35,7 +35,7 @@ permissions:
   contents: read # Allow all jobs to check out the repository.
 
 # All third-party actions are pinned to a specific commit SHA for security reasons.
-# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
   can-build-project:
     name: Can build the project
