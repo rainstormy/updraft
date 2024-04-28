@@ -52,6 +52,7 @@ jobs:
         uses: ./.github/actions/pnpm
         #
       - name: Publish the package to npm
-        uses: rainstormy-actions/release/npm@e9b2ac5cc4a0a1288cce53dd3021b9ed2c8b42f8 # https://github.com/rainstormy-actions/release
+        uses: rainstormy-actions/release/npm@0245a6b2708a91d0c8f4f22e8c6d321d4fc8c580 # https://github.com/rainstormy-actions/release
         with:
+          access-level: public
           npm-auth-token: ${{ secrets.BOT_NIMBUS_NPM_TOKEN }}

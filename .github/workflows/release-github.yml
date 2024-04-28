@@ -38,10 +38,14 @@ jobs:
     needs: validate-software-quality
     runs-on: ubuntu-22.04
     timeout-minutes: 1
-    permissions: { }
+    permissions:
+      contents: read # Allow the job to check out the repository.
     steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
+        #
       - name: Create a draft GitHub release
-        uses: rainstormy-actions/release/github@e9b2ac5cc4a0a1288cce53dd3021b9ed2c8b42f8 # https://github.com/rainstormy-actions/release
+        uses: rainstormy-actions/release/github@0245a6b2708a91d0c8f4f22e8c6d321d4fc8c580 # https://github.com/rainstormy-actions/release
         with:
           gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
           version: ${{ github.ref_name }}

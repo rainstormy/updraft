@@ -42,6 +42,6 @@ jobs:
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
       - name: Create a release tag
-        uses: rainstormy-actions/release/tag@e9b2ac5cc4a0a1288cce53dd3021b9ed2c8b42f8 # https://github.com/rainstormy-actions/release
+        uses: rainstormy-actions/release/tag@0245a6b2708a91d0c8f4f22e8c6d321d4fc8c580 # https://github.com/rainstormy-actions/release
         with:
           version: ${{ github.head_ref }}
