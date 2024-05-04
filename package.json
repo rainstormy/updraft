@@ -47,14 +47,14 @@
 		"tslib": "This library optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.6.1",
-		"@types/node": "20.10.4",
-		"@vitest/coverage-v8": "1.0.2",
-		"@vitest/ui": "1.0.2",
-		"lefthook": "1.6.7",
-		"typescript": "5.3.3",
-		"vite": "5.0.6",
-		"vitest": "1.0.2"
+		"@biomejs/biome": "1.7.3",
+		"@types/node": "20.12.10",
+		"@vitest/coverage-v8": "1.6.0",
+		"@vitest/ui": "1.6.0",
+		"lefthook": "1.6.10",
+		"typescript": "5.4.5",
+		"vite": "5.2.11",
+		"vitest": "1.6.0"
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",

@@ -123,6 +123,7 @@ function assumeInvalid(
 	configuration: Configuration,
 ): asserts configuration is Configuration.Invalid {
 	if (configuration.type !== "invalid") {
+		// biome-ignore lint/nursery/noMisplacedAssertion: This is a test utility function.
 		expect.fail(
 			`Expected the configuration to be 'invalid', but it was ${configuration.type}`,
 		)
@@ -133,6 +134,7 @@ function assumeRelease(
 	configuration: Configuration,
 ): asserts configuration is Configuration.Release {
 	if (configuration.type !== "release") {
+		// biome-ignore lint/nursery/noMisplacedAssertion: This is a test utility function.
 		expect.fail(
 			`Expected the configuration to be 'release', but it was ${configuration.type}`,
 		)
