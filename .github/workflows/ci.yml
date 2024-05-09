@@ -29,11 +29,6 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Minimise the permission scope of the default GitHub access token in this workflow.
-# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
-permissions:
-  contents: read # Allow all jobs to check out the repository.
-
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
@@ -41,6 +36,8 @@ jobs:
     name: Can build the project
     runs-on: ubuntu-22.04
     timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
@@ -68,6 +65,8 @@ jobs:
     name: Has clean code
     runs-on: ubuntu-22.04
     timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
@@ -97,6 +96,8 @@ jobs:
     name: Satisfies unit tests
     runs-on: ubuntu-22.04
     timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
