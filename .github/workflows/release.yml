@@ -58,6 +58,7 @@ jobs:
       - name: Update release artifacts
         # Run the newest version of Updraft on itself.
         # Use double quotes to enclose a space-separated list of files to ensure correct shell expansion.
+        # language=sh
         run: |
           VERSION=$(echo "$RAW_VERSION" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?')
           if [[ "$VERSION" == *'-'* || "$VERSION" == *'+'* ]]; then
