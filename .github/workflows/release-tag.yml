@@ -20,8 +20,8 @@ concurrency:
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
-  create-git-tag:
-    name: Create Git tag
+  tag:
+    name: Tag
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-22.04
     timeout-minutes: 1
@@ -41,7 +41,7 @@ jobs:
           __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
-      - name: Create a release tag
+      - name: Create a semantic version tag in Git
         uses: rainstormy-actions/release/tag@0245a6b2708a91d0c8f4f22e8c6d321d4fc8c580 # https://github.com/rainstormy-actions/release
         with:
           version: ${{ github.head_ref }}

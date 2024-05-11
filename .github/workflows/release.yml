@@ -29,16 +29,16 @@ concurrency:
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
-  validate-software-quality:
-    name: Validate software quality
+  quality-assurance:
+    name: Quality assurance
     permissions:
       contents: read # Allow the job to call the reusable `ci.yml` workflow.
       pull-requests: read # `ci.yml` requires `pull-requests` read permissions.
     uses: ./.github/workflows/ci.yml
 
-  create-pull-request:
-    name: Create pull request
-    needs: validate-software-quality
+  pull-request:
+    name: Pull request
+    needs: quality-assurance
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     permissions: { }
@@ -77,7 +77,7 @@ jobs:
           __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
-      - name: Create a release pull request
+      - name: Create a release-triggering pull request in GitHub
         uses: rainstormy-actions/release/pr@0245a6b2708a91d0c8f4f22e8c6d321d4fc8c580 # https://github.com/rainstormy-actions/release
         with:
           gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
