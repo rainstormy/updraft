@@ -11,14 +11,12 @@ export default defineConfig(() => ({
 		minify: "esbuild" as const,
 		reportCompressedSize: false,
 	},
+	cacheDir: inProjectDirectory("node_modules/.cache/"),
 	plugins: [],
 	resolve: {
 		alias: getAliasesFromTsconfig(),
 	},
 	test: {
-		cache: {
-			dir: inProjectDirectory("node_modules/.cache/vitest/"),
-		},
 		coverage: {
 			include: ["src/**/*.ts"],
 			exclude: ["src/**/*.tests.ts"],
