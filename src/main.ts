@@ -4,7 +4,7 @@ import { onListingMatchingFilesFromDisk } from "+adapters/OnListingMatchingFiles
 import { onReadingFilesFromDisk } from "+adapters/OnReadingFiles"
 import { onWritingToFilesOnDisk } from "+adapters/OnWritingToFiles"
 import { getConfigurationFromArgs } from "+configuration/Configuration"
-import { runProgram } from "+program/Program"
+import { mainProgram } from "+program/Program"
 import type {
 	DateString,
 	SemanticVersionString,
@@ -19,7 +19,7 @@ const today = new Date()
 
 const toolVersion = packageJsonVersion as SemanticVersionString
 
-runProgram(
+mainProgram(
 	{
 		configuration: getConfigurationFromArgs(argv.slice(2)),
 		today,

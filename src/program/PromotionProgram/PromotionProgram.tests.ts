@@ -1,8 +1,5 @@
 import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
-import {
-	type OnListingMatchingFiles,
-	onListingFakeMatchingFiles,
-} from "+adapters/OnListingMatchingFiles"
+import { onListingFakeMatchingFiles } from "+adapters/OnListingMatchingFiles"
 import {
 	type OnReadingFiles,
 	onReadingFakeFiles,
@@ -12,7 +9,7 @@ import {
 	onWritingToFakeFiles,
 } from "+adapters/OnWritingToFiles"
 import type { Configuration } from "+configuration/Configuration"
-import { runProgram, usageInstructions } from "+program/Program"
+import { mainProgram } from "+program/Program"
 import {
 	type DateString,
 	type SemanticVersionString,
@@ -26,204 +23,6 @@ const dummyInput = {
 } as const
 
 const dummyReleaseVersion: SemanticVersionString = "2.0.0"
-
-describe("the program with a 'help-screen' configuration", async () => {
-	const onDisplayingMessage: OnDisplayingMessage = vi.fn()
-	const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
-	const onReadingFiles: OnReadingFiles = vi.fn()
-	const onWritingToFiles: OnWritingToFiles = vi.fn()
-
-	const configuration: Configuration = {
-		type: "help-screen",
-	}
-
-	const exitCode = await runProgram(
-		{ ...dummyInput, configuration },
-		{
-			onDisplayingMessage,
-			onListingMatchingFiles,
-			onReadingFiles,
-			onWritingToFiles,
-		},
-	)
-
-	it("returns an exit code of 0", () => {
-		expect(exitCode).toBe(0)
-	})
-
-	it("displays the usage instructions", () => {
-		expect(onDisplayingMessage).toHaveBeenCalledWith({
-			severity: "info",
-			message: usageInstructions,
-		} satisfies OnDisplayingMessage.Payload)
-		expect(onDisplayingMessage).toHaveBeenCalledTimes(1)
-	})
-
-	it("does not traverse the file system", () => {
-		expect(onListingMatchingFiles).not.toHaveBeenCalled()
-	})
-
-	it("does not read the content of any file", () => {
-		expect(onReadingFiles).not.toHaveBeenCalled()
-	})
-
-	it("does not write changes to any file", () => {
-		expect(onWritingToFiles).not.toHaveBeenCalled()
-	})
-})
-
-describe("the usage instructions", () => {
-	it("is a list of program arguments and options", () => {
-		expect(usageInstructions).toBe(dedent`
-			Usage: updraft [options]
-
-			This tool prepares a repository for an upcoming release by updating changelogs
-			and bumping version numbers in package.json files.
-
-			Supported file formats:
-			  * AsciiDoc-based changelogs (*.adoc) in Keep a Changelog format.
-			  * package.json.
-
-			Options:
-			  --files <patterns>           Update files matching the glob patterns.
-			                               Mandatory when --release-version is specified.
-
-			                               Use whitespace to separate multiple patterns:
-			                               <pattern-1> <pattern-2> <pattern-3>
-
-			  --help                       Display this help screen and exit.
-
-			  --release-version <version>  The semantic version of the upcoming release.
-			                               Mandatory when --files is specified.
-
-			                               Expected format (optional parts in brackets):
-			                               [v]major.minor.patch[-prerelease][+buildinfo]
-
-			  --version                    Display the version of this tool and exit.
-		`)
-	})
-
-	it("fits within 80 columns", () => {
-		const lines = usageInstructions.split("\n")
-
-		for (const line of lines) {
-			expect(line.length).toBeLessThanOrEqual(80)
-		}
-	})
-})
-
-describe.each`
-	toolVersion
-	${"1.1.5"}
-	${"3.2.0-beta.1"}
-`(
-	"the program with a 'tool-version' configuration when the tool version is $toolVersion",
-	async (input: { toolVersion: SemanticVersionString }) => {
-		const { toolVersion } = input
-
-		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
-		const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
-		const onReadingFiles: OnReadingFiles = vi.fn()
-		const onWritingToFiles: OnWritingToFiles = vi.fn()
-
-		const configuration: Configuration = {
-			type: "tool-version",
-		}
-
-		const exitCode = await runProgram(
-			{ ...dummyInput, configuration, toolVersion },
-			{
-				onDisplayingMessage,
-				onListingMatchingFiles,
-				onReadingFiles,
-				onWritingToFiles,
-			},
-		)
-
-		it("returns an exit code of 0", () => {
-			expect(exitCode).toBe(0)
-		})
-
-		it("displays the tool version", () => {
-			expect(onDisplayingMessage).toHaveBeenCalledWith({
-				severity: "info",
-				message: toolVersion,
-			} satisfies OnDisplayingMessage.Payload)
-			expect(onDisplayingMessage).toHaveBeenCalledTimes(1)
-		})
-
-		it("does not traverse the file system", () => {
-			expect(onListingMatchingFiles).not.toHaveBeenCalled()
-		})
-
-		it("does not read the content of any file", () => {
-			expect(onReadingFiles).not.toHaveBeenCalled()
-		})
-
-		it("does not write changes to any file", () => {
-			expect(onWritingToFiles).not.toHaveBeenCalled()
-		})
-	},
-)
-
-describe.each`
-	errorMessage
-	${"Unknown option '--check'."}
-	${"--release-version has an invalid value '2.5'."}
-	${"--files must specify a value."}
-`(
-	"the program with an 'invalid' configuration when the error message is $errorMessage",
-	async (input: { errorMessage: string }) => {
-		const { errorMessage } = input
-
-		const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
-		const onReadingFiles: OnReadingFiles = vi.fn()
-		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
-		const onWritingToFiles: OnWritingToFiles = vi.fn()
-
-		const configuration: Configuration = {
-			type: "invalid",
-			errorMessage,
-		}
-
-		const exitCode = await runProgram(
-			{ ...dummyInput, configuration },
-			{
-				onDisplayingMessage,
-				onListingMatchingFiles,
-				onReadingFiles,
-				onWritingToFiles,
-			},
-		)
-
-		it("returns an exit code of 2", () => {
-			expect(exitCode).toBe(2)
-		})
-
-		it("displays the error and encourages the use of --help", () => {
-			expect(onDisplayingMessage).toHaveBeenCalledWith({
-				severity: "error",
-				message: dedent`
-					${errorMessage}
-					For usage instructions, please run the program with the --help option.
-				`,
-			} satisfies OnDisplayingMessage.Payload)
-			expect(onDisplayingMessage).toHaveBeenCalledTimes(1)
-		})
-
-		it("does not traverse the file system", () => {
-			expect(onListingMatchingFiles).not.toHaveBeenCalled()
-		})
-
-		it("does not read the content of any file", () => {
-			expect(onReadingFiles).not.toHaveBeenCalled()
-		})
-
-		it("does not write changes to any file", () => {
-			expect(onWritingToFiles).not.toHaveBeenCalled()
-		})
-	},
-)
 
 describe.each`
 	filePatterns                                      | expectedWarning
@@ -252,7 +51,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -323,7 +122,7 @@ describe.each`
 			releaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration, today: releaseDate },
 			{
 				onDisplayingMessage,
@@ -390,7 +189,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -449,7 +248,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -562,7 +361,7 @@ describe.each`
 			releaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration, today: releaseDate },
 			{
 				onDisplayingMessage,
@@ -718,7 +517,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -799,7 +598,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -874,7 +673,7 @@ describe.each`
 			releaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration, today: releaseDate },
 			{
 				onDisplayingMessage,
@@ -941,7 +740,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -1003,7 +802,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -1111,7 +910,7 @@ describe.each`
 			releaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration, today: releaseDate },
 			{
 				onDisplayingMessage,
@@ -1240,7 +1039,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -1317,7 +1116,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -1405,7 +1204,7 @@ describe.each`
 			releaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration, today: releaseDate },
 			{
 				onDisplayingMessage,
@@ -1559,7 +1358,7 @@ describe.each`
 			releaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration, today: releaseDate },
 			{
 				onDisplayingMessage,
@@ -1746,7 +1545,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -1856,7 +1655,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -1908,7 +1707,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -1995,7 +1794,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -2081,7 +1880,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
@@ -2168,7 +1967,7 @@ describe.each`
 			releaseVersion: dummyReleaseVersion,
 		}
 
-		const exitCode = await runProgram(
+		const exitCode = await mainProgram(
 			{ ...dummyInput, configuration },
 			{
 				onDisplayingMessage,
