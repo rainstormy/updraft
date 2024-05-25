@@ -2,7 +2,7 @@ import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
 import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
 import type { OnReadingFiles } from "+adapters/OnReadingFiles"
 import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
-import type { Configuration } from "+configuration/Configuration"
+import { getConfigurationFromArgs } from "+program/Configuration"
 import { invalidConfigurationProgram } from "+program/InvalidConfigurationProgram/InvalidConfigurationProgram"
 import { promotionProgram } from "+program/PromotionProgram/PromotionProgram"
 import { toolVersionProgram } from "+program/ToolVersionProgram/ToolVersionProgram"
@@ -15,7 +15,7 @@ import type {
 
 export async function mainProgram(
 	input: {
-		configuration: Configuration
+		args: Array<string>
 		today: DateString
 		toolVersion: SemanticVersionString
 	},
@@ -26,20 +26,22 @@ export async function mainProgram(
 		onWritingToFiles: OnWritingToFiles
 	},
 ): Promise<ExitCode> {
-	switch (input.configuration.type) {
+	const configuration = getConfigurationFromArgs(input.args)
+
+	switch (configuration.type) {
 		case "help-screen":
 			return usageInstructionsProgram(sideEffects.onDisplayingMessage)
 
 		case "invalid":
 			return invalidConfigurationProgram(
-				input.configuration.errorMessage,
+				configuration.errorMessage,
 				sideEffects.onDisplayingMessage,
 			)
 
 		case "release":
 			return promotionProgram(
-				input.configuration.filePatterns,
-				input.configuration.releaseVersion,
+				configuration.filePatterns,
+				configuration.releaseVersion,
 				input.today,
 				sideEffects.onDisplayingMessage,
 				sideEffects.onListingMatchingFiles,

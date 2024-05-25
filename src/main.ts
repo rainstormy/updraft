@@ -3,7 +3,6 @@ import { onDisplayingMessageInConsole } from "+adapters/OnDisplayingMessage"
 import { onListingMatchingFilesFromDisk } from "+adapters/OnListingMatchingFiles"
 import { onReadingFilesFromDisk } from "+adapters/OnReadingFiles"
 import { onWritingToFilesOnDisk } from "+adapters/OnWritingToFiles"
-import { getConfigurationFromArgs } from "+configuration/Configuration"
 import { mainProgram } from "+program/Program"
 import type {
 	DateString,
@@ -21,7 +20,7 @@ const toolVersion = packageJsonVersion as SemanticVersionString
 
 mainProgram(
 	{
-		configuration: getConfigurationFromArgs(argv.slice(2)),
+		args: argv.slice(2),
 		today,
 		toolVersion,
 	},

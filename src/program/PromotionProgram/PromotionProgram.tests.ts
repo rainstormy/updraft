@@ -8,7 +8,6 @@ import {
 	type OnWritingToFiles,
 	onWritingToFakeFiles,
 } from "+adapters/OnWritingToFiles"
-import type { Configuration } from "+configuration/Configuration"
 import { mainProgram } from "+program/Program"
 import {
 	type DateString,
@@ -16,13 +15,6 @@ import {
 	dedent,
 } from "+utilities/StringUtilities"
 import { describe, expect, it, vi } from "vitest"
-
-const dummyInput = {
-	today: "2022-05-29",
-	toolVersion: "1.0.0",
-} as const
-
-const dummyReleaseVersion: SemanticVersionString = "2.0.0"
 
 describe.each`
 	filePatterns                                      | expectedWarning
@@ -45,14 +37,12 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns,
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: ["--files", ...filePatterns, "--release-version", "2.0.0"],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -116,14 +106,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedChangelogFilename],
-			releaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration, today: releaseDate },
+			{
+				args: [
+					"--files",
+					matchedChangelogFilename,
+					"--release-version",
+					releaseVersion,
+				],
+				today: releaseDate,
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -183,14 +176,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedChangelogFilename],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedChangelogFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -242,14 +238,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedChangelogFilename],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedChangelogFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -355,14 +354,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [...matchedFilePatterns, ...unmatchedFilePatterns],
-			releaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration, today: releaseDate },
+			{
+				args: [
+					"--files",
+					...matchedFilePatterns,
+					...unmatchedFilePatterns,
+					"--release-version",
+					releaseVersion,
+				],
+				today: releaseDate,
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -511,14 +514,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: matchedChangelogFilenames,
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					...matchedChangelogFilenames,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -592,14 +598,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [...matchedFilePatterns, ...unmatchedFilePatterns],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					...matchedFilePatterns,
+					...unmatchedFilePatterns,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -667,14 +677,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedPackageJsonFilename],
-			releaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration, today: releaseDate },
+			{
+				args: [
+					"--files",
+					matchedPackageJsonFilename,
+					"--release-version",
+					releaseVersion,
+				],
+				today: releaseDate,
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -734,14 +747,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedPackageJsonFilename],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedPackageJsonFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -796,14 +812,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedPackageJsonFilename],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedPackageJsonFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -904,14 +923,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [...matchedFilePatterns, ...unmatchedFilePatterns],
-			releaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration, today: releaseDate },
+			{
+				args: [
+					"--files",
+					...matchedFilePatterns,
+					...unmatchedFilePatterns,
+					"--release-version",
+					releaseVersion,
+				],
+				today: releaseDate,
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1033,14 +1056,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: matchedPackageJsonFilenames,
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					...matchedPackageJsonFilenames,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1110,14 +1136,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [...matchedFilePatterns, ...unmatchedFilePatterns],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					...matchedFilePatterns,
+					...unmatchedFilePatterns,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1198,14 +1228,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedChangelogFilename, matchedPackageJsonFilename],
-			releaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration, today: releaseDate },
+			{
+				args: [
+					"--files",
+					matchedChangelogFilename,
+					matchedPackageJsonFilename,
+					"--release-version",
+					releaseVersion,
+				],
+				today: releaseDate,
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1349,17 +1383,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [
-				...matchedChangelogFilenames,
-				...matchedPackageJsonFilenames,
-			],
-			releaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration, today: releaseDate },
+			{
+				args: [
+					"--files",
+					...matchedChangelogFilenames,
+					...matchedPackageJsonFilenames,
+					"--release-version",
+					releaseVersion,
+				],
+				today: releaseDate,
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1536,17 +1571,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [
-				...matchedChangelogFilenames,
-				...matchedPackageJsonFilenames,
-			],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					...matchedChangelogFilenames,
+					...matchedPackageJsonFilenames,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1646,17 +1682,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [
-				...matchedChangelogFilenames,
-				...matchedPackageJsonFilenames,
-			],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					...matchedChangelogFilenames,
+					...matchedPackageJsonFilenames,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1701,14 +1738,17 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedUnsupportedFilename],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedUnsupportedFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1784,18 +1824,19 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [
-				matchedChangelogFilename,
-				matchedPackageJsonFilename,
-				matchedUnsupportedFilename,
-			],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedChangelogFilename,
+					matchedPackageJsonFilename,
+					matchedUnsupportedFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1874,14 +1915,18 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedChangelogFilename, matchedPackageJsonFilename],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedChangelogFilename,
+					matchedPackageJsonFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1961,14 +2006,18 @@ describe.each`
 		])
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 
-		const configuration: Configuration = {
-			type: "release",
-			filePatterns: [matchedChangelogFilename, matchedPackageJsonFilename],
-			releaseVersion: dummyReleaseVersion,
-		}
-
 		const exitCode = await mainProgram(
-			{ ...dummyInput, configuration },
+			{
+				args: [
+					"--files",
+					matchedChangelogFilename,
+					matchedPackageJsonFilename,
+					"--release-version",
+					"2.0.0",
+				],
+				today: "2022-05-29",
+				toolVersion: "1.0.0",
+			},
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
