@@ -2,9 +2,12 @@ import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
 import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
 import type { OnReadingFiles } from "+adapters/OnReadingFiles"
 import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
+import { injectMocksOfPackageJsonVersion } from "+adapters/PackageJsonVersion/PackageJsonVersion.mocks"
 import { mainProgram } from "+program/Program"
 import type { SemanticVersionString } from "+utilities/StringUtilities"
 import { describe, expect, it, vi } from "vitest"
+
+const { mockPackageJsonVersion } = injectMocksOfPackageJsonVersion()
 
 describe.each`
 	toolVersionArgs
@@ -22,24 +25,19 @@ describe.each`
 		`(
 			"and the tool version is $toolVersion",
 			async (toolVersionProps: { toolVersion: SemanticVersionString }) => {
+				mockPackageJsonVersion(toolVersionProps.toolVersion)
+
 				const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 				const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
 				const onReadingFiles: OnReadingFiles = vi.fn()
 				const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-				const exitCode = await mainProgram(
-					{
-						args: argsProps.toolVersionArgs,
-						today: "2022-05-29",
-						toolVersion: toolVersionProps.toolVersion,
-					},
-					{
-						onDisplayingMessage,
-						onListingMatchingFiles,
-						onReadingFiles,
-						onWritingToFiles,
-					},
-				)
+				const exitCode = await mainProgram(argsProps.toolVersionArgs, {
+					onDisplayingMessage,
+					onListingMatchingFiles,
+					onReadingFiles,
+					onWritingToFiles,
+				})
 
 				it("returns an exit code of 0", () => {
 					expect(exitCode).toBe(0)

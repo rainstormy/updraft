@@ -21,19 +21,12 @@ describe.each`
 		const onReadingFiles: OnReadingFiles = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const exitCode = await mainProgram(
-			{
-				args: argsProps.helpScreenArgs,
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
-			{
-				onDisplayingMessage,
-				onListingMatchingFiles,
-				onReadingFiles,
-				onWritingToFiles,
-			},
-		)
+		const exitCode = await mainProgram(argsProps.helpScreenArgs, {
+			onDisplayingMessage,
+			onListingMatchingFiles,
+			onReadingFiles,
+			onWritingToFiles,
+		})
 
 		it("returns an exit code of 0", () => {
 			expect(exitCode).toBe(0)

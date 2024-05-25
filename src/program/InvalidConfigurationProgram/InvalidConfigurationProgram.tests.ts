@@ -34,19 +34,12 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
-		const exitCode = await mainProgram(
-			{
-				args: argsProps.invalidArgs,
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
-			{
-				onDisplayingMessage,
-				onListingMatchingFiles,
-				onReadingFiles,
-				onWritingToFiles,
-			},
-		)
+		const exitCode = await mainProgram(argsProps.invalidArgs, {
+			onDisplayingMessage,
+			onListingMatchingFiles,
+			onReadingFiles,
+			onWritingToFiles,
+		})
 
 		it("returns an exit code of 2", () => {
 			expect(exitCode).toBe(2)

@@ -8,6 +8,7 @@ import {
 	type OnWritingToFiles,
 	onWritingToFakeFiles,
 } from "+adapters/OnWritingToFiles"
+import { injectMocksOfToday } from "+adapters/Today/Today.mocks"
 import { mainProgram } from "+program/Program"
 import {
 	type DateString,
@@ -15,6 +16,8 @@ import {
 	dedent,
 } from "+utilities/StringUtilities"
 import { describe, expect, it, vi } from "vitest"
+
+const { mockToday } = injectMocksOfToday()
 
 describe.each`
 	filePatterns                                      | expectedWarning
@@ -38,11 +41,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: ["--files", ...filePatterns, "--release-version", "2.0.0"],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", ...filePatterns, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -74,7 +73,7 @@ describe.each`
 )
 
 describe.each`
-	matchedChangelogFilename | releaseVersion    | releaseDate
+	matchedChangelogFilename | releaseVersion    | today
 	${"CHANGELOG.adoc"}      | ${"1.4.11"}       | ${"2023-10-26"}
 	${"lib/RELEASES.adoc"}   | ${"5.0.6-beta.2"} | ${"2024-06-12"}
 `(
@@ -82,9 +81,11 @@ describe.each`
 	async (input: {
 		matchedChangelogFilename: string
 		releaseVersion: SemanticVersionString
-		releaseDate: DateString
+		today: DateString
 	}) => {
-		const { matchedChangelogFilename, releaseVersion, releaseDate } = input
+		const { matchedChangelogFilename, releaseVersion, today } = input
+
+		mockToday(today)
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedChangelogFilename,
@@ -107,16 +108,12 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedChangelogFilename,
-					"--release-version",
-					releaseVersion,
-				],
-				today: releaseDate,
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				matchedChangelogFilename,
+				"--release-version",
+				releaseVersion,
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -145,7 +142,7 @@ describe.each`
 							== {url-repo}/compare/v${releaseVersion}\\...HEAD[Unreleased]
 
 
-							== {url-repo}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${releaseDate}
+							== {url-repo}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${today}
 
 							=== Changed
 							* The fruit basket is now refilled every day.
@@ -167,6 +164,8 @@ describe.each`
 	async (input: { matchedChangelogFilename: string }) => {
 		const { matchedChangelogFilename } = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedChangelogFilename,
 		])
@@ -177,16 +176,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedChangelogFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", matchedChangelogFilename, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -222,6 +212,8 @@ describe.each`
 	async (input: { matchedChangelogFilename: string }) => {
 		const { matchedChangelogFilename } = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedChangelogFilename,
 		])
@@ -239,16 +231,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedChangelogFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", matchedChangelogFilename, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -276,7 +259,7 @@ describe.each`
 )
 
 describe.each`
-	matchedFilePatterns       | unmatchedFilePatterns                 | matchedChangelogFilenames                                                                                | releaseVersion    | releaseDate
+	matchedFilePatterns       | unmatchedFilePatterns                 | matchedChangelogFilenames                                                                                | releaseVersion    | today
 	${["packages/**/*.adoc"]} | ${["CHANGELOG.adoc", "package.json"]} | ${["packages/apples/CHANGELOG.adoc", "packages/oranges/RELEASES.adoc", "packages/peaches/CHANGES.adoc"]} | ${"1.4.11"}       | ${"2023-10-26"}
 	${["*/CHANGELOG.adoc"]}   | ${["build/package.json"]}             | ${["lib/CHANGELOG.adoc", "dist/CHANGELOG.adoc", "docs/CHANGELOG.adoc"]}                                  | ${"5.0.6-beta.2"} | ${"2024-06-12"}
 `(
@@ -286,15 +269,17 @@ describe.each`
 		unmatchedFilePatterns: Array<string>
 		matchedChangelogFilenames: Array<string>
 		releaseVersion: SemanticVersionString
-		releaseDate: DateString
+		today: DateString
 	}) => {
 		const {
 			matchedFilePatterns,
 			unmatchedFilePatterns,
 			matchedChangelogFilenames,
 			releaseVersion,
-			releaseDate,
+			today,
 		} = input
+
+		mockToday(today)
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles(
 			matchedChangelogFilenames,
@@ -355,17 +340,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedFilePatterns,
-					...unmatchedFilePatterns,
-					"--release-version",
-					releaseVersion,
-				],
-				today: releaseDate,
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				...matchedFilePatterns,
+				...unmatchedFilePatterns,
+				"--release-version",
+				releaseVersion,
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -395,7 +376,7 @@ describe.each`
 							== {url-github}/compare/v${releaseVersion}\\...HEAD[Unreleased]
 
 
-							== {url-github}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${releaseDate}
+							== {url-github}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${today}
 
 							=== Added
 							* A new shower mode: \`jet-stream\`.
@@ -410,7 +391,7 @@ describe.each`
 							== {url-github}/compare/v${releaseVersion}\\...HEAD[Unreleased]
 
 
-							== {url-github}/compare/v0.9.9\\...v${releaseVersion}[${releaseVersion}] - ${releaseDate}
+							== {url-github}/compare/v0.9.9\\...v${releaseVersion}[${releaseVersion}] - ${today}
 
 							=== Fixed
 							* Office chairs are now more comfortable.
@@ -436,7 +417,7 @@ describe.each`
 							== {url-github}/compare/v${releaseVersion}\\...HEAD[Unreleased]
 
 
-							== {url-github}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${releaseDate}
+							== {url-github}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${today}
 
 							=== Changed
 							* The fruit basket is now refilled every day.
@@ -462,6 +443,8 @@ describe.each`
 		matchedChangelogFilenames: Array<string>
 	}) => {
 		const { matchedChangelogFilenames } = input
+
+		mockToday("2022-05-29")
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles(
 			matchedChangelogFilenames,
@@ -515,16 +498,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedChangelogFilenames,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", ...matchedChangelogFilenames, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -568,6 +542,8 @@ describe.each`
 			matchedChangelogFilenames,
 		} = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles(
 			matchedChangelogFilenames,
 		)
@@ -599,17 +575,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedFilePatterns,
-					...unmatchedFilePatterns,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				...matchedFilePatterns,
+				...unmatchedFilePatterns,
+				"--release-version",
+				"2.0.0",
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -642,7 +614,7 @@ describe.each`
 )
 
 describe.each`
-	matchedPackageJsonFilename | releaseVersion    | releaseDate
+	matchedPackageJsonFilename | releaseVersion    | today
 	${"package.json"}          | ${"1.4.11"}       | ${"2023-10-26"}
 	${"lib/package.json"}      | ${"5.0.6-beta.2"} | ${"2024-06-12"}
 `(
@@ -650,9 +622,11 @@ describe.each`
 	async (input: {
 		matchedPackageJsonFilename: string
 		releaseVersion: SemanticVersionString
-		releaseDate: DateString
+		today: DateString
 	}) => {
-		const { matchedPackageJsonFilename, releaseVersion, releaseDate } = input
+		const { matchedPackageJsonFilename, releaseVersion, today } = input
+
+		mockToday(today)
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedPackageJsonFilename,
@@ -678,16 +652,12 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedPackageJsonFilename,
-					"--release-version",
-					releaseVersion,
-				],
-				today: releaseDate,
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				matchedPackageJsonFilename,
+				"--release-version",
+				releaseVersion,
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -738,6 +708,8 @@ describe.each`
 	async (input: { matchedPackageJsonFilename: string }) => {
 		const { matchedPackageJsonFilename } = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedPackageJsonFilename,
 		])
@@ -748,16 +720,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedPackageJsonFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", matchedPackageJsonFilename, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -793,6 +756,8 @@ describe.each`
 	async (input: { matchedPackageJsonFilename: string }) => {
 		const { matchedPackageJsonFilename } = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedPackageJsonFilename,
 		])
@@ -813,16 +778,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedPackageJsonFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", matchedPackageJsonFilename, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -850,7 +806,7 @@ describe.each`
 )
 
 describe.each`
-	matchedFilePatterns             | unmatchedFilePatterns                             | matchedPackageJsonFilenames                                                                           | releaseVersion    | releaseDate
+	matchedFilePatterns             | unmatchedFilePatterns                             | matchedPackageJsonFilenames                                                                           | releaseVersion    | today
 	${["packages/**/package.json"]} | ${["packages/**/CHANGELOG.adoc", "package.json"]} | ${["packages/apples/package.json", "packages/oranges/package.json", "packages/peaches/package.json"]} | ${"1.4.11"}       | ${"2023-10-26"}
 	${["*/package.json"]}           | ${["*/CHANGESETS.adoc"]}                          | ${["lib/package.json", "dist/package.json", "build/package.json"]}                                    | ${"5.0.6-beta.2"} | ${"2024-06-12"}
 `(
@@ -860,15 +816,17 @@ describe.each`
 		unmatchedFilePatterns: Array<string>
 		matchedPackageJsonFilenames: Array<string>
 		releaseVersion: SemanticVersionString
-		releaseDate: DateString
+		today: DateString
 	}) => {
 		const {
 			matchedFilePatterns,
 			unmatchedFilePatterns,
 			matchedPackageJsonFilenames,
 			releaseVersion,
-			releaseDate,
+			today,
 		} = input
+
+		mockToday(today)
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles(
 			matchedPackageJsonFilenames,
@@ -924,17 +882,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedFilePatterns,
-					...unmatchedFilePatterns,
-					"--release-version",
-					releaseVersion,
-				],
-				today: releaseDate,
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				...matchedFilePatterns,
+				...unmatchedFilePatterns,
+				"--release-version",
+				releaseVersion,
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1018,6 +972,8 @@ describe.each`
 	}) => {
 		const { matchedPackageJsonFilenames } = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles(
 			matchedPackageJsonFilenames,
 		)
@@ -1057,16 +1013,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedPackageJsonFilenames,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", ...matchedPackageJsonFilenames, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1110,6 +1057,8 @@ describe.each`
 			matchedPackageJsonFilenames,
 		} = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles(
 			matchedPackageJsonFilenames,
 		)
@@ -1137,17 +1086,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedFilePatterns,
-					...unmatchedFilePatterns,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				...matchedFilePatterns,
+				...unmatchedFilePatterns,
+				"--release-version",
+				"2.0.0",
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1180,7 +1125,7 @@ describe.each`
 )
 
 describe.each`
-	matchedChangelogFilename | matchedPackageJsonFilename | releaseVersion  | releaseDate
+	matchedChangelogFilename | matchedPackageJsonFilename | releaseVersion  | today
 	${"CHANGELOG.adoc"}      | ${"package.json"}          | ${"3.6.4"}      | ${"2023-12-05"}
 	${"lib/CHANGELOG.adoc"}  | ${"lib/package.json"}      | ${"7.0.8-rc.1"} | ${"2024-03-23"}
 `(
@@ -1189,14 +1134,16 @@ describe.each`
 		matchedChangelogFilename: string
 		matchedPackageJsonFilename: string
 		releaseVersion: SemanticVersionString
-		releaseDate: DateString
+		today: DateString
 	}) => {
 		const {
 			matchedChangelogFilename,
 			matchedPackageJsonFilename,
 			releaseVersion,
-			releaseDate,
+			today,
 		} = input
+
+		mockToday(today)
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedChangelogFilename,
@@ -1229,17 +1176,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedChangelogFilename,
-					matchedPackageJsonFilename,
-					"--release-version",
-					releaseVersion,
-				],
-				today: releaseDate,
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				matchedChangelogFilename,
+				matchedPackageJsonFilename,
+				"--release-version",
+				releaseVersion,
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1268,7 +1211,7 @@ describe.each`
 							== {url-repo}/compare/v${releaseVersion}\\...HEAD[Unreleased]
 
 
-							== {url-repo}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${releaseDate}
+							== {url-repo}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${today}
 
 							=== Changed
 							* The fruit basket is now refilled every day.
@@ -1291,7 +1234,7 @@ describe.each`
 )
 
 describe.each`
-	matchedChangelogFilenames                                                | matchedPackageJsonFilenames                                          | releaseVersion  | releaseDate
+	matchedChangelogFilenames                                                | matchedPackageJsonFilenames                                          | releaseVersion  | today
 	${["packages/apples/CHANGELOG.adoc", "packages/oranges/CHANGELOG.adoc"]} | ${["packages/apples/package.json", "packages/oranges/package.json"]} | ${"3.6.4"}      | ${"2023-12-05"}
 	${["lib/CHANGELOG.adoc", "dist/CHANGELOG.adoc"]}                         | ${["lib/package.json", "dist/package.json"]}                         | ${"7.0.8-rc.1"} | ${"2024-03-23"}
 `(
@@ -1300,14 +1243,16 @@ describe.each`
 		matchedChangelogFilenames: Array<string>
 		matchedPackageJsonFilenames: Array<string>
 		releaseVersion: SemanticVersionString
-		releaseDate: DateString
+		today: DateString
 	}) => {
 		const {
 			matchedChangelogFilenames,
 			matchedPackageJsonFilenames,
 			releaseVersion,
-			releaseDate,
+			today,
 		} = input
+
+		mockToday(today)
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			...matchedChangelogFilenames,
@@ -1384,17 +1329,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedChangelogFilenames,
-					...matchedPackageJsonFilenames,
-					"--release-version",
-					releaseVersion,
-				],
-				today: releaseDate,
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				...matchedChangelogFilenames,
+				...matchedPackageJsonFilenames,
+				"--release-version",
+				releaseVersion,
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1423,7 +1364,7 @@ describe.each`
 							== {url-github}/compare/v${releaseVersion}\\...HEAD[Unreleased]
 
 
-							== {url-github}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${releaseDate}
+							== {url-github}/releases/tag/v${releaseVersion}[${releaseVersion}] - ${today}
 
 							=== Added
 							* A new shower mode: \`jet-stream\`.
@@ -1438,7 +1379,7 @@ describe.each`
 							== {url-github}/compare/v${releaseVersion}\\...HEAD[Unreleased]
 
 
-							== {url-github}/compare/v0.9.9\\...v${releaseVersion}[${releaseVersion}] - ${releaseDate}
+							== {url-github}/compare/v0.9.9\\...v${releaseVersion}[${releaseVersion}] - ${today}
 
 							=== Fixed
 							* Office chairs are now more comfortable.
@@ -1503,6 +1444,8 @@ describe.each`
 		matchedPackageJsonFilenames: Array<string>
 	}) => {
 		const { matchedChangelogFilenames, matchedPackageJsonFilenames } = input
+
+		mockToday("2022-05-29")
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			...matchedChangelogFilenames,
@@ -1572,17 +1515,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedChangelogFilenames,
-					...matchedPackageJsonFilenames,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				...matchedChangelogFilenames,
+				...matchedPackageJsonFilenames,
+				"--release-version",
+				"2.0.0",
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1620,6 +1559,8 @@ describe.each`
 		matchedPackageJsonFilenames: Array<string>
 	}) => {
 		const { matchedChangelogFilenames, matchedPackageJsonFilenames } = input
+
+		mockToday("2022-05-29")
 
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			...matchedChangelogFilenames,
@@ -1683,17 +1624,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					...matchedChangelogFilenames,
-					...matchedPackageJsonFilenames,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				...matchedChangelogFilenames,
+				...matchedPackageJsonFilenames,
+				"--release-version",
+				"2.0.0",
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1729,6 +1666,8 @@ describe.each`
 	async (input: { matchedUnsupportedFilename: string }) => {
 		const { matchedUnsupportedFilename } = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedUnsupportedFilename,
 		])
@@ -1739,16 +1678,7 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedUnsupportedFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			["--files", matchedUnsupportedFilename, "--release-version", "2.0.0"],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1792,6 +1722,8 @@ describe.each`
 			matchedUnsupportedFilename,
 		} = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedChangelogFilename,
 			matchedPackageJsonFilename,
@@ -1825,18 +1757,14 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedChangelogFilename,
-					matchedPackageJsonFilename,
-					matchedUnsupportedFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				matchedChangelogFilename,
+				matchedPackageJsonFilename,
+				matchedUnsupportedFilename,
+				"--release-version",
+				"2.0.0",
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1884,6 +1812,8 @@ describe.each`
 			expectedErrorMessage,
 		} = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedChangelogFilename,
 			matchedPackageJsonFilename,
@@ -1916,17 +1846,13 @@ describe.each`
 		const onWritingToFiles: OnWritingToFiles = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedChangelogFilename,
-					matchedPackageJsonFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				matchedChangelogFilename,
+				matchedPackageJsonFilename,
+				"--release-version",
+				"2.0.0",
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,
@@ -1974,6 +1900,8 @@ describe.each`
 			expectedErrorMessage,
 		} = input
 
+		mockToday("2022-05-29")
+
 		const onListingMatchingFiles = onListingFakeMatchingFiles([
 			matchedChangelogFilename,
 			matchedPackageJsonFilename,
@@ -2007,17 +1935,13 @@ describe.each`
 		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
 
 		const exitCode = await mainProgram(
-			{
-				args: [
-					"--files",
-					matchedChangelogFilename,
-					matchedPackageJsonFilename,
-					"--release-version",
-					"2.0.0",
-				],
-				today: "2022-05-29",
-				toolVersion: "1.0.0",
-			},
+			[
+				"--files",
+				matchedChangelogFilename,
+				matchedPackageJsonFilename,
+				"--release-version",
+				"2.0.0",
+			],
 			{
 				onDisplayingMessage,
 				onListingMatchingFiles,

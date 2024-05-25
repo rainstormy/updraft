@@ -8,17 +8,9 @@ import { promotionProgram } from "+program/PromotionProgram/PromotionProgram"
 import { toolVersionProgram } from "+program/ToolVersionProgram/ToolVersionProgram"
 import { usageInstructionsProgram } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import type { ExitCode } from "+utilities/ErrorUtilities"
-import type {
-	DateString,
-	SemanticVersionString,
-} from "+utilities/StringUtilities"
 
 export async function mainProgram(
-	input: {
-		args: Array<string>
-		today: DateString
-		toolVersion: SemanticVersionString
-	},
+	args: Array<string>,
 	sideEffects: {
 		onDisplayingMessage: OnDisplayingMessage
 		onListingMatchingFiles: OnListingMatchingFiles
@@ -26,7 +18,7 @@ export async function mainProgram(
 		onWritingToFiles: OnWritingToFiles
 	},
 ): Promise<ExitCode> {
-	const configuration = getConfigurationFromArgs(input.args)
+	const configuration = getConfigurationFromArgs(args)
 
 	switch (configuration.type) {
 		case "help-screen":
@@ -42,7 +34,6 @@ export async function mainProgram(
 			return promotionProgram(
 				configuration.filePatterns,
 				configuration.releaseVersion,
-				input.today,
 				sideEffects.onDisplayingMessage,
 				sideEffects.onListingMatchingFiles,
 				sideEffects.onReadingFiles,
@@ -50,9 +41,6 @@ export async function mainProgram(
 			)
 
 		case "tool-version":
-			return toolVersionProgram(
-				input.toolVersion,
-				sideEffects.onDisplayingMessage,
-			)
+			return toolVersionProgram(sideEffects.onDisplayingMessage)
 	}
 }

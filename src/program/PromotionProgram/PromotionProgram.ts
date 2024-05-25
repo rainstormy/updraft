@@ -2,6 +2,7 @@ import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
 import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
 import type { OnReadingFiles } from "+adapters/OnReadingFiles"
 import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
+import { today } from "+adapters/Today/Today"
 import { parseAsciidocChangelog } from "+changelogs/AsciidocChangelogParser"
 import { serializeChangelogToAsciidoc } from "+changelogs/AsciidocChangelogSerializer"
 import { promoteChangelog } from "+changelogs/ChangelogPromoter"
@@ -10,22 +11,16 @@ import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import type { FileType, PathWithContent } from "+utilities/FileUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
 import type { Release } from "+utilities/Release"
-import type {
-	DateString,
-	SemanticVersionString,
-} from "+utilities/StringUtilities"
+import type { SemanticVersionString } from "+utilities/StringUtilities"
 
 export async function promotionProgram(
 	filePatterns: Array<string>,
 	releaseVersion: SemanticVersionString,
-	today: DateString,
 	onDisplayingMessage: OnDisplayingMessage,
 	onListingMatchingFiles: OnListingMatchingFiles,
 	onReadingFiles: OnReadingFiles,
 	onWritingToFiles: OnWritingToFiles,
 ): Promise<ExitCode> {
-	const newRelease: Release = { version: releaseVersion, date: today }
-
 	try {
 		const matchingFiles = await onListingMatchingFiles({ filePatterns })
 
@@ -40,6 +35,8 @@ export async function promotionProgram(
 		const pathsWithOriginalContent = await onReadingFiles({
 			paths: matchingFiles,
 		})
+
+		const newRelease: Release = { version: releaseVersion, date: today() }
 
 		const promotionResults = await Promise.allSettled<PathWithContent>(
 			pathsWithOriginalContent.map(
