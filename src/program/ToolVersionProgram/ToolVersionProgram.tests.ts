@@ -1,68 +1,52 @@
-import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
-import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
-import type { OnReadingFiles } from "+adapters/OnReadingFiles"
-import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
-import { injectMocksOfPackageJsonVersion } from "+adapters/PackageJsonVersion/PackageJsonVersion.mocks"
+import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
+import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
+import { injectPackageJsonVersionMock } from "+adapters/PackageJsonVersion/PackageJsonVersion.mock"
 import { mainProgram } from "+program/Program"
+import type { ExitCode } from "+utilities/ErrorUtilities"
 import type { SemanticVersionString } from "+utilities/StringUtilities"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
-const { mockPackageJsonVersion } = injectMocksOfPackageJsonVersion()
+const { packageJsonVersion } = injectPackageJsonVersionMock()
+const { printMessage } = injectLoggerMock()
+const { readMatchingFiles, writeFiles } = injectFileSystemMock()
+
+beforeEach(() => {
+	vi.clearAllMocks()
+})
 
 describe.each`
-	toolVersionArgs
-	${["--version"]}
-	${["--release-version", "2.2", "--version"]}
-	${["--files", "--version", "CHANGELOG.adoc"]}
+	toolVersionArgs                               | toolVersion
+	${["--version"]}                              | ${"1.1.5"}
+	${["--release-version", "2.2", "--version"]}  | ${"10.4.1"}
+	${["--files", "--version", "CHANGELOG.adoc"]} | ${"3.2.0-beta.1"}
 `(
-	"when the args are $toolVersionArgs",
-	(argsProps: { toolVersionArgs: Array<string> }) => {
-		describe.each`
-			toolVersion
-			${"1.1.5"}
-			${"10.4.1"}
-			${"3.2.0-beta.1"}
-		`(
-			"and the tool version is $toolVersion",
-			async (toolVersionProps: { toolVersion: SemanticVersionString }) => {
-				mockPackageJsonVersion(toolVersionProps.toolVersion)
+	"when the args are $toolVersionArgs and the tool version is $toolVersion",
+	(props: {
+		toolVersionArgs: Array<string>
+		toolVersion: SemanticVersionString
+	}) => {
+		let actualExitCode: ExitCode | null = null
 
-				const onDisplayingMessage: OnDisplayingMessage = vi.fn()
-				const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
-				const onReadingFiles: OnReadingFiles = vi.fn()
-				const onWritingToFiles: OnWritingToFiles = vi.fn()
+		beforeEach(async () => {
+			packageJsonVersion.mockImplementation(() => props.toolVersion)
+			actualExitCode = await mainProgram(props.toolVersionArgs)
+		})
 
-				const exitCode = await mainProgram(argsProps.toolVersionArgs, {
-					onDisplayingMessage,
-					onListingMatchingFiles,
-					onReadingFiles,
-					onWritingToFiles,
-				})
+		it("returns an exit code of 0", () => {
+			expect(actualExitCode).toBe(0)
+		})
 
-				it("returns an exit code of 0", () => {
-					expect(exitCode).toBe(0)
-				})
+		it("displays the tool version", () => {
+			expect(printMessage).toHaveBeenCalledWith(props.toolVersion)
+			expect(printMessage).toHaveBeenCalledTimes(1)
+		})
 
-				it("displays the tool version", () => {
-					expect(onDisplayingMessage).toHaveBeenCalledWith({
-						severity: "info",
-						message: toolVersionProps.toolVersion,
-					} satisfies OnDisplayingMessage.Payload)
-					expect(onDisplayingMessage).toHaveBeenCalledTimes(1)
-				})
+		it("does not read the content of any file", () => {
+			expect(readMatchingFiles).not.toHaveBeenCalled()
+		})
 
-				it("does not traverse the file system", () => {
-					expect(onListingMatchingFiles).not.toHaveBeenCalled()
-				})
-
-				it("does not read the content of any file", () => {
-					expect(onReadingFiles).not.toHaveBeenCalled()
-				})
-
-				it("does not write changes to any file", () => {
-					expect(onWritingToFiles).not.toHaveBeenCalled()
-				})
-			},
-		)
+		it("does not write changes to any file", () => {
+			expect(writeFiles).not.toHaveBeenCalled()
+		})
 	},
 )

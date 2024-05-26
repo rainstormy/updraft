@@ -1,10 +1,16 @@
-import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
-import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
-import type { OnReadingFiles } from "+adapters/OnReadingFiles"
-import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
+import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
+import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 import { mainProgram } from "+program/Program"
+import type { ExitCode } from "+utilities/ErrorUtilities"
 import { dedent } from "+utilities/StringUtilities"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+
+const { printError } = injectLoggerMock()
+const { readMatchingFiles, writeFiles } = injectFileSystemMock()
+
+beforeEach(() => {
+	vi.clearAllMocks()
+})
 
 describe.each`
 	invalidArgs                                                                                           | expectedErrorMessage
@@ -25,47 +31,34 @@ describe.each`
 	${["--release-version", "1.0.1", "--files"]}                                                          | ${"--files must specify a value."}
 `(
 	"when the args are $invalidArgs",
-	async (argsProps: {
+	(props: {
 		invalidArgs: Array<string>
 		expectedErrorMessage: string
 	}) => {
-		const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
-		const onReadingFiles: OnReadingFiles = vi.fn()
-		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
-		const onWritingToFiles: OnWritingToFiles = vi.fn()
+		let actualExitCode: ExitCode | null = null
 
-		const exitCode = await mainProgram(argsProps.invalidArgs, {
-			onDisplayingMessage,
-			onListingMatchingFiles,
-			onReadingFiles,
-			onWritingToFiles,
+		beforeEach(async () => {
+			actualExitCode = await mainProgram(props.invalidArgs)
 		})
 
 		it("returns an exit code of 2", () => {
-			expect(exitCode).toBe(2)
+			expect(actualExitCode).toBe(2)
 		})
 
 		it("displays an appropriate error message and encourages the use of --help", () => {
-			expect(onDisplayingMessage).toHaveBeenCalledWith({
-				severity: "error",
-				message: dedent`
-					${argsProps.expectedErrorMessage}
-					For usage instructions, please run the program with the --help option.
-				`,
-			} satisfies OnDisplayingMessage.Payload)
-			expect(onDisplayingMessage).toHaveBeenCalledTimes(1)
-		})
-
-		it("does not traverse the file system", () => {
-			expect(onListingMatchingFiles).not.toHaveBeenCalled()
+			expect(printError).toHaveBeenCalledWith(dedent`
+				${props.expectedErrorMessage}
+				For usage instructions, please run the program with the --help option.
+			`)
+			expect(printError).toHaveBeenCalledTimes(1)
 		})
 
 		it("does not read the content of any file", () => {
-			expect(onReadingFiles).not.toHaveBeenCalled()
+			expect(readMatchingFiles).not.toHaveBeenCalled()
 		})
 
 		it("does not write changes to any file", () => {
-			expect(onWritingToFiles).not.toHaveBeenCalled()
+			expect(writeFiles).not.toHaveBeenCalled()
 		})
 	},
 )

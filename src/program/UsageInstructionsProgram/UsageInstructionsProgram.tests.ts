@@ -1,10 +1,16 @@
-import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
-import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
-import type { OnReadingFiles } from "+adapters/OnReadingFiles"
-import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
+import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
+import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 import { mainProgram } from "+program/Program"
 import { usageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
-import { describe, expect, it, vi } from "vitest"
+import type { ExitCode } from "+utilities/ErrorUtilities"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+
+const { printMessage } = injectLoggerMock()
+const { readMatchingFiles, writeFiles } = injectFileSystemMock()
+
+beforeEach(() => {
+	vi.clearAllMocks()
+})
 
 describe.each`
 	helpScreenArgs
@@ -15,41 +21,28 @@ describe.each`
 	${["--files", "--help", "package.json"]}
 `(
 	"when the args are $helpScreenArgs",
-	async (argsProps: { helpScreenArgs: Array<string> }) => {
-		const onDisplayingMessage: OnDisplayingMessage = vi.fn()
-		const onListingMatchingFiles: OnListingMatchingFiles = vi.fn()
-		const onReadingFiles: OnReadingFiles = vi.fn()
-		const onWritingToFiles: OnWritingToFiles = vi.fn()
+	(props: { helpScreenArgs: Array<string> }) => {
+		let actualExitCode: ExitCode | null = null
 
-		const exitCode = await mainProgram(argsProps.helpScreenArgs, {
-			onDisplayingMessage,
-			onListingMatchingFiles,
-			onReadingFiles,
-			onWritingToFiles,
+		beforeEach(async () => {
+			actualExitCode = await mainProgram(props.helpScreenArgs)
 		})
 
 		it("returns an exit code of 0", () => {
-			expect(exitCode).toBe(0)
+			expect(actualExitCode).toBe(0)
 		})
 
 		it("displays the usage instructions", () => {
-			expect(onDisplayingMessage).toHaveBeenCalledWith({
-				severity: "info",
-				message: usageInstructions,
-			} satisfies OnDisplayingMessage.Payload)
-			expect(onDisplayingMessage).toHaveBeenCalledTimes(1)
-		})
-
-		it("does not traverse the file system", () => {
-			expect(onListingMatchingFiles).not.toHaveBeenCalled()
+			expect(printMessage).toHaveBeenCalledWith(usageInstructions)
+			expect(printMessage).toHaveBeenCalledTimes(1)
 		})
 
 		it("does not read the content of any file", () => {
-			expect(onReadingFiles).not.toHaveBeenCalled()
+			expect(readMatchingFiles).not.toHaveBeenCalled()
 		})
 
 		it("does not write changes to any file", () => {
-			expect(onWritingToFiles).not.toHaveBeenCalled()
+			expect(writeFiles).not.toHaveBeenCalled()
 		})
 	},
 )

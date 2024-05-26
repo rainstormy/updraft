@@ -1,7 +1,3 @@
-import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
-import type { OnListingMatchingFiles } from "+adapters/OnListingMatchingFiles"
-import type { OnReadingFiles } from "+adapters/OnReadingFiles"
-import type { OnWritingToFiles } from "+adapters/OnWritingToFiles"
 import { getConfigurationFromArgs } from "+program/Configuration"
 import { invalidConfigurationProgram } from "+program/InvalidConfigurationProgram/InvalidConfigurationProgram"
 import { promotionProgram } from "+program/PromotionProgram/PromotionProgram"
@@ -9,38 +5,26 @@ import { toolVersionProgram } from "+program/ToolVersionProgram/ToolVersionProgr
 import { usageInstructionsProgram } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 
-export async function mainProgram(
-	args: Array<string>,
-	sideEffects: {
-		onDisplayingMessage: OnDisplayingMessage
-		onListingMatchingFiles: OnListingMatchingFiles
-		onReadingFiles: OnReadingFiles
-		onWritingToFiles: OnWritingToFiles
-	},
-): Promise<ExitCode> {
+export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 	const configuration = getConfigurationFromArgs(args)
 
 	switch (configuration.type) {
-		case "help-screen":
-			return usageInstructionsProgram(sideEffects.onDisplayingMessage)
+		case "help-screen": {
+			return usageInstructionsProgram()
+		}
 
-		case "invalid":
-			return invalidConfigurationProgram(
-				configuration.errorMessage,
-				sideEffects.onDisplayingMessage,
-			)
+		case "invalid": {
+			const { errorMessage } = configuration
+			return invalidConfigurationProgram(errorMessage)
+		}
 
-		case "release":
-			return promotionProgram(
-				configuration.filePatterns,
-				configuration.releaseVersion,
-				sideEffects.onDisplayingMessage,
-				sideEffects.onListingMatchingFiles,
-				sideEffects.onReadingFiles,
-				sideEffects.onWritingToFiles,
-			)
+		case "release": {
+			const { filePatterns, releaseVersion } = configuration
+			return promotionProgram(filePatterns, releaseVersion)
+		}
 
-		case "tool-version":
-			return toolVersionProgram(sideEffects.onDisplayingMessage)
+		case "tool-version": {
+			return toolVersionProgram()
+		}
 	}
 }

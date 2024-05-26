@@ -1,10 +1,8 @@
-import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
+import { printMessage } from "+adapters/Logger/Logger"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 
-export async function usageInstructionsProgram(
-	onDisplayingMessage: OnDisplayingMessage,
-): Promise<ExitCode> {
-	await onDisplayingMessage({ severity: "info", message: usageInstructions })
+export async function usageInstructionsProgram(): Promise<ExitCode> {
+	printMessage(usageInstructions)
 	return 0
 }
 

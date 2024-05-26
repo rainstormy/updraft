@@ -1,14 +1,10 @@
-import type { OnDisplayingMessage } from "+adapters/OnDisplayingMessage"
+import { printError } from "+adapters/Logger/Logger"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 
 export async function invalidConfigurationProgram(
 	errorMessage: string,
-	onDisplayingMessage: OnDisplayingMessage,
 ): Promise<ExitCode> {
-	await onDisplayingMessage({
-		severity: "error",
-		message: `${errorMessage}\n${usageInstructionsReminder}`,
-	})
+	printError(`${errorMessage}\n${usageInstructionsReminder}`)
 	return 2
 }
 
