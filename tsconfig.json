@@ -23,7 +23,6 @@
 		"paths": {
 			"+adapters/*": ["./src/adapters/*"],
 			"+changelogs/*": ["./src/changelogs/*"],
-			"+configuration/*": ["./src/configuration/*"],
 			"+packages/*": ["./src/packages/*"],
 			"+program/*": ["./src/program/*"],
 			"+utilities/*": ["./src/utilities/*"]
