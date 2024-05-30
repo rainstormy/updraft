@@ -9,7 +9,7 @@ export function serializeChangelogToAsciidoc(changelog: Changelog): string {
 }
 
 function serializeSectionToAsciidoc(section: Changelog.Section): string {
-	return `\n\n\n${serializeSectionHeadingToAsciidoc(
+	return `\n\n${serializeSectionHeadingToAsciidoc(
 		section,
 	)}${serializeSectionBodyToAsciidoc(section)}`
 }
@@ -37,5 +37,5 @@ function serializeSectionHeadingToAsciidoc(section: Changelog.Section): string {
 }
 
 function serializeSectionBodyToAsciidoc(section: Changelog.Section): string {
-	return section.sectionBody !== "" ? `\n\n${section.sectionBody}` : ""
+	return section.sectionBody !== "" ? `\n${section.sectionBody}` : ""
 }

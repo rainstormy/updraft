@@ -76,19 +76,15 @@ describe.each`
 			= Changelog
 
 			== {url-repo}[Unreleased]
-
 			=== Changed
 			* The fruit basket is now refilled every day.
 		`
 		const expectedPromotedContent = `${dedent`
 			= Changelog
 
-
 			== {url-repo}/compare/v${props.releaseVersion}\\...HEAD[Unreleased]
 
-
 			== {url-repo}/releases/tag/v${props.releaseVersion}[${props.releaseVersion}] - ${props.releaseDate}
-
 			=== Changed
 			* The fruit basket is now refilled every day.
 		`}\n`
@@ -247,18 +243,14 @@ describe.each`
 			dedent`
 				= Changelog
 
-
 				== {url-github}[Unreleased]
-
 				=== Added
 				* A new shower mode: \`jet-stream\`.
 			`,
 			dedent`
 				= Releases
 
-
 				== {url-github}[Unreleased]
-
 				=== Fixed
 				* Office chairs are now more comfortable.
 				* Books on the shelf are now alphabetically sorted.
@@ -266,9 +258,7 @@ describe.each`
 				=== Changed
 				* The office is now open 24/7.
 
-
 				== {url-github}/releases/tag/v0.9.9[0.9.9] - 2023-04-09
-
 				=== Added
 				* A new cold water dispenser.
 				* Skylights in the ceiling.
@@ -276,9 +266,7 @@ describe.each`
 			dedent`
 				= Changes
 
-
 				== {url-github}[Unreleased]
-
 				=== Changed
 				* The fruit basket is now refilled every day.
 
@@ -290,24 +278,18 @@ describe.each`
 			`${dedent`
 				= Changelog
 
-
 				== {url-github}/compare/v${props.releaseVersion}\\...HEAD[Unreleased]
 
-
 				== {url-github}/releases/tag/v${props.releaseVersion}[${props.releaseVersion}] - ${props.releaseDate}
-
 				=== Added
 				* A new shower mode: \`jet-stream\`.
 			`}\n`,
 			`${dedent`
 				= Releases
 
-
 				== {url-github}/compare/v${props.releaseVersion}\\...HEAD[Unreleased]
 
-
 				== {url-github}/compare/v0.9.9\\...v${props.releaseVersion}[${props.releaseVersion}] - ${props.releaseDate}
-
 				=== Fixed
 				* Office chairs are now more comfortable.
 				* Books on the shelf are now alphabetically sorted.
@@ -315,9 +297,7 @@ describe.each`
 				=== Changed
 				* The office is now open 24/7.
 
-
 				== {url-github}/releases/tag/v0.9.9[0.9.9] - 2023-04-09
-
 				=== Added
 				* A new cold water dispenser.
 				* Skylights in the ceiling.
@@ -325,12 +305,9 @@ describe.each`
 			`${dedent`
 				= Changes
 
-
 				== {url-github}/compare/v${props.releaseVersion}\\...HEAD[Unreleased]
 
-
 				== {url-github}/releases/tag/v${props.releaseVersion}[${props.releaseVersion}] - ${props.releaseDate}
-
 				=== Changed
 				* The fruit basket is now refilled every day.
 
@@ -1103,12 +1080,9 @@ describe.each`
 			`${dedent`
 				= Changelog
 
-
 				== {url-repo}/compare/v${props.releaseVersion}\\...HEAD[Unreleased]
 
-
 				== {url-repo}/releases/tag/v${props.releaseVersion}[${props.releaseVersion}] - ${props.releaseDate}
-
 				=== Changed
 				* The fruit basket is now refilled every day.
 			`}\n`,
@@ -1190,9 +1164,7 @@ describe.each`
 			dedent`
 				= Apples Changelog
 
-
 				== {url-github}[Unreleased]
-
 				=== Added
 				* A new shower mode: \`jet-stream\`.
 			`,
@@ -1245,24 +1217,18 @@ describe.each`
 			`${dedent`
 				= Apples Changelog
 
-
 				== {url-github}/compare/v${props.releaseVersion}\\...HEAD[Unreleased]
 
-
 				== {url-github}/releases/tag/v${props.releaseVersion}[${props.releaseVersion}] - ${props.releaseDate}
-
 				=== Added
 				* A new shower mode: \`jet-stream\`.
 			`}\n`,
 			`${dedent`
 				= Oranges Changelog
 
-
 				== {url-github}/compare/v${props.releaseVersion}\\...HEAD[Unreleased]
 
-
 				== {url-github}/compare/v0.9.9\\...v${props.releaseVersion}[${props.releaseVersion}] - ${props.releaseDate}
-
 				=== Fixed
 				* Office chairs are now more comfortable.
 				* Books on the shelf are now alphabetically sorted.
@@ -1270,9 +1236,7 @@ describe.each`
 				=== Changed
 				* The office is now open 24/7.
 
-
 				== {url-github}/releases/tag/v0.9.9[0.9.9] - 2023-04-09
-
 				=== Added
 				* A new cold water dispenser.
 				* Skylights in the ceiling.

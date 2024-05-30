@@ -335,3 +335,28 @@ describe("when the changelog contains a non-empty unreleased section and two ear
 		})
 	})
 })
+
+describe("when the changelog contains unnecessary blank lines", () => {
+	const asciidoc = dedent`
+		${preambles[0]}
+
+
+		== https://github.com/spdiswal/coolciv/compare/v0.5.1\\...HEAD[Unreleased]
+
+		${sectionOfKitchenAppliances}
+
+
+		== https://github.com/spdiswal/coolciv/releases/tag/v0.5.1[0.5.1] - 2022-12-22
+
+		${sectionOfOfficeAppliances}
+	`
+	const result = parseAsciidocChangelog(asciidoc)
+
+	it("produces a changelog with a preamble", () => {
+		expect(result.preamble).toBe(preambles[0])
+	})
+
+	it("produces a changelog with two sections", () => {
+		expect(result.sections).toHaveLength(2)
+	})
+})
