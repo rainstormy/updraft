@@ -9,6 +9,9 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 
 == {url-github-repository}/compare/v1.0.0\...HEAD[Unreleased]
 
+=== Changed
+* Include a trailing newline character in the output files.
+
 
 == {url-github-repository}/releases/tag/v1.0.0[1.0.0] - 2023-12-08
 

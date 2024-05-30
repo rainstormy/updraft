@@ -1,9 +1,10 @@
 import type { Changelog } from "+changelogs/Changelog"
+import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
 export function serializeChangelogToAsciidoc(changelog: Changelog): string {
-	return (
+	return ensureTrailingNewlineIfNonEmpty(
 		changelog.preamble +
-		changelog.sections.map(serializeSectionToAsciidoc).join("")
+			changelog.sections.map(serializeSectionToAsciidoc).join(""),
 	)
 }
 

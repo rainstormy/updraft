@@ -80,8 +80,7 @@ describe.each`
 			=== Changed
 			* The fruit basket is now refilled every day.
 		`
-
-		const promotedContent = dedent`
+		const expectedPromotedContent = `${dedent`
 			= Changelog
 
 
@@ -92,7 +91,7 @@ describe.each`
 
 			=== Changed
 			* The fruit basket is now refilled every day.
-		`
+		`}\n`
 
 		let actualExitCode: ExitCode | null = null
 
@@ -127,7 +126,7 @@ describe.each`
 		it("saves the promoted changelog file", () => {
 			expect(writeFiles).toHaveBeenCalledWith([
 				{
-					content: promotedContent,
+					content: expectedPromotedContent,
 					path: props.matchedChangelogFilename,
 					type: "asciidoc-changelog",
 				},
@@ -287,9 +286,8 @@ describe.each`
 				* Milk in the refrigerator is now fresh.
 			`,
 		]
-
-		const promotedContents = [
-			dedent`
+		const expectedPromotedContents = [
+			`${dedent`
 				= Changelog
 
 
@@ -300,8 +298,8 @@ describe.each`
 
 				=== Added
 				* A new shower mode: \`jet-stream\`.
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				= Releases
 
 
@@ -323,8 +321,8 @@ describe.each`
 				=== Added
 				* A new cold water dispenser.
 				* Skylights in the ceiling.
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				= Changes
 
 
@@ -338,7 +336,7 @@ describe.each`
 
 				=== Fixed
 				* Milk in the refrigerator is now fresh.
-			`,
+			`}\n`,
 		]
 
 		let actualExitCode: ExitCode | null = null
@@ -386,17 +384,17 @@ describe.each`
 		it("saves the promoted changelog files", () => {
 			expect(writeFiles).toHaveBeenCalledWith([
 				{
-					content: promotedContents[0],
+					content: expectedPromotedContents[0],
 					path: props.matchedChangelogFilenames[0],
 					type: "asciidoc-changelog",
 				},
 				{
-					content: promotedContents[1],
+					content: expectedPromotedContents[1],
 					path: props.matchedChangelogFilenames[1],
 					type: "asciidoc-changelog",
 				},
 				{
-					content: promotedContents[2],
+					content: expectedPromotedContents[2],
 					path: props.matchedChangelogFilenames[2],
 					type: "asciidoc-changelog",
 				},
@@ -605,8 +603,7 @@ describe.each`
 				"packageManager": "yarn@3.6.3"
 			}
 		`
-
-		const promotedContent = dedent`
+		const expectedPromotedContent = `${dedent`
 			{
 				"$schema": "https://json.schemastore.org/package.json",
 				"name": "@rainstormy/preset-prettier-base",
@@ -617,7 +614,7 @@ describe.each`
 				"files": ["dist"],
 				"packageManager": "yarn@3.6.3"
 			}
-		`
+		`}\n`
 
 		let actualExitCode: ExitCode | null = null
 
@@ -652,7 +649,7 @@ describe.each`
 		it("saves the promoted package.json file", () => {
 			expect(writeFiles).toHaveBeenCalledWith([
 				{
-					content: promotedContent,
+					content: expectedPromotedContent,
 					path: props.matchedPackageJsonFilename,
 					type: "package-json",
 				},
@@ -810,9 +807,8 @@ describe.each`
 				}
 			`,
 		]
-
-		const promotedContents = [
-			dedent`
+		const expectedPromotedContents = [
+			`${dedent`
 				{
 					"$schema": "https://json.schemastore.org/package.json",
 					"name": "@rainstormy/apples",
@@ -823,8 +819,8 @@ describe.each`
 					"files": ["dist"],
 					"packageManager": "yarn@4.0.1"
 				}
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				{
 					"$schema": "https://json.schemastore.org/package.json",
 					"name": "@rainstormy/oranges",
@@ -835,8 +831,8 @@ describe.each`
 					"files": ["dist"],
 					"packageManager": "yarn@4.0.1"
 				}
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				{
 					"$schema": "https://json.schemastore.org/package.json",
 					"name": "@rainstormy/peaches",
@@ -847,7 +843,7 @@ describe.each`
 					"files": ["dist"],
 					"packageManager": "yarn@4.0.1"
 				}
-			`,
+			`}\n`,
 		]
 
 		let actualExitCode: ExitCode | null = null
@@ -895,17 +891,17 @@ describe.each`
 		it("saves the promoted package.json files", () => {
 			expect(writeFiles).toHaveBeenCalledWith([
 				{
-					content: promotedContents[0],
+					content: expectedPromotedContents[0],
 					path: props.matchedPackageJsonFilenames[0],
 					type: "package-json",
 				},
 				{
-					content: promotedContents[1],
+					content: expectedPromotedContents[1],
 					path: props.matchedPackageJsonFilenames[1],
 					type: "package-json",
 				},
 				{
-					content: promotedContents[2],
+					content: expectedPromotedContents[2],
 					path: props.matchedPackageJsonFilenames[2],
 					type: "package-json",
 				},
@@ -1103,9 +1099,8 @@ describe.each`
 				}
 			`,
 		]
-
-		const promotedContents = [
-			dedent`
+		const expectedPromotedContents = [
+			`${dedent`
 				= Changelog
 
 
@@ -1116,13 +1111,13 @@ describe.each`
 
 				=== Changed
 				* The fruit basket is now refilled every day.
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				{
 					"name": "@rainstormy/preset-prettier-base",
 					"version": "${props.releaseVersion}",
 				}
-			`,
+			`}\n`,
 		]
 
 		let actualExitCode: ExitCode | null = null
@@ -1164,12 +1159,12 @@ describe.each`
 		it("saves the promoted changelog file and the promoted package.json file", () => {
 			expect(writeFiles).toHaveBeenCalledWith([
 				{
-					content: promotedContents[0],
+					content: expectedPromotedContents[0],
 					path: props.matchedChangelogFilename,
 					type: "asciidoc-changelog",
 				},
 				{
-					content: promotedContents[1],
+					content: expectedPromotedContents[1],
 					path: props.matchedPackageJsonFilename,
 					type: "package-json",
 				},
@@ -1246,9 +1241,8 @@ describe.each`
 				}
 			`,
 		]
-
-		const promotedContents = [
-			dedent`
+		const expectedPromotedContents = [
+			`${dedent`
 				= Apples Changelog
 
 
@@ -1259,8 +1253,8 @@ describe.each`
 
 				=== Added
 				* A new shower mode: \`jet-stream\`.
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				= Oranges Changelog
 
 
@@ -1282,8 +1276,8 @@ describe.each`
 				=== Added
 				* A new cold water dispenser.
 				* Skylights in the ceiling.
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				{
 					"$schema": "https://json.schemastore.org/package.json",
 					"name": "@rainstormy/apples",
@@ -1294,8 +1288,8 @@ describe.each`
 					"files": ["dist"],
 					"packageManager": "yarn@4.0.1"
 				}
-			`,
-			dedent`
+			`}\n`,
+			`${dedent`
 				{
 					"$schema": "https://json.schemastore.org/package.json",
 					"name": "@rainstormy/oranges",
@@ -1306,7 +1300,7 @@ describe.each`
 					"files": ["dist"],
 					"packageManager": "yarn@4.0.1"
 				}
-			`,
+			`}\n`,
 		]
 
 		let actualExitCode: ExitCode | null = null
@@ -1358,22 +1352,22 @@ describe.each`
 		it("saves the promoted changelog files and the promoted package.json files", () => {
 			expect(writeFiles).toHaveBeenCalledWith([
 				{
-					content: promotedContents[0],
+					content: expectedPromotedContents[0],
 					path: props.matchedChangelogFilenames[0],
 					type: "asciidoc-changelog",
 				},
 				{
-					content: promotedContents[1],
+					content: expectedPromotedContents[1],
 					path: props.matchedChangelogFilenames[1],
 					type: "asciidoc-changelog",
 				},
 				{
-					content: promotedContents[2],
+					content: expectedPromotedContents[2],
 					path: props.matchedPackageJsonFilenames[0],
 					type: "package-json",
 				},
 				{
-					content: promotedContents[3],
+					content: expectedPromotedContents[3],
 					path: props.matchedPackageJsonFilenames[1],
 					type: "package-json",
 				},

@@ -8,13 +8,10 @@ describe("when the changelog is completely empty", () => {
 		preamble: "",
 		sections: [],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces an empty document", () => {
-			expect(result).toBe("")
-		})
+	it("produces an empty document", () => {
+		expect(result).toBe("")
 	})
 })
 
@@ -27,17 +24,16 @@ describe("when the changelog contains a preamble and no sections", () => {
 		`,
 		sections: [],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with a preamble", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with a preamble", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Releases
 
 				You can find all releases in this document.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -63,12 +59,11 @@ describe("when the changelog contains an unreleased section", () => {
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with an unreleased section whose heading is a hyperlink to a commit log since the previous release", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with an unreleased section whose heading is a hyperlink to a commit log since the previous release", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Changelog
 
 				This is a changelog.
@@ -78,8 +73,8 @@ describe("when the changelog contains an unreleased section", () => {
 
 				=== Added
 				* A new shower mode: \`jet-stream\`.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -112,12 +107,11 @@ describe("when the changelog contains a released section", () => {
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with a released section whose heading is a hyperlink to a commit log between the two releases", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with a released section whose heading is a hyperlink to a commit log between the two releases", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Releases
 
 				You can find all releases in this document.
@@ -131,8 +125,8 @@ describe("when the changelog contains a released section", () => {
 				=== Fixed
 				* The coffee machine will no longer produce ice cubes.
 				* Milk in the refrigerator is now fresh.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -159,12 +153,11 @@ describe("when the changelog contains an unreleased section without a link to th
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with an unreleased section whose heading is not a hyperlink", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with an unreleased section whose heading is not a hyperlink", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Changelog
 
 				This is a changelog.
@@ -175,8 +168,8 @@ describe("when the changelog contains an unreleased section without a link to th
 				=== Added
 				* Soft toilet paper.
 				* Ambient music.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -205,12 +198,11 @@ describe("when the changelog contains a released section without a link to the G
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with a released section whose heading is not a hyperlink", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with a released section whose heading is not a hyperlink", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Releases
 
 				You can find all releases in this document.
@@ -220,8 +212,8 @@ describe("when the changelog contains a released section without a link to the G
 
 				=== Fixed
 				* Heating in toilet seats has been restored.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -244,12 +236,11 @@ describe("when the changelog contains an unreleased section without a reference 
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with an unreleased section whose heading is a hyperlink to the home page of the GitHub repository", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with an unreleased section whose heading is a hyperlink to the home page of the GitHub repository", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Changelog
 
 				This is a changelog.
@@ -259,8 +250,8 @@ describe("when the changelog contains an unreleased section without a reference 
 
 				=== Changed
 				* The fruit basket is now refilled every day.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -290,12 +281,11 @@ describe("when the changelog contains a released section without a reference to 
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with a released section whose heading is a hyperlink to the release tag", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with a released section whose heading is a hyperlink to the release tag", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Releases
 
 				You can find all releases in this document.
@@ -309,8 +299,8 @@ describe("when the changelog contains a released section without a reference to 
 
 				=== Removed
 				* Dust on the floor.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -333,20 +323,19 @@ describe("when the changelog contains an empty unreleased section", () => {
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with an unreleased section that does not have a body", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with an unreleased section that does not have a body", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Changelog
 
 				This is a changelog.
 
 
 				== {github-repository-base-url}/compare/v0.4.9-beta.1\\...HEAD[Unreleased]
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -372,20 +361,19 @@ describe("when the changelog contains an empty released section", () => {
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with a released section that does not have a body", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with a released section that does not have a body", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Releases
 
 				You can find all releases in this document.
 
 
 				== https://github.com/rainstormy/presets-web/compare/v2.0.0-beta.5+20231116153649\\...v2.0.0[2.0.0] - 2023-11-17
-			`)
-		})
+			`}\n`,
+		)
 	})
 })
 
@@ -484,12 +472,11 @@ describe("when the changelog contains a preamble, an unreleased section, and thr
 			},
 		],
 	}
+	const result = serializeChangelogToAsciidoc(changelog)
 
-	describe("serialising the changelog to AsciiDoc", () => {
-		const result = serializeChangelogToAsciidoc(changelog)
-
-		it("produces a document with a preamble and four sections in total", () => {
-			expect(result).toBe(dedent`
+	it("produces a document with a preamble and four sections in total", () => {
+		expect(result).toBe(
+			`${dedent`
 				= Changelog
 				:experimental:
 				:source-highlighter: highlight.js
@@ -544,7 +531,7 @@ describe("when the changelog contains a preamble, an unreleased section, and thr
 				* New rule: \`no-squash-commits\`.
 				* New rule: \`no-trailing-punctuation-in-subject-lines\`.
 				* New rule: \`no-unexpected-whitespace\`.
-			`)
-		})
+			`}\n`,
+		)
 	})
 })

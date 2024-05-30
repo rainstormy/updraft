@@ -14,18 +14,13 @@ describe("when the changelog has no sections", () => {
 		sections: [],
 	}
 
-	describe("promoting the changelog", () => {
-		const throwingAction = () =>
-			promoteChangelog({
-				originalChangelog: changelog,
-				newRelease: { version: "0.12.7", date: "2023-05-04" },
-			})
+	const newRelease: Release = { version: "0.12.7", date: "2023-05-04" }
+	const throwingAction = () => promoteChangelog(changelog, newRelease)
 
-		it("raises an error", async () => {
-			await expect(throwingAction).rejects.toThrow(
-				"must have an 'Unreleased' section",
-			)
-		})
+	it("raises an error", async () => {
+		await expect(throwingAction).rejects.toThrow(
+			"must have an 'Unreleased' section",
+		)
 	})
 })
 
@@ -46,18 +41,13 @@ describe("when the changelog contains an empty unreleased section", () => {
 		],
 	}
 
-	describe("promoting the changelog", () => {
-		const throwingAction = () =>
-			promoteChangelog({
-				originalChangelog: changelog,
-				newRelease: { version: "2.1.6", date: "2022-07-01" },
-			})
+	const newRelease: Release = { version: "2.1.6", date: "2022-07-01" }
+	const throwingAction = () => promoteChangelog(changelog, newRelease)
 
-		it("raises an error", async () => {
-			await expect(throwingAction).rejects.toThrow(
-				"must have at least one item in the 'Unreleased' section",
-			)
-		})
+	it("raises an error", async () => {
+		await expect(throwingAction).rejects.toThrow(
+			"must have at least one item in the 'Unreleased' section",
+		)
 	})
 })
 
@@ -81,22 +71,17 @@ describe("when the changelog contains a non-empty unreleased section without a l
 		],
 	}
 
-	describe("promoting the changelog", () => {
-		const throwingAction = () =>
-			promoteChangelog({
-				originalChangelog: changelog,
-				newRelease: { version: "1.1.0", date: "2021-09-25" },
-			})
+	const newRelease: Release = { version: "1.1.0", date: "2021-09-25" }
+	const throwingAction = () => promoteChangelog(changelog, newRelease)
 
-		it("raises an error", async () => {
-			await expect(throwingAction).rejects.toThrow(
-				"must have a link to the GitHub repository in the 'Unreleased' section",
-			)
-		})
+	it("raises an error", async () => {
+		await expect(throwingAction).rejects.toThrow(
+			"must have a link to the GitHub repository in the 'Unreleased' section",
+		)
 	})
 })
 
-describe("when the changelog contains a non-empty unreleased section and no prior releases", () => {
+describe("when the changelog contains a non-empty unreleased section and no prior releases", async () => {
 	const changelog: Changelog = {
 		preamble: dedent`
 			= Releases
@@ -116,73 +101,66 @@ describe("when the changelog contains a non-empty unreleased section and no prio
 		],
 	}
 
-	describe("promoting the changelog", async () => {
-		const newRelease: Release = {
-			version: "0.12.7",
-			date: "2023-05-04",
-		}
-		const promotedChangelog = await promoteChangelog({
-			originalChangelog: changelog,
-			newRelease,
-		})
+	const newRelease: Release = {
+		version: "0.12.7",
+		date: "2023-05-04",
+	}
+	const promotedChangelog = await promoteChangelog(changelog, newRelease)
 
-		it("preserves the preamble", () => {
-			expect(promotedChangelog.preamble).toBe(changelog.preamble)
-		})
+	it("preserves the preamble", () => {
+		expect(promotedChangelog.preamble).toBe(changelog.preamble)
+	})
 
-		it("inserts a new section", () => {
-			expect(promotedChangelog.sections).toHaveLength(
-				changelog.sections.length + 1,
-			)
-		})
+	it("inserts a new section", () => {
+		expect(promotedChangelog.sections).toHaveLength(
+			changelog.sections.length + 1,
+		)
+	})
 
-		it("contains an empty unreleased section", () => {
-			const unreleasedSection = promotedChangelog.sections[0]
-			expect(unreleasedSection.release).toBeNull()
-			expect(unreleasedSection.sectionBody).toBe("")
-		})
+	it("contains an empty unreleased section", () => {
+		const unreleasedSection = promotedChangelog.sections[0]
+		expect(unreleasedSection.release).toBeNull()
+		expect(unreleasedSection.sectionBody).toBe("")
+	})
 
-		it("preserves the repository URL in the empty unreleased section", () => {
-			const unreleasedSection = promotedChangelog.sections[0]
-			expect(unreleasedSection.repositoryUrl).toStrictEqual(
-				changelog.sections[0].repositoryUrl,
-			)
-		})
+	it("preserves the repository URL in the empty unreleased section", () => {
+		const unreleasedSection = promotedChangelog.sections[0]
+		expect(unreleasedSection.repositoryUrl).toStrictEqual(
+			changelog.sections[0].repositoryUrl,
+		)
+	})
 
-		it("makes the empty unreleased section refer back to the newly promoted release", () => {
-			const unreleasedSection = promotedChangelog.sections[0]
-			expect(unreleasedSection.previousRelease).toStrictEqual(newRelease)
-		})
+	it("makes the empty unreleased section refer back to the newly promoted release", () => {
+		const unreleasedSection = promotedChangelog.sections[0]
+		expect(unreleasedSection.previousRelease).toStrictEqual(newRelease)
+	})
 
-		it("promotes the existing unreleased section to become a new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.release).toStrictEqual(newRelease)
-		})
+	it("promotes the existing unreleased section to become a new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.release).toStrictEqual(newRelease)
+	})
 
-		it("preserves the promoted items in the new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.sectionBody).toBe(
-				changelog.sections[0].sectionBody,
-			)
-		})
+	it("preserves the promoted items in the new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.sectionBody).toBe(changelog.sections[0].sectionBody)
+	})
 
-		it("preserves the repository URL in the new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.repositoryUrl).toStrictEqual(
-				changelog.sections[0].repositoryUrl,
-			)
-		})
+	it("preserves the repository URL in the new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.repositoryUrl).toStrictEqual(
+			changelog.sections[0].repositoryUrl,
+		)
+	})
 
-		it("preserves the reference to the previous release in the new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.previousRelease).toStrictEqual(
-				changelog.sections[0].previousRelease,
-			)
-		})
+	it("preserves the reference to the previous release in the new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.previousRelease).toStrictEqual(
+			changelog.sections[0].previousRelease,
+		)
 	})
 })
 
-describe("when the changelog contains a non-empty unreleased section and two prior releases", () => {
+describe("when the changelog contains a non-empty unreleased section and two prior releases", async () => {
 	const changelog: Changelog = {
 		preamble: dedent`
 			= Changelog
@@ -236,73 +214,66 @@ describe("when the changelog contains a non-empty unreleased section and two pri
 		],
 	}
 
-	describe("promoting the changelog", async () => {
-		const newRelease: Release = {
-			version: "10.12.9-beta.6",
-			date: "2024-03-27",
-		}
-		const promotedChangelog = await promoteChangelog({
-			originalChangelog: changelog,
-			newRelease,
-		})
+	const newRelease: Release = {
+		version: "10.12.9-beta.6",
+		date: "2024-03-27",
+	}
+	const promotedChangelog = await promoteChangelog(changelog, newRelease)
 
-		it("preserves the preamble", () => {
-			expect(promotedChangelog.preamble).toBe(changelog.preamble)
-		})
+	it("preserves the preamble", () => {
+		expect(promotedChangelog.preamble).toBe(changelog.preamble)
+	})
 
-		it("inserts a new section", () => {
-			expect(promotedChangelog.sections).toHaveLength(
-				changelog.sections.length + 1,
-			)
-		})
+	it("inserts a new section", () => {
+		expect(promotedChangelog.sections).toHaveLength(
+			changelog.sections.length + 1,
+		)
+	})
 
-		it("contains an empty unreleased section", () => {
-			const unreleasedSection = promotedChangelog.sections[0]
-			expect(unreleasedSection.release).toBeNull()
-			expect(unreleasedSection.sectionBody).toBe("")
-		})
+	it("contains an empty unreleased section", () => {
+		const unreleasedSection = promotedChangelog.sections[0]
+		expect(unreleasedSection.release).toBeNull()
+		expect(unreleasedSection.sectionBody).toBe("")
+	})
 
-		it("preserves the repository URL in the empty unreleased section", () => {
-			const unreleasedSection = promotedChangelog.sections[0]
-			expect(unreleasedSection.repositoryUrl).toStrictEqual(
-				changelog.sections[0].repositoryUrl,
-			)
-		})
+	it("preserves the repository URL in the empty unreleased section", () => {
+		const unreleasedSection = promotedChangelog.sections[0]
+		expect(unreleasedSection.repositoryUrl).toStrictEqual(
+			changelog.sections[0].repositoryUrl,
+		)
+	})
 
-		it("makes the empty unreleased section refer back to the newly promoted release", () => {
-			const unreleasedSection = promotedChangelog.sections[0]
-			expect(unreleasedSection.previousRelease).toStrictEqual(newRelease)
-		})
+	it("makes the empty unreleased section refer back to the newly promoted release", () => {
+		const unreleasedSection = promotedChangelog.sections[0]
+		expect(unreleasedSection.previousRelease).toStrictEqual(newRelease)
+	})
 
-		it("promotes the existing unreleased section to become a new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.release).toStrictEqual(newRelease)
-		})
+	it("promotes the existing unreleased section to become a new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.release).toStrictEqual(newRelease)
+	})
 
-		it("preserves the promoted items in the new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.sectionBody).toBe(
-				changelog.sections[0].sectionBody,
-			)
-		})
+	it("preserves the promoted items in the new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.sectionBody).toBe(changelog.sections[0].sectionBody)
+	})
 
-		it("preserves the repository URL in the new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.repositoryUrl).toStrictEqual(
-				changelog.sections[0].repositoryUrl,
-			)
-		})
+	it("preserves the repository URL in the new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.repositoryUrl).toStrictEqual(
+			changelog.sections[0].repositoryUrl,
+		)
+	})
 
-		it("preserves the reference to the previous release in the new release", () => {
-			const promotedSection = promotedChangelog.sections[1]
-			expect(promotedSection.previousRelease).toStrictEqual(
-				changelog.sections[0].previousRelease,
-			)
-		})
+	it("preserves the reference to the previous release in the new release", () => {
+		const promotedSection = promotedChangelog.sections[1]
+		expect(promotedSection.previousRelease).toStrictEqual(
+			changelog.sections[0].previousRelease,
+		)
+	})
 
-		it("preserves the existing release sections", () => {
-			expect(promotedChangelog.sections[2]).toStrictEqual(changelog.sections[1])
-			expect(promotedChangelog.sections[3]).toStrictEqual(changelog.sections[2])
-		})
+	it("preserves the existing release sections", () => {
+		expect(promotedChangelog.sections[2]).toStrictEqual(changelog.sections[1])
+		expect(promotedChangelog.sections[3]).toStrictEqual(changelog.sections[2])
 	})
 })

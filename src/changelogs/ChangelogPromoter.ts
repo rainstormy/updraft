@@ -1,12 +1,10 @@
 import type { Changelog } from "+changelogs/Changelog"
 import type { Release } from "+utilities/Release"
 
-export async function promoteChangelog(input: {
-	originalChangelog: Changelog
-	newRelease: Release
-}): Promise<Changelog> {
-	const { originalChangelog, newRelease } = input
-
+export async function promoteChangelog(
+	originalChangelog: Changelog,
+	newRelease: Release,
+): Promise<Changelog> {
 	const unreleasedSection =
 		originalChangelog.sections.find((section) => section.release === null) ??
 		null
