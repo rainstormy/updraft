@@ -1,14 +1,15 @@
 import type { Changelog } from "+changelogs/Changelog"
+import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
 export function serializeChangelogToAsciidoc(changelog: Changelog): string {
-	return (
+	return ensureTrailingNewlineIfNonEmpty(
 		changelog.preamble +
-		changelog.sections.map(serializeSectionToAsciidoc).join("")
+			changelog.sections.map(serializeSectionToAsciidoc).join(""),
 	)
 }
 
 function serializeSectionToAsciidoc(section: Changelog.Section): string {
-	return `\n\n\n${serializeSectionHeadingToAsciidoc(
+	return `\n\n${serializeSectionHeadingToAsciidoc(
 		section,
 	)}${serializeSectionBodyToAsciidoc(section)}`
 }
@@ -36,5 +37,5 @@ function serializeSectionHeadingToAsciidoc(section: Changelog.Section): string {
 }
 
 function serializeSectionBodyToAsciidoc(section: Changelog.Section): string {
-	return section.sectionBody !== "" ? `\n\n${section.sectionBody}` : ""
+	return section.sectionBody !== "" ? `\n${section.sectionBody}` : ""
 }

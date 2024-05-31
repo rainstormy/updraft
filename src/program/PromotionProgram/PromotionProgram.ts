@@ -60,10 +60,10 @@ export async function promotionProgram(
 		async function promoteChangelogFile(file: File): Promise<File> {
 			try {
 				const originalChangelog = parseAsciidocChangelog(file.content)
-				const promotedChangelog = await promoteChangelog({
+				const promotedChangelog = await promoteChangelog(
 					originalChangelog,
 					newRelease,
-				})
+				)
 				const promotedContent = serializeChangelogToAsciidoc(promotedChangelog)
 				return { ...file, content: promotedContent }
 			} catch (error) {
@@ -74,10 +74,7 @@ export async function promotionProgram(
 
 		async function promotePackageJsonFile(file: File): Promise<File> {
 			try {
-				const promotedContent = await promotePackage({
-					originalPackageContent: file.content,
-					newRelease,
-				})
+				const promotedContent = await promotePackage(file.content, newRelease)
 				return { ...file, content: promotedContent }
 			} catch (error) {
 				assertError(error)

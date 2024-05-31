@@ -1,3 +1,4 @@
+import { assertError } from "+utilities/ErrorUtilities"
 import {
 	type SemanticVersionString,
 	isSemanticVersionString,
@@ -17,15 +18,13 @@ export function getConfigurationFromArgs(args: Array<string>): Configuration {
 		const rawReleaseVersions = parsedArgs["--release-version"]
 
 		if (rawReleaseVersions === null) {
-			return invalid({ message: "--release-version must be specified." })
+			return invalid("--release-version must be specified.")
 		}
 		if (rawReleaseVersions.length === 0) {
-			return invalid({ message: "--release-version must specify a value." })
+			return invalid("--release-version must specify a value.")
 		}
 		if (rawReleaseVersions.length > 1) {
-			return invalid({
-				message: "--release-version must not specify more than one value.",
-			})
+			return invalid("--release-version must not specify more than one value.")
 		}
 
 		const rawReleaseVersion = rawReleaseVersions[0]
@@ -35,23 +34,23 @@ export function getConfigurationFromArgs(args: Array<string>): Configuration {
 			: rawReleaseVersion
 
 		if (!isSemanticVersionString(releaseVersion)) {
-			return invalid({
-				message: `--release-version has an invalid value '${rawReleaseVersion}'.`,
-			})
+			return invalid(
+				`--release-version has an invalid value '${rawReleaseVersion}'.`,
+			)
 		}
 
 		const files = parsedArgs["--files"]
 
 		if (files === null) {
-			return invalid({ message: "--files must be specified." })
+			return invalid("--files must be specified.")
 		}
 		if (files.length === 0) {
-			return invalid({ message: "--files must specify a value." })
+			return invalid("--files must specify a value.")
 		}
-
-		return release({ files, releaseVersion })
+		return release(files, releaseVersion)
 	} catch (error) {
-		return invalid({ message: (error as Error).message })
+		assertError(error)
+		return invalid(error.message)
 	}
 }
 
@@ -125,16 +124,14 @@ function helpScreen(): Configuration.HelpScreen {
 	return { type: "help-screen" }
 }
 
-function invalid(input: { message: string }): Configuration.Invalid {
-	const { message } = input
+function invalid(message: string): Configuration.Invalid {
 	return { type: "invalid", errorMessage: message }
 }
 
-function release(input: {
-	files: Array<string>
-	releaseVersion: SemanticVersionString
-}): Configuration.Release {
-	const { files, releaseVersion } = input
+function release(
+	files: Array<string>,
+	releaseVersion: SemanticVersionString,
+): Configuration.Release {
 	return { type: "release", filePatterns: files, releaseVersion }
 }
 

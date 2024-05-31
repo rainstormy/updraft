@@ -1,21 +1,22 @@
 import type { Release } from "+utilities/Release"
+import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
 const versionFieldRegex = /"version":\s*"(?<semanticVersionNumber>[^"]+)"/u
 
-export async function promotePackage(input: {
-	originalPackageContent: string
-	newRelease: Release
-}): Promise<string> {
-	const { originalPackageContent, newRelease } = input
-
-	const hasVersionField = versionFieldRegex.test(originalPackageContent)
+export async function promotePackage(
+	originalContent: string,
+	newRelease: Release,
+): Promise<string> {
+	const hasVersionField = versionFieldRegex.test(originalContent)
 
 	if (!hasVersionField) {
 		throw new Error("must have a 'version' field")
 	}
 
-	return originalPackageContent.replace(
-		versionFieldRegex,
-		`"version": "${newRelease.version}"`,
+	return ensureTrailingNewlineIfNonEmpty(
+		originalContent.replace(
+			versionFieldRegex,
+			`"version": "${newRelease.version}"`,
+		),
 	)
 }
