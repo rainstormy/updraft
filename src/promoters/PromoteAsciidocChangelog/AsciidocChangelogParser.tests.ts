@@ -1,4 +1,4 @@
-import { parseAsciidocChangelog } from "+changelogs/AsciidocChangelogParser"
+import { parseAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/AsciidocChangelogParser"
 import { assertNotNullish } from "+utilities/ObjectUtilities"
 import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"

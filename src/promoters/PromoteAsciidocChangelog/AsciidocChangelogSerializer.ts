@@ -1,4 +1,4 @@
-import type { Changelog } from "+changelogs/Changelog"
+import type { Changelog } from "+promoters/PromoteAsciidocChangelog/Changelog"
 import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
 export function serializeChangelogToAsciidoc(changelog: Changelog): string {

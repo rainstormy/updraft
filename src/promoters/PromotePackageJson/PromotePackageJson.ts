@@ -3,7 +3,7 @@ import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
 const versionFieldRegex = /"version":\s*"(?<semanticVersionNumber>[^"]+)"/u
 
-export async function promotePackage(
+export async function promotePackageJson(
 	originalContent: string,
 	newRelease: Release,
 ): Promise<string> {

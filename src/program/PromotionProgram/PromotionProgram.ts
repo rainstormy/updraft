@@ -2,10 +2,10 @@ import type { File } from "+adapters/FileSystem/File"
 import { readMatchingFiles, writeFiles } from "+adapters/FileSystem/FileSystem"
 import { printError, printWarning } from "+adapters/Logger/Logger"
 import { today } from "+adapters/Today/Today"
-import { parseAsciidocChangelog } from "+changelogs/AsciidocChangelogParser"
-import { serializeChangelogToAsciidoc } from "+changelogs/AsciidocChangelogSerializer"
-import { promoteChangelog } from "+changelogs/ChangelogPromoter"
-import { promotePackage } from "+packages/PackagePromoter"
+import { parseAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/AsciidocChangelogParser"
+import { serializeChangelogToAsciidoc } from "+promoters/PromoteAsciidocChangelog/AsciidocChangelogSerializer"
+import { promoteChangelog } from "+promoters/PromoteAsciidocChangelog/ChangelogPromoter"
+import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
 import type { Release } from "+utilities/Release"
@@ -47,38 +47,27 @@ export async function promotionProgram(
 		return 0
 
 		async function promoteFile(file: File): Promise<File> {
+			try {
+				return { ...file, content: await getPromotedContent(file) }
+			} catch (error) {
+				assertError(error)
+				throw new Error(`${file.path} ${error.message}.`)
+			}
+		}
+
+		async function getPromotedContent(file: File): Promise<string> {
 			switch (file.type) {
 				case "asciidoc-changelog": {
-					return promoteChangelogFile(file)
+					const originalChangelog = parseAsciidocChangelog(file.content)
+					const promotedChangelog = await promoteChangelog(
+						originalChangelog,
+						newRelease,
+					)
+					return serializeChangelogToAsciidoc(promotedChangelog)
 				}
 				case "package-json": {
-					return promotePackageJsonFile(file)
+					return promotePackageJson(file.content, newRelease)
 				}
-			}
-		}
-
-		async function promoteChangelogFile(file: File): Promise<File> {
-			try {
-				const originalChangelog = parseAsciidocChangelog(file.content)
-				const promotedChangelog = await promoteChangelog(
-					originalChangelog,
-					newRelease,
-				)
-				const promotedContent = serializeChangelogToAsciidoc(promotedChangelog)
-				return { ...file, content: promotedContent }
-			} catch (error) {
-				assertError(error)
-				throw new Error(`${file.path} ${error.message}.`)
-			}
-		}
-
-		async function promotePackageJsonFile(file: File): Promise<File> {
-			try {
-				const promotedContent = await promotePackage(file.content, newRelease)
-				return { ...file, content: promotedContent }
-			} catch (error) {
-				assertError(error)
-				throw new Error(`${file.path} ${error.message}.`)
 			}
 		}
 	} catch (error) {

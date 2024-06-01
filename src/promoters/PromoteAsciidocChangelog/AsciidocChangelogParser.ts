@@ -1,4 +1,4 @@
-import type { Changelog } from "+changelogs/Changelog"
+import type { Changelog } from "+promoters/PromoteAsciidocChangelog/Changelog"
 import type { Release } from "+utilities/Release"
 import type {
 	DateString,

@@ -1,5 +1,5 @@
-import type { Changelog } from "+changelogs/Changelog"
-import { promoteChangelog } from "+changelogs/ChangelogPromoter"
+import type { Changelog } from "+promoters/PromoteAsciidocChangelog/Changelog"
+import { promoteChangelog } from "+promoters/PromoteAsciidocChangelog/ChangelogPromoter"
 import type { Release } from "+utilities/Release"
 import { dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
