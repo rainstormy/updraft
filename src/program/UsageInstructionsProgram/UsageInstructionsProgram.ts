@@ -13,6 +13,7 @@ and bumping version numbers in package.json files.
 
 Supported file formats:
   * AsciiDoc-based changelogs (*.adoc) in Keep a Changelog format.
+  * Markdown-based changelogs (*.md) in Keep a Changelog format.
   * package.json.
 
 Options:

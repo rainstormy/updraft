@@ -3,6 +3,7 @@ import { readMatchingFiles, writeFiles } from "+adapters/FileSystem/FileSystem"
 import { printError, printWarning } from "+adapters/Logger/Logger"
 import { today } from "+adapters/Today/Today"
 import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
+import { promoteMarkdownChangelog } from "+promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
 import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
@@ -11,10 +12,11 @@ import type { SemanticVersionString } from "+utilities/StringUtilities"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,
+	"markdown-changelog": promoteMarkdownChangelog,
 	"package-json": promotePackageJson,
 }
 
-type FileType = "asciidoc-changelog" | "package-json"
+type FileType = "asciidoc-changelog" | "markdown-changelog" | "package-json"
 type Promoter = (content: string, release: Release) => Promise<string>
 
 export async function promotionProgram(
@@ -80,6 +82,9 @@ function detectFileType(path: string): FileType {
 	}
 	if (filename.endsWith(".adoc")) {
 		return "asciidoc-changelog"
+	}
+	if (filename.endsWith(".md")) {
+		return "markdown-changelog"
 	}
 	throw new Error("is not a supported file format")
 }

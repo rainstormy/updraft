@@ -11,6 +11,7 @@ it("is a list of program arguments and options", () => {
 
 		Supported file formats:
 		  * AsciiDoc-based changelogs (*.adoc) in Keep a Changelog format.
+		  * Markdown-based changelogs (*.md) in Keep a Changelog format.
 		  * package.json.
 
 		Options:
