@@ -97,7 +97,6 @@ describe.each`
 				{
 					content: originalContent,
 					path: props.matchedChangelogFilename,
-					type: "asciidoc-changelog",
 				},
 			])
 
@@ -124,7 +123,6 @@ describe.each`
 				{
 					content: expectedPromotedContent,
 					path: props.matchedChangelogFilename,
-					type: "asciidoc-changelog",
 				},
 			] satisfies Files)
 			expect(writeFiles).toHaveBeenCalledTimes(1)
@@ -147,7 +145,6 @@ describe.each`
 				{
 					content: "", // An empty file.
 					path: props.matchedChangelogFilename,
-					type: "asciidoc-changelog",
 				},
 			])
 
@@ -197,7 +194,6 @@ describe.each`
 				{
 					content: originalContent,
 					path: props.matchedChangelogFilename,
-					type: "asciidoc-changelog",
 				},
 			])
 
@@ -324,17 +320,14 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedChangelogFilenames[2],
-					type: "asciidoc-changelog",
 				},
 			])
 
@@ -363,17 +356,14 @@ describe.each`
 				{
 					content: expectedPromotedContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: expectedPromotedContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: expectedPromotedContents[2],
 					path: props.matchedChangelogFilenames[2],
-					type: "asciidoc-changelog",
 				},
 			] satisfies Files)
 			expect(writeFiles).toHaveBeenCalledTimes(1)
@@ -433,17 +423,14 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedChangelogFilenames[2],
-					type: "asciidoc-changelog",
 				},
 			])
 
@@ -510,17 +497,14 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedChangelogFilenames[2],
-					type: "asciidoc-changelog",
 				},
 			])
 
@@ -601,7 +585,6 @@ describe.each`
 				{
 					content: originalContent,
 					path: props.matchedPackageJsonFilename,
-					type: "package-json",
 				},
 			])
 
@@ -628,7 +611,6 @@ describe.each`
 				{
 					content: expectedPromotedContent,
 					path: props.matchedPackageJsonFilename,
-					type: "package-json",
 				},
 			] satisfies Files)
 			expect(writeFiles).toHaveBeenCalledTimes(1)
@@ -651,7 +633,6 @@ describe.each`
 				{
 					content: "", // An empty file.
 					path: props.matchedPackageJsonFilename,
-					type: "package-json",
 				},
 			])
 
@@ -704,7 +685,6 @@ describe.each`
 				{
 					content: originalContent,
 					path: props.matchedPackageJsonFilename,
-					type: "package-json",
 				},
 			])
 
@@ -831,17 +811,14 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedPackageJsonFilenames[2],
-					type: "package-json",
 				},
 			])
 
@@ -870,17 +847,14 @@ describe.each`
 				{
 					content: expectedPromotedContents[0],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: expectedPromotedContents[1],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 				{
 					content: expectedPromotedContents[2],
 					path: props.matchedPackageJsonFilenames[2],
-					type: "package-json",
 				},
 			] satisfies Files)
 			expect(writeFiles).toHaveBeenCalledTimes(1)
@@ -927,17 +901,14 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedPackageJsonFilenames[2],
-					type: "package-json",
 				},
 			])
 
@@ -1000,17 +971,14 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedPackageJsonFilenames[2],
-					type: "package-json",
 				},
 			])
 
@@ -1102,12 +1070,10 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilename,
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedPackageJsonFilename,
-					type: "package-json",
 				},
 			])
 
@@ -1135,12 +1101,10 @@ describe.each`
 				{
 					content: expectedPromotedContents[0],
 					path: props.matchedChangelogFilename,
-					type: "asciidoc-changelog",
 				},
 				{
 					content: expectedPromotedContents[1],
 					path: props.matchedPackageJsonFilename,
-					type: "package-json",
 				},
 			] satisfies Files)
 			expect(writeFiles).toHaveBeenCalledTimes(1)
@@ -1275,22 +1239,18 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: originalContents[3],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 			])
 
@@ -1318,22 +1278,18 @@ describe.each`
 				{
 					content: expectedPromotedContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: expectedPromotedContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: expectedPromotedContents[2],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: expectedPromotedContents[3],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 			] satisfies Files)
 			expect(writeFiles).toHaveBeenCalledTimes(1)
@@ -1408,22 +1364,18 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: originalContents[3],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 			])
 
@@ -1514,22 +1466,18 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilenames[0],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedChangelogFilenames[1],
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[2],
 					path: props.matchedPackageJsonFilenames[0],
-					type: "package-json",
 				},
 				{
 					content: originalContents[3],
 					path: props.matchedPackageJsonFilenames[1],
-					type: "package-json",
 				},
 			])
 
@@ -1566,15 +1514,16 @@ describe.each`
 `(
 	"when $matchedUnsupportedFilename matches a file of an unsupported format",
 	async (props: { matchedUnsupportedFilename: string }) => {
-		const errorMessage = `${props.matchedUnsupportedFilename} is not a supported file format.`
-
 		let actualExitCode: ExitCode | null = null
 
 		beforeEach(async () => {
 			today.mockImplementation(() => "2022-05-29")
-			readMatchingFiles.mockImplementation(async () => {
-				throw new Error(errorMessage)
-			})
+			readMatchingFiles.mockImplementation(async () => [
+				{
+					content: "", // An empty file.
+					path: props.matchedUnsupportedFilename,
+				},
+			])
 
 			actualExitCode = await mainProgram([
 				"--files",
@@ -1589,7 +1538,9 @@ describe.each`
 		})
 
 		it("displays an error", () => {
-			expect(printError).toHaveBeenCalledWith(errorMessage)
+			expect(printError).toHaveBeenCalledWith(
+				`${props.matchedUnsupportedFilename} is not a supported file format.`,
+			)
 			expect(printError).toHaveBeenCalledTimes(1)
 		})
 
@@ -1610,15 +1561,42 @@ describe.each`
 		matchedPackageJsonFilename: string
 		matchedUnsupportedFilename: string
 	}) => {
-		const errorMessage = `${props.matchedUnsupportedFilename} is not a supported file format.`
+		const originalContents = [
+			dedent`
+				= Changelog
+
+
+				== {url-repo}[Unreleased]
+
+				=== Changed
+				* The fruit basket is now refilled every day.
+			`,
+			dedent`
+				{
+					"name": "@rainstormy/preset-prettier-base",
+					"version": "0.8.6",
+				}
+			`,
+		]
 
 		let actualExitCode: ExitCode | null = null
 
 		beforeEach(async () => {
 			today.mockImplementation(() => "2022-05-29")
-			readMatchingFiles.mockImplementation(async () => {
-				throw new Error(errorMessage)
-			})
+			readMatchingFiles.mockImplementation(async () => [
+				{
+					content: originalContents[0],
+					path: props.matchedChangelogFilename,
+				},
+				{
+					content: originalContents[1],
+					path: props.matchedPackageJsonFilename,
+				},
+				{
+					content: "", // An empty file.
+					path: props.matchedUnsupportedFilename,
+				},
+			])
 
 			actualExitCode = await mainProgram([
 				"--files",
@@ -1635,7 +1613,9 @@ describe.each`
 		})
 
 		it("displays an error", () => {
-			expect(printError).toHaveBeenCalledWith(errorMessage)
+			expect(printError).toHaveBeenCalledWith(
+				`${props.matchedUnsupportedFilename} is not a supported file format.`,
+			)
 			expect(printError).toHaveBeenCalledTimes(1)
 		})
 
@@ -1725,12 +1705,10 @@ describe.each`
 				{
 					content: originalContents[0],
 					path: props.matchedChangelogFilename,
-					type: "asciidoc-changelog",
 				},
 				{
 					content: originalContents[1],
 					path: props.matchedPackageJsonFilename,
-					type: "package-json",
 				},
 			])
 			writeFiles.mockImplementation(async () => {

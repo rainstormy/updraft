@@ -9,11 +9,12 @@ import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
 import type { Release } from "+utilities/Release"
 import type { SemanticVersionString } from "+utilities/StringUtilities"
 
-const promoters: Record<File.Type, Promoter> = {
+const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,
 	"package-json": promotePackageJson,
 }
 
+type FileType = "asciidoc-changelog" | "package-json"
 type Promoter = (content: string, release: Release) => Promise<string>
 
 export async function promotionProgram(
@@ -53,8 +54,11 @@ export async function promotionProgram(
 
 		async function promoteFile(file: File): Promise<File> {
 			try {
-				const promoter = promoters[file.type]
-				const promotedContent = await promoter(file.content, newRelease)
+				const originalContent = file.content
+				const fileType = detectFileType(file.path)
+				const promoter = promoters[fileType]
+
+				const promotedContent = await promoter(originalContent, newRelease)
 				return { ...file, content: promotedContent }
 			} catch (error) {
 				assertError(error)
@@ -66,4 +70,16 @@ export async function promotionProgram(
 		printError(error.message)
 		return 1
 	}
+}
+
+function detectFileType(path: string): FileType {
+	const filename = path.split("/").at(-1) ?? ""
+
+	if (filename === "package.json") {
+		return "package-json"
+	}
+	if (filename.endsWith(".adoc")) {
+		return "asciidoc-changelog"
+	}
+	throw new Error("is not a supported file format")
 }
