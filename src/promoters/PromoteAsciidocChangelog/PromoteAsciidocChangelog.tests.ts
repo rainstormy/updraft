@@ -127,7 +127,6 @@ describe.each`
 				=== Added
 				* A new shower mode: \`jet-stream\`.
 			`
-
 			const expectedPromotedContent = `${dedent`
 				= Releases
 
@@ -172,7 +171,6 @@ describe.each`
 				=== Fixed
 				* Milk in the refrigerator is now fresh.
 			`
-
 			const expectedPromotedContent = `${dedent`
 				= Changelog
 				:experimental:
@@ -276,7 +274,6 @@ describe.each`
 				* New rule: \`no-trailing-punctuation-in-subject-lines\`.
 				* New rule: \`no-unexpected-whitespace\`.
 			`
-
 			const expectedPromotedContent = `${dedent`
 				= Changelog
 				:experimental:
@@ -372,7 +369,6 @@ describe.each`
 
 				== ${releaseProps.githubRepositoryUrl}/releases/tag/v0.4.9-beta.1[0.4.9-beta.1] - 2023-11-16
 			`
-
 			const expectedPromotedContent = `${dedent`
 				= Changelog
 
@@ -393,6 +389,35 @@ describe.each`
 			`}\n`
 
 			it("preserves the empty releases", async () => {
+				await expect(
+					promoteAsciidocChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe("and the changelog contains a non-empty unreleased section in alternating case", () => {
+			const originalContent = dedent`
+				= Releases
+
+				You can find all releases in this document.
+
+				== ${releaseProps.githubRepositoryUrl}[uNrElEaSeD]
+				=== Added
+				* A new shower mode: \`jet-stream\`.
+			`
+			const expectedPromotedContent = `${dedent`
+				= Releases
+
+				You can find all releases in this document.
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v${release.version}\\...HEAD[Unreleased]
+
+				== ${releaseProps.githubRepositoryUrl}/releases/tag/v${release.version}[${release.version}] - ${release.date}
+				=== Added
+				* A new shower mode: \`jet-stream\`.
+			`}\n`
+
+			it("normalises the case in the new unreleased section", async () => {
 				await expect(
 					promoteAsciidocChangelog(originalContent, release),
 				).resolves.toBe(expectedPromotedContent)
@@ -458,7 +483,6 @@ describe.each`
 				=== Fixed
 				* Heating in toilet seats has been restored.
 			`
-
 			const expectedPromotedContent = `${dedent`
 				= Changelog
 				:experimental:
