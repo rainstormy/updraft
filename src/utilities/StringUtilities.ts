@@ -7,8 +7,6 @@ export namespace DateString {
 	export type Day = `${number}${number}`
 }
 
-export type HyperlinkString = `https://${string}.${string}` | `/${string}`
-
 export type SemanticVersionString =
 	| `${SemanticVersionString.MajorMinorPatch}`
 	| `${SemanticVersionString.MajorMinorPatch}${SemanticVersionString.Build}`

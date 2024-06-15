@@ -2,7 +2,6 @@ import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/Pr
 import type { Release } from "+utilities/Release"
 import {
 	type DateString,
-	type HyperlinkString,
 	type SemanticVersionString,
 	dedent,
 } from "+utilities/StringUtilities"
@@ -19,7 +18,7 @@ describe.each`
 	(releaseProps: {
 		releaseVersion: SemanticVersionString
 		releaseDate: DateString
-		githubRepositoryUrl: HyperlinkString
+		githubRepositoryUrl: string
 	}) => {
 		const release: Release = {
 			version: releaseProps.releaseVersion,

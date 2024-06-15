@@ -1,61 +1,87 @@
 import type { Release } from "+utilities/Release"
 import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
-// Matches the unreleased section, including the heading and the body,
-// which spans the characters after the heading until the next '==' heading
-// or until the end of the string.
+// Matches an unreleased section, including the heading and the body, which
+// spans the characters after the heading until the next '##' heading or until
+// the end of the string (trailing newlines are allowed).
+// The heading may include an inline link to the GitHub repository.
 const unreleasedSectionRegex =
-	/\n## (\[Unreleased\]\((?<unreleasedRepositoryLink>\S+)\)|Unreleased)(?<unreleasedBody>.*?)(?=\n## \[(?<previousReleaseVersion>\S+)\]\((?<previousReleaseRepositoryLink>\S+)\)|$)/su
+	/\n## (?:\[unreleased\](?:\((?<unreleasedRepositoryLink>\S+)\))?|unreleased)(?<unreleasedBody>.*?)(?=\n## \[(?<latestReleaseVersion>\S+)\]|\n*$)/isu
 
-// Matches one blank line after a '##' heading,
-// except for a blank line directly between two '##' headings.
-const redundantBlankLinesAfterHeadingRegex = /(?<=## .+)\n\n(?!## )/gu
+// Matches a trailing link to the GitHub repository for an unreleased section.
+const unreleasedTrailingLinkRegex =
+	/\n\[unreleased\]: (?<unreleasedRepositoryLink>\S+)(?=\n\[\S+\]: |\n*$)/iu
 
 // Matches two or more consecutive blank lines.
 const redundantMultipleBlankLinesRegex = /\n\n\n+/gu
+
+// Matches one blank line after a '##' heading, except for a blank line directly
+// between two '##' headings or before the trailing links.
+const redundantBlankLinesAfterHeadingRegex =
+	/(?<=## .+)\n\n(?!## |\[unreleased\]: )/giu
 
 export async function promoteMarkdownChangelog(
 	originalContent: string,
 	newRelease: Release,
 ): Promise<string> {
-	const unreleasedHeading = unreleasedSectionRegex.exec(originalContent)
+	const unreleasedSection = unreleasedSectionRegex.exec(originalContent)
 
-	if (unreleasedHeading === null) {
+	if (unreleasedSection === null) {
 		throw new Error("must have an 'Unreleased' section")
 	}
 
-	const unreleasedRepositoryLink =
-		unreleasedHeading.groups?.unreleasedRepositoryLink ?? null
 	const trimmedUnreleasedBody =
-		unreleasedHeading.groups?.unreleasedBody?.trim() ?? null
-	const previousReleaseVersion =
-		unreleasedHeading.groups?.previousReleaseVersion ?? null
+		unreleasedSection.groups?.unreleasedBody?.trim() ?? null
+
+	if (trimmedUnreleasedBody === null || trimmedUnreleasedBody === "") {
+		throw new Error("must have at least one item in the 'Unreleased' section")
+	}
+
+	const trailingLinks = unreleasedTrailingLinkRegex.exec(originalContent)
+	const unreleasedRepositoryLink =
+		trailingLinks?.groups?.unreleasedRepositoryLink ??
+		unreleasedSection.groups?.unreleasedRepositoryLink ??
+		null
 
 	if (unreleasedRepositoryLink === null) {
 		throw new Error(
 			"must have a link to the GitHub repository in the 'Unreleased' section",
 		)
 	}
-	if (trimmedUnreleasedBody === null || trimmedUnreleasedBody === "") {
-		throw new Error("must have at least one item in the 'Unreleased' section")
-	}
+
+	const latestReleaseVersion =
+		unreleasedSection.groups?.latestReleaseVersion ?? null
 
 	const repositoryLink = unreleasedRepositoryLink.replace(
-		/\/(compare|releases\/tag)\/v\S+/u,
+		/\/(compare|releases\/tag)\/v\S+/iu,
 		"",
 	)
+	const newUnreleasedLink = `${repositoryLink}/compare/v${newRelease.version}...HEAD`
+	const newReleaseLink = `${repositoryLink}${
+		latestReleaseVersion !== null
+			? `/compare/v${latestReleaseVersion}...v${newRelease.version}`
+			: `/releases/tag/v${newRelease.version}`
+	}`
 
-	const newUnreleasedHeading = `## [Unreleased](${repositoryLink}/compare/v${newRelease.version}...HEAD)`
-	const newReleaseRepositoryLink =
-		previousReleaseVersion !== null
-			? `${repositoryLink}/compare/v${previousReleaseVersion}...v${newRelease.version}`
-			: `${repositoryLink}/releases/tag/v${newRelease.version}`
-	const newReleaseHeading = `## [${newRelease.version}](${newReleaseRepositoryLink}) - ${newRelease.date}`
+	const newUnreleasedHeading =
+		trailingLinks !== null
+			? "## [Unreleased]"
+			: `## [Unreleased](${newUnreleasedLink})`
+	const newReleaseHeading =
+		trailingLinks !== null
+			? `## [${newRelease.version}] - ${newRelease.date}`
+			: `## [${newRelease.version}](${newReleaseLink}) - ${newRelease.date}`
 	const newReleaseSection = `\n${newUnreleasedHeading}\n\n${newReleaseHeading}\n${trimmedUnreleasedBody}\n`
+
+	const newTrailingLinks =
+		trailingLinks !== null
+			? `\n[unreleased]: ${newUnreleasedLink}\n[${newRelease.version}]: ${newReleaseLink}`
+			: ""
 
 	return ensureTrailingNewlineIfNonEmpty(
 		originalContent
 			.replace(unreleasedSectionRegex, newReleaseSection)
+			.replace(unreleasedTrailingLinkRegex, newTrailingLinks)
 			.replace(redundantMultipleBlankLinesRegex, "\n\n")
 			.replace(redundantBlankLinesAfterHeadingRegex, "\n"),
 	)
