@@ -945,5 +945,313 @@ describe.each`
 				).resolves.toBe(expectedPromotedContent)
 			})
 		})
+
+		describe("and the changelog contains redundant blank lines before the trailing links", () => {
+			const originalContent = dedent`
+				# Changelog
+
+
+				## [Unreleased]
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+
+
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+
+
+
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...HEAD
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`
+			const expectedPromotedContent = `${dedent`
+				# Changelog
+
+				## [Unreleased]
+
+				## [${release.version}] - ${release.date}
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v${release.version}...HEAD
+				[${release.version}]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...v${release.version}
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`}\n`
+
+			it("preserves at most one blank line before the trailing links", async () => {
+				await expect(
+					promoteMarkdownChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe("and the changelog contains blank lines between the trailing links", () => {
+			const originalContent = `${dedent`
+				# Changelog
+
+				## [Unreleased]
+				### Changed
+				- Allow up to five height presets.
+
+				## [4.3.1] - 2024-06-26
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.1...HEAD
+
+
+				[4.3.1]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...v4.3.1
+
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`}\n\n\n`
+			const expectedPromotedContent = `${dedent`
+				# Changelog
+
+				## [Unreleased]
+
+				## [${release.version}] - ${release.date}
+				### Changed
+				- Allow up to five height presets.
+
+				## [4.3.1] - 2024-06-26
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v${release.version}...HEAD
+				[${release.version}]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.1...v${release.version}
+				[4.3.1]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...v4.3.1
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`}\n`
+
+			it("removes blank lines between trailing links", async () => {
+				await expect(
+					promoteMarkdownChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe("and the changelog does not have blank lines between sections", () => {
+			const originalContent = `${dedent`
+				# Changelog
+				## [Unreleased](${releaseProps.githubRepositoryUrl}/compare/v4.3.0...HEAD)
+				### Added
+				- Custom height presets for sit-to-stand desks.
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+				## [4.3.0](${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0) - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+			`}\n\n`
+			const expectedPromotedContent = `${dedent`
+				# Changelog
+
+				## [Unreleased](${releaseProps.githubRepositoryUrl}/compare/v${release.version}...HEAD)
+
+				## [${release.version}](${releaseProps.githubRepositoryUrl}/compare/v4.3.0...v${release.version}) - ${release.date}
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0](${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0) - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+			`}\n`
+
+			it("inserts a blank line before each section", async () => {
+				await expect(
+					promoteMarkdownChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe("and the changelog does not have blank lines between sections and before the trailing links", () => {
+			const originalContent = dedent`
+				# Changelog
+				## [Unreleased]
+				### Added
+				- Custom height presets for sit-to-stand desks.
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...HEAD
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`
+			const expectedPromotedContent = `${dedent`
+				# Changelog
+
+				## [Unreleased]
+
+				## [${release.version}] - ${release.date}
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v${release.version}...HEAD
+				[${release.version}]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...v${release.version}
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`}\n`
+
+			it("inserts a blank line before each section and the trailing links", async () => {
+				await expect(
+					promoteMarkdownChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe("and the changelog contains trailing blank lines", () => {
+			const originalContent = `${dedent`
+				# Changelog
+
+				## [Unreleased](${releaseProps.githubRepositoryUrl}/compare/v4.3.0...HEAD)
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0](${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0) - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+			`}\n\n`
+			const expectedPromotedContent = `${dedent`
+				# Changelog
+
+				## [Unreleased](${releaseProps.githubRepositoryUrl}/compare/v${release.version}...HEAD)
+
+				## [${release.version}](${releaseProps.githubRepositoryUrl}/compare/v4.3.0...v${release.version}) - ${release.date}
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0](${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0) - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+			`}\n`
+
+			it("preserves one trailing newline", async () => {
+				await expect(
+					promoteMarkdownChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe("and the changelog contains trailing blank lines after the trailing links", () => {
+			const originalContent = `${dedent`
+				# Changelog
+
+				## [Unreleased]
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...HEAD
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`}\n\n\n`
+			const expectedPromotedContent = `${dedent`
+				# Changelog
+
+				## [Unreleased]
+
+				## [${release.version}] - ${release.date}
+				### Added
+				- Custom height presets for sit-to-stand desks.
+
+				### Changed
+				- Increased the maximum height for sit-to-stand desks.
+
+				### Fixed
+				- Control panel buttons are now correctly labelled.
+
+				## [4.3.0] - 2024-06-15
+				### Added
+				- Sit-to-stand desks.
+
+				[unreleased]: ${releaseProps.githubRepositoryUrl}/compare/v${release.version}...HEAD
+				[${release.version}]: ${releaseProps.githubRepositoryUrl}/compare/v4.3.0...v${release.version}
+				[4.3.0]: ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0
+			`}\n`
+
+			it("preserves one trailing newline", async () => {
+				await expect(
+					promoteMarkdownChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
 	},
 )

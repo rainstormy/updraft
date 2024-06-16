@@ -70,7 +70,3 @@ const indentRegex = /^[ \t]*/u
 function extractIndent(line: string): string {
 	return indentRegex.exec(line)?.[0] ?? ""
 }
-
-export function ensureTrailingNewlineIfNonEmpty(value: string): string {
-	return value.length === 0 || value.endsWith("\n") ? value : `${value}\n`
-}

@@ -12,7 +12,7 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 
 === Changed
 * Include a trailing newline character in the output files.
-* Remove unnecessary blank lines between sections in AsciiDoc changelogs.
+* Normalise blank lines in changelogs.
 
 == {url-github-repository}/releases/tag/v1.0.0[1.0.0] - 2023-12-08
 === Added

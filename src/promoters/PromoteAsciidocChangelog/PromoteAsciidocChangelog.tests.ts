@@ -537,5 +537,91 @@ describe.each`
 				).resolves.toBe(expectedPromotedContent)
 			})
 		})
+
+		describe("and the changelog does not have blank lines between sections", () => {
+			const originalContent = `${dedent`
+				= Changelog
+				== ${releaseProps.githubRepositoryUrl}/compare/v4.3.0\\...HEAD[Unreleased]
+				=== Added
+				* Custom height presets for sit-to-stand desks.
+				=== Changed
+				* Increased the maximum height for sit-to-stand desks.
+				=== Fixed
+				* Control panel buttons are now correctly labelled.
+				== ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0[4.3.0] - 2024-06-15
+				=== Added
+				* Sit-to-stand desks.
+			`}\n\n`
+			const expectedPromotedContent = `${dedent`
+				= Changelog
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v${release.version}\\...HEAD[Unreleased]
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v4.3.0\\...v${release.version}[${release.version}] - ${release.date}
+				=== Added
+				* Custom height presets for sit-to-stand desks.
+
+				=== Changed
+				* Increased the maximum height for sit-to-stand desks.
+
+				=== Fixed
+				* Control panel buttons are now correctly labelled.
+
+				== ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0[4.3.0] - 2024-06-15
+				=== Added
+				* Sit-to-stand desks.
+			`}\n`
+
+			it("inserts a blank line before each section", async () => {
+				await expect(
+					promoteAsciidocChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe("and the changelog contains trailing blank lines", () => {
+			const originalContent = `${dedent`
+				= Changelog
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v4.3.0\\...HEAD[Unreleased]
+				=== Added
+				* Custom height presets for sit-to-stand desks.
+
+				=== Changed
+				* Increased the maximum height for sit-to-stand desks.
+
+				=== Fixed
+				* Control panel buttons are now correctly labelled.
+
+				== ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0[4.3.0] - 2024-06-15
+				=== Added
+				* Sit-to-stand desks.
+			`}\n\n`
+			const expectedPromotedContent = `${dedent`
+				= Changelog
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v${release.version}\\...HEAD[Unreleased]
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v4.3.0\\...v${release.version}[${release.version}] - ${release.date}
+				=== Added
+				* Custom height presets for sit-to-stand desks.
+
+				=== Changed
+				* Increased the maximum height for sit-to-stand desks.
+
+				=== Fixed
+				* Control panel buttons are now correctly labelled.
+
+				== ${releaseProps.githubRepositoryUrl}/releases/tag/v4.3.0[4.3.0] - 2024-06-15
+				=== Added
+				* Sit-to-stand desks.
+			`}\n`
+
+			it("preserves one trailing newline", async () => {
+				await expect(
+					promoteAsciidocChangelog(originalContent, release),
+				).resolves.toBe(expectedPromotedContent)
+			})
+		})
 	},
 )

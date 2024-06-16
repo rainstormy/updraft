@@ -1,5 +1,4 @@
 import type { Release } from "+utilities/Release"
-import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
 // Matches an unreleased section, including the heading and the body, which
 // spans the characters after the heading until the next '##' heading or until
@@ -10,15 +9,7 @@ const unreleasedSectionRegex =
 
 // Matches a trailing link to the GitHub repository for an unreleased section.
 const unreleasedTrailingLinkRegex =
-	/\n\[unreleased\]: (?<unreleasedRepositoryLink>\S+)(?=\n\[\S+\]: |\n*$)/iu
-
-// Matches two or more consecutive blank lines.
-const redundantMultipleBlankLinesRegex = /\n\n\n+/gu
-
-// Matches one blank line after a '##' heading, except for a blank line directly
-// between two '##' headings or before the trailing links.
-const redundantBlankLinesAfterHeadingRegex =
-	/(?<=## .+)\n\n(?!## |\[unreleased\]: )/giu
+	/\n\[unreleased\]: (?<unreleasedRepositoryLink>\S+)(?=\n+\[\S+\]: |\n*$)/iu
 
 export async function promoteMarkdownChangelog(
 	originalContent: string,
@@ -78,11 +69,27 @@ export async function promoteMarkdownChangelog(
 			? `\n[unreleased]: ${newUnreleasedLink}\n[${newRelease.version}]: ${newReleaseLink}`
 			: ""
 
-	return ensureTrailingNewlineIfNonEmpty(
+	return (
 		originalContent
 			.replace(unreleasedSectionRegex, newReleaseSection)
 			.replace(unreleasedTrailingLinkRegex, newTrailingLinks)
-			.replace(redundantMultipleBlankLinesRegex, "\n\n")
-			.replace(redundantBlankLinesAfterHeadingRegex, "\n"),
+
+			// Remove consecutive blank lines.
+			.replace(/\n\n\n+/gu, "\n\n")
+
+			// Insert exactly one blank line before '##' and '###' headings.
+			.replace(/\n+(?=###? )/gu, "\n\n")
+
+			// Remove blank lines between a '##' heading and a '###' heading.
+			.replace(/(?<=\n## .+)\n+(?=\n### )/gu, "")
+
+			// Insert exactly one blank line before each trailing link.
+			.replace(/\n+(?=\[\S+\]: )/gu, "\n\n")
+
+			// Remove blank lines between two trailing links.
+			.replace(/(?<=\[\S+\]: .+)\n+(?=\[\S+\]: )/gu, "\n")
+
+			// Insert exactly one trailing newline character.
+			.replace(/\n*$/u, "\n")
 	)
 }

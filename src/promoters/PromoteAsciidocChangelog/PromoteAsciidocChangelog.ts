@@ -1,5 +1,4 @@
 import type { Release } from "+utilities/Release"
-import { ensureTrailingNewlineIfNonEmpty } from "+utilities/StringUtilities"
 
 // Matches an unreleased section, including the heading and the body, which
 // spans the characters after the heading until the next '==' heading or until
@@ -10,11 +9,6 @@ const unreleasedSectionRegex =
 
 // Matches one blank line after a '==' heading,
 // except for a blank line directly between two '==' headings.
-const redundantBlankLinesAfterHeadingRegex = /(?<=== .+)\n\n(?!== )/gu
-
-// Matches two or more consecutive blank lines.
-const redundantMultipleBlankLinesRegex = /\n\n\n+/gu
-
 export async function promoteAsciidocChangelog(
 	originalContent: string,
 	newRelease: Release,
@@ -59,10 +53,20 @@ export async function promoteAsciidocChangelog(
 	const newReleaseHeading = `== ${newReleaseLink}[${newRelease.version}] - ${newRelease.date}`
 	const newReleaseSection = `\n${newUnreleasedHeading}\n\n${newReleaseHeading}\n${trimmedUnreleasedBody}\n`
 
-	return ensureTrailingNewlineIfNonEmpty(
+	return (
 		originalContent
 			.replace(unreleasedSectionRegex, newReleaseSection)
-			.replace(redundantMultipleBlankLinesRegex, "\n\n")
-			.replace(redundantBlankLinesAfterHeadingRegex, "\n"),
+
+			// Remove consecutive blank lines.
+			.replace(/\n\n\n+/gu, "\n\n")
+
+			// Insert exactly one blank line before '==' and '===' headings.
+			.replace(/\n+(?====? )/gu, "\n\n")
+
+			// Remove blank lines between a '==' heading and a '===' heading.
+			.replace(/(?<=\n== .+)\n+(?=\n=== )/gu, "")
+
+			// Insert exactly one trailing newline character.
+			.replace(/\n*$/u, "\n")
 	)
 }
