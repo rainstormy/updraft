@@ -1,4 +1,4 @@
-import { promotePackage } from "+packages/PackagePromoter"
+import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
 import type { Release } from "+utilities/Release"
 import { type SemanticVersionString, dedent } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
@@ -14,7 +14,7 @@ describe("when the package.json file does not have a 'version' field", () => {
 	`
 
 	const newRelease: Release = { version: "1.0.0", date: "2023-10-01" }
-	const throwingAction = () => promotePackage(originalContent, newRelease)
+	const throwingAction = () => promotePackageJson(originalContent, newRelease)
 
 	it("raises an error", async () => {
 		await expect(throwingAction).rejects.toThrow("must have a 'version' field")
@@ -60,7 +60,7 @@ describe.each`
 			version: props.versionToRelease,
 			date: "2023-10-01",
 		}
-		const actualPromotedContent = await promotePackage(
+		const actualPromotedContent = await promotePackageJson(
 			originalContent,
 			newRelease,
 		)

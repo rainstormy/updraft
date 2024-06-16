@@ -3,14 +3,10 @@ import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 import { mainProgram } from "+program/Program"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 import { dedent } from "+utilities/StringUtilities"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it } from "vitest"
 
 const { printError } = injectLoggerMock()
 const { readMatchingFiles, writeFiles } = injectFileSystemMock()
-
-beforeEach(() => {
-	vi.clearAllMocks()
-})
 
 describe.each`
 	invalidArgs                                                                                           | expectedErrorMessage

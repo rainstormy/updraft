@@ -22,8 +22,7 @@
 		"noUnusedParameters": true,
 		"paths": {
 			"+adapters/*": ["./src/adapters/*"],
-			"+changelogs/*": ["./src/changelogs/*"],
-			"+packages/*": ["./src/packages/*"],
+			"+promoters/*": ["./src/promoters/*"],
 			"+program/*": ["./src/program/*"],
 			"+utilities/*": ["./src/utilities/*"]
 		},

@@ -10,9 +10,9 @@ manually after running the Updraft tool.
 
 Supported file formats:
 
-* AsciiDoc-based changelogs (`*.adoc`)
+- Markdown `CHANGELOG.md` and AsciiDoc `CHANGELOG.adoc`
   in [Keep a Changelog](https://keepachangelog.com/en/1.1.0) format.
-* `package.json` files.
+- `package.json` files.
 
 ### Usage
 ```shell

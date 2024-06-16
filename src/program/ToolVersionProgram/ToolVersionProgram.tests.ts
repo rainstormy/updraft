@@ -4,15 +4,11 @@ import { injectPackageJsonVersionMock } from "+adapters/PackageJsonVersion/Packa
 import { mainProgram } from "+program/Program"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 import type { SemanticVersionString } from "+utilities/StringUtilities"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it } from "vitest"
 
 const { packageJsonVersion } = injectPackageJsonVersionMock()
 const { printMessage } = injectLoggerMock()
 const { readMatchingFiles, writeFiles } = injectFileSystemMock()
-
-beforeEach(() => {
-	vi.clearAllMocks()
-})
 
 describe.each`
 	toolVersionArgs                               | toolVersion

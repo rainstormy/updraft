@@ -2,14 +2,22 @@ import type { File } from "+adapters/FileSystem/File"
 import { readMatchingFiles, writeFiles } from "+adapters/FileSystem/FileSystem"
 import { printError, printWarning } from "+adapters/Logger/Logger"
 import { today } from "+adapters/Today/Today"
-import { parseAsciidocChangelog } from "+changelogs/AsciidocChangelogParser"
-import { serializeChangelogToAsciidoc } from "+changelogs/AsciidocChangelogSerializer"
-import { promoteChangelog } from "+changelogs/ChangelogPromoter"
-import { promotePackage } from "+packages/PackagePromoter"
+import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
+import { promoteMarkdownChangelog } from "+promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
+import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
 import type { Release } from "+utilities/Release"
 import type { SemanticVersionString } from "+utilities/StringUtilities"
+
+const promoters: Record<FileType, Promoter> = {
+	"asciidoc-changelog": promoteAsciidocChangelog,
+	"markdown-changelog": promoteMarkdownChangelog,
+	"package-json": promotePackageJson,
+}
+
+type FileType = "asciidoc-changelog" | "markdown-changelog" | "package-json"
+type Promoter = (content: string, release: Release) => Promise<string>
 
 export async function promotionProgram(
 	filePatterns: Array<string>,
@@ -47,34 +55,12 @@ export async function promotionProgram(
 		return 0
 
 		async function promoteFile(file: File): Promise<File> {
-			switch (file.type) {
-				case "asciidoc-changelog": {
-					return promoteChangelogFile(file)
-				}
-				case "package-json": {
-					return promotePackageJsonFile(file)
-				}
-			}
-		}
-
-		async function promoteChangelogFile(file: File): Promise<File> {
 			try {
-				const originalChangelog = parseAsciidocChangelog(file.content)
-				const promotedChangelog = await promoteChangelog(
-					originalChangelog,
-					newRelease,
-				)
-				const promotedContent = serializeChangelogToAsciidoc(promotedChangelog)
-				return { ...file, content: promotedContent }
-			} catch (error) {
-				assertError(error)
-				throw new Error(`${file.path} ${error.message}.`)
-			}
-		}
+				const originalContent = file.content
+				const fileType = detectFileType(file.path)
+				const promoter = promoters[fileType]
 
-		async function promotePackageJsonFile(file: File): Promise<File> {
-			try {
-				const promotedContent = await promotePackage(file.content, newRelease)
+				const promotedContent = await promoter(originalContent, newRelease)
 				return { ...file, content: promotedContent }
 			} catch (error) {
 				assertError(error)
@@ -86,4 +72,19 @@ export async function promotionProgram(
 		printError(error.message)
 		return 1
 	}
+}
+
+function detectFileType(path: string): FileType {
+	const filename = path.split("/").at(-1) ?? ""
+
+	if (filename === "package.json") {
+		return "package-json"
+	}
+	if (filename.endsWith(".adoc")) {
+		return "asciidoc-changelog"
+	}
+	if (filename.endsWith(".md")) {
+		return "markdown-changelog"
+	}
+	throw new Error("is not a supported file format")
 }

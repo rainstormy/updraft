@@ -26,6 +26,7 @@ export default defineConfig(() => ({
 			),
 		},
 		include: ["src/**/*.tests.ts"],
+		mockReset: true,
 	},
 }))
 
