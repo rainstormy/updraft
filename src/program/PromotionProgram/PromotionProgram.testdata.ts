@@ -2,16 +2,12 @@ import type { File } from "+adapters/FileSystem/File"
 import type { Release } from "+utilities/Release"
 import { dedent } from "+utilities/StringUtilities"
 
-export type PromotionProgramDummies = {
+export function getAsciidocChangelogDummies(release: Release): {
 	emptyFile: File
 	nonPromotableFile: File
 	promotableFiles: [File, File, File, File]
 	expectedPromotedFiles: [File, File, File, File]
-}
-
-export function getAsciidocChangelogDummies(
-	release: Release,
-): PromotionProgramDummies {
+} {
 	return {
 		emptyFile: {
 			path: "CHANGELOG.adoc",
@@ -63,7 +59,7 @@ export function getAsciidocChangelogDummies(
 				`,
 			},
 			{
-				path: "packages/oranges/RELEASES.adoc",
+				path: "packages/oranges/CHANGELOG.adoc",
 				content: dedent`
 					= Releases
 
@@ -132,7 +128,7 @@ export function getAsciidocChangelogDummies(
 				`}\n`,
 			},
 			{
-				path: "packages/oranges/RELEASES.adoc",
+				path: "packages/oranges/CHANGELOG.adoc",
 				content: `${dedent`
 					= Releases
 
@@ -171,9 +167,12 @@ export function getAsciidocChangelogDummies(
 	}
 }
 
-export function getMarkdownChangelogDummies(
-	release: Release,
-): PromotionProgramDummies {
+export function getMarkdownChangelogDummies(release: Release): {
+	emptyFile: File
+	nonPromotableFile: File
+	promotableFiles: [File, File, File, File]
+	expectedPromotedFiles: [File, File, File, File]
+} {
 	return {
 		emptyFile: {
 			path: "CHANGELOG.md",
@@ -225,7 +224,7 @@ export function getMarkdownChangelogDummies(
 				`,
 			},
 			{
-				path: "packages/oranges/RELEASES.md",
+				path: "packages/oranges/CHANGELOG.md",
 				content: dedent`
 					# Releases
 
@@ -294,7 +293,7 @@ export function getMarkdownChangelogDummies(
 				`}\n`,
 			},
 			{
-				path: "packages/oranges/RELEASES.md",
+				path: "packages/oranges/CHANGELOG.md",
 				content: `${dedent`
 					# Releases
 
@@ -333,9 +332,12 @@ export function getMarkdownChangelogDummies(
 	}
 }
 
-export function getPackageJsonDummies(
-	release: Release,
-): PromotionProgramDummies {
+export function getPackageJsonDummies(release: Release): {
+	emptyFile: File
+	nonPromotableFile: File
+	promotableFiles: [File, File, File, File]
+	expectedPromotedFiles: [File, File, File, File]
+} {
 	return {
 		emptyFile: {
 			path: "package.json",
@@ -445,6 +447,98 @@ export function getPackageJsonDummies(
 						"name": "@rainstormy/peaches",
 						"version": "${release.version}"
 					}
+				`}\n`,
+			},
+		],
+	}
+}
+
+export function getDeprecatedDummies(release: Release): {
+	promotableFiles: [File, File]
+	expectedPromotedFiles: [File, File]
+} {
+	return {
+		promotableFiles: [
+			{
+				path: "RELEASES.adoc",
+				content: dedent`
+					= Changelog
+					:experimental:
+					:source-highlighter: highlight.js
+
+					This file documents all notable changes to this project.
+					The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
+
+					== {url-repo}/compare/v2.0.0-rc.1\\...HEAD[Unreleased]
+					=== Changed
+					* The fruit basket is now refilled every day.
+
+					== {url-repo}/releases/tag/v2.0.0-rc.1[2.0.0-rc.1] - 2023-12-03
+					=== Added
+					* A new shiny fruit basket.
+				`,
+			},
+			{
+				path: "HISTORY.md",
+				content: dedent`
+					# Changelog
+					This file documents all notable changes to this project.
+
+					The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0),
+					and this project adheres
+					to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+					## [Unreleased](https://github.com/rainstormy-actions/release/compare/v2.0.0-rc.1...HEAD)
+					### Changed
+					- The fruit basket is now refilled every day.
+
+					## [2.0.0-rc.1](https://github.com/rainstormy-actions/release/releases/tag/v2.0.0-rc.1) - 2023-12-03
+					### Added
+					- A new shiny fruit basket.
+				`,
+			},
+		],
+		expectedPromotedFiles: [
+			{
+				path: "RELEASES.adoc",
+				content: `${dedent`
+					= Changelog
+					:experimental:
+					:source-highlighter: highlight.js
+
+					This file documents all notable changes to this project.
+					The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
+
+					== {url-repo}/compare/v${release.version}\\...HEAD[Unreleased]
+
+					== {url-repo}/compare/v2.0.0-rc.1\\...v${release.version}[${release.version}] - ${release.date}
+					=== Changed
+					* The fruit basket is now refilled every day.
+
+					== {url-repo}/releases/tag/v2.0.0-rc.1[2.0.0-rc.1] - 2023-12-03
+					=== Added
+					* A new shiny fruit basket.
+				`}\n`,
+			},
+			{
+				path: "HISTORY.md",
+				content: `${dedent`
+					# Changelog
+					This file documents all notable changes to this project.
+
+					The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0),
+					and this project adheres
+					to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+					## [Unreleased](https://github.com/rainstormy-actions/release/compare/v${release.version}...HEAD)
+
+					## [${release.version}](https://github.com/rainstormy-actions/release/compare/v2.0.0-rc.1...v${release.version}) - ${release.date}
+					### Changed
+					- The fruit basket is now refilled every day.
+
+					## [2.0.0-rc.1](https://github.com/rainstormy-actions/release/releases/tag/v2.0.0-rc.1) - 2023-12-03
+					### Added
+					- A new shiny fruit basket.
 				`}\n`,
 			},
 		],
