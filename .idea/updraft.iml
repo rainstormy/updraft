@@ -3,12 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludePattern pattern=".cache" />
-      <excludePattern pattern=".yarn" />
       <excludePattern pattern="dist" />
-      <excludePattern pattern=".pnp.*" />
-      <excludePattern pattern="README.md" />
-      <excludePattern pattern="yarn.lock" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
