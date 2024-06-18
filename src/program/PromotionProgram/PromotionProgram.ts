@@ -77,13 +77,25 @@ export async function promotionProgram(
 function detectFileType(path: string): FileType {
 	const filename = path.split("/").at(-1) ?? ""
 
-	if (filename === "package.json") {
-		return "package-json"
+	switch (filename) {
+		case "CHANGELOG.adoc":
+			return "asciidoc-changelog"
+		case "CHANGELOG.md":
+			return "markdown-changelog"
+		case "package.json":
+			return "package-json"
 	}
+
 	if (filename.endsWith(".adoc")) {
+		printWarning(
+			`${filename} is not a supported filename and must be renamed to 'CHANGELOG.adoc' in Updraft v2.0.0.`,
+		)
 		return "asciidoc-changelog"
 	}
 	if (filename.endsWith(".md")) {
+		printWarning(
+			`${filename} is not a supported filename and must be renamed to 'CHANGELOG.md' in Updraft v2.0.0.`,
+		)
 		return "markdown-changelog"
 	}
 	throw new Error("is not a supported file format")

@@ -4,6 +4,7 @@ import { injectTodayMock } from "+adapters/Today/Today.mock"
 import { mainProgram } from "+program/Program"
 import {
 	getAsciidocChangelogDummies,
+	getDeprecatedDummies,
 	getMarkdownChangelogDummies,
 	getPackageJsonDummies,
 	getUnsupportedDummies,
@@ -58,6 +59,17 @@ describe.each`
 			expectedPromotedFiles: expectedPromotedPackageJsonFiles,
 		} = getPackageJsonDummies(release)
 
+		const {
+			promotableFiles: [
+				promotableDeprecatedAsciidocChangelog,
+				promotableDeprecatedMarkdownChangelog,
+			],
+			expectedPromotedFiles: [
+				expectedPromotedDeprecatedAsciidocChangelog,
+				expectedPromotedDeprecatedMarkdownChangelog,
+			],
+		} = getDeprecatedDummies(release)
+
 		const unsupportedFiles = getUnsupportedDummies()
 
 		const args = [
@@ -87,6 +99,8 @@ describe.each`
 			const expectedWarning = `${filePatternList} did not match any files.`
 
 			it(`displays a warning that says '${expectedWarning}'`, () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printError).not.toHaveBeenCalled()
 				expect(printWarning).toHaveBeenCalledWith(expectedWarning)
 				expect(printWarning).toHaveBeenCalledTimes(1)
 			})
@@ -109,6 +123,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${emptyAsciidocChangelog.path} must have an 'Unreleased' section.`,
 				)
@@ -133,6 +149,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotableAsciidocChangelog.path} must have at least one item in the 'Unreleased' section.`,
 				)
@@ -159,6 +177,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotableAsciidocChangelog.path} must have at least one item in the 'Unreleased' section.`,
 				)
@@ -185,6 +205,8 @@ describe.each`
 			})
 
 			it("displays two errors", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenNthCalledWith(
 					1,
 					`${emptyAsciidocChangelog.path} must have an 'Unreleased' section.`,
@@ -270,6 +292,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${emptyMarkdownChangelog.path} must have an 'Unreleased' section.`,
 				)
@@ -294,6 +318,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotableMarkdownChangelog.path} must have at least one item in the 'Unreleased' section.`,
 				)
@@ -320,6 +346,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotableMarkdownChangelog.path} must have at least one item in the 'Unreleased' section.`,
 				)
@@ -346,6 +374,8 @@ describe.each`
 			})
 
 			it("displays two errors", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenNthCalledWith(
 					1,
 					`${emptyMarkdownChangelog.path} must have an 'Unreleased' section.`,
@@ -429,6 +459,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${emptyPackageJsonFile.path} must have a 'version' field.`,
 				)
@@ -453,6 +485,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotablePackageJsonFile.path} must have a 'version' field.`,
 				)
@@ -479,6 +513,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotablePackageJsonFile.path} must have a 'version' field.`,
 				)
@@ -505,6 +541,8 @@ describe.each`
 			})
 
 			it("displays two errors", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenNthCalledWith(
 					1,
 					`${emptyPackageJsonFile.path} must have a 'version' field.`,
@@ -592,6 +630,8 @@ describe.each`
 			})
 
 			it("displays three errors", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenNthCalledWith(
 					1,
 					`${nonPromotableAsciidocChangelog.path} must have at least one item in the 'Unreleased' section.`,
@@ -627,6 +667,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotableAsciidocChangelog.path} must have at least one item in the 'Unreleased' section.`,
 				)
@@ -653,6 +695,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotableMarkdownChangelog.path} must have at least one item in the 'Unreleased' section.`,
 				)
@@ -679,6 +723,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${nonPromotablePackageJsonFile.path} must have a 'version' field.`,
 				)
@@ -720,6 +766,106 @@ describe.each`
 			})
 		})
 
+		describe("and the only matching AsciiDoc changelog file is deprecated", () => {
+			beforeEach(async () => {
+				readMatchingFiles.mockImplementation(async () => [
+					promotableDeprecatedAsciidocChangelog,
+				])
+				actualExitCode = await mainProgram(args)
+			})
+
+			it("returns an exit code of 0", () => {
+				expect(actualExitCode).toBe(0)
+			})
+
+			it("displays a warning", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printError).not.toHaveBeenCalled()
+				expect(printWarning).toHaveBeenCalledWith(
+					`${promotableDeprecatedAsciidocChangelog.path} is not a supported filename and must be renamed to 'CHANGELOG.adoc' in Updraft v2.0.0.`,
+				)
+				expect(printWarning).toHaveBeenCalledTimes(1)
+			})
+
+			it("saves the promoted file", () => {
+				expect(writeFiles).toHaveBeenCalledWith([
+					expectedPromotedDeprecatedAsciidocChangelog,
+				])
+				expect(writeFiles).toHaveBeenCalledTimes(1)
+			})
+		})
+
+		describe("and the only matching Markdown changelog file is deprecated", () => {
+			beforeEach(async () => {
+				readMatchingFiles.mockImplementation(async () => [
+					promotableDeprecatedMarkdownChangelog,
+				])
+				actualExitCode = await mainProgram(args)
+			})
+
+			it("returns an exit code of 0", () => {
+				expect(actualExitCode).toBe(0)
+			})
+
+			it("displays a warning", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printError).not.toHaveBeenCalled()
+				expect(printWarning).toHaveBeenCalledWith(
+					`${promotableDeprecatedMarkdownChangelog.path} is not a supported filename and must be renamed to 'CHANGELOG.md' in Updraft v2.0.0.`,
+				)
+				expect(printWarning).toHaveBeenCalledTimes(1)
+			})
+
+			it("saves the promoted file", () => {
+				expect(writeFiles).toHaveBeenCalledWith([
+					expectedPromotedDeprecatedMarkdownChangelog,
+				])
+				expect(writeFiles).toHaveBeenCalledTimes(1)
+			})
+		})
+
+		describe("and two of five matching files are deprecated", () => {
+			beforeEach(async () => {
+				readMatchingFiles.mockImplementation(async () => [
+					promotableAsciidocChangelogs[1],
+					promotableDeprecatedMarkdownChangelog,
+					promotableMarkdownChangelogs[2],
+					promotablePackageJsonFiles[3],
+					promotableDeprecatedAsciidocChangelog,
+				])
+				actualExitCode = await mainProgram(args)
+			})
+
+			it("returns an exit code of 0", () => {
+				expect(actualExitCode).toBe(0)
+			})
+
+			it("displays two warnings", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printError).not.toHaveBeenCalled()
+				expect(printWarning).toHaveBeenNthCalledWith(
+					1,
+					`${promotableDeprecatedMarkdownChangelog.path} is not a supported filename and must be renamed to 'CHANGELOG.md' in Updraft v2.0.0.`,
+				)
+				expect(printWarning).toHaveBeenNthCalledWith(
+					2,
+					`${promotableDeprecatedAsciidocChangelog.path} is not a supported filename and must be renamed to 'CHANGELOG.adoc' in Updraft v2.0.0.`,
+				)
+				expect(printWarning).toHaveBeenCalledTimes(2)
+			})
+
+			it("saves the promoted files", () => {
+				expect(writeFiles).toHaveBeenCalledWith([
+					expectedPromotedAsciidocChangelogs[1],
+					expectedPromotedDeprecatedMarkdownChangelog,
+					expectedPromotedMarkdownChangelogs[2],
+					expectedPromotedPackageJsonFiles[3],
+					expectedPromotedDeprecatedAsciidocChangelog,
+				])
+				expect(writeFiles).toHaveBeenCalledTimes(1)
+			})
+		})
+
 		describe("and the only matching file is unsupported", () => {
 			beforeEach(async () => {
 				readMatchingFiles.mockImplementation(async () => [unsupportedFiles[0]])
@@ -731,6 +877,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${unsupportedFiles[0].path} is not a supported file format.`,
 				)
@@ -758,6 +906,8 @@ describe.each`
 			})
 
 			it("displays an error", () => {
+				expect(printMessage).not.toHaveBeenCalled()
+				expect(printWarning).not.toHaveBeenCalled()
 				expect(printError).toHaveBeenCalledWith(
 					`${unsupportedFiles[1].path} is not a supported file format.`,
 				)
@@ -793,6 +943,8 @@ describe.each`
 				})
 
 				it("displays an error", () => {
+					expect(printMessage).not.toHaveBeenCalled()
+					expect(printWarning).not.toHaveBeenCalled()
 					expect(printError).toHaveBeenCalledWith(fullErrorMessage)
 					expect(printError).toHaveBeenCalledTimes(1)
 				})
@@ -832,6 +984,8 @@ describe.each`
 				})
 
 				it("displays an error", () => {
+					expect(printMessage).not.toHaveBeenCalled()
+					expect(printWarning).not.toHaveBeenCalled()
 					expect(printError).toHaveBeenCalledWith(fullErrorMessage)
 					expect(printError).toHaveBeenCalledTimes(1)
 				})
