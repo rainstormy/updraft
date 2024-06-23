@@ -75,7 +75,8 @@ export async function promotionProgram(
 }
 
 function detectFileType(path: string): FileType {
-	const filename = path.split("/").at(-1) ?? ""
+	const pathSegments = path.split("/")
+	const filename = pathSegments.at(-1) ?? ""
 
 	switch (filename) {
 		case "CHANGELOG.adoc":
@@ -87,14 +88,20 @@ function detectFileType(path: string): FileType {
 	}
 
 	if (filename.endsWith(".adoc")) {
+		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.adoc"].join(
+			"/",
+		)
 		printWarning(
-			`${filename} is not a supported filename and must be renamed to 'CHANGELOG.adoc' in Updraft v2.0.0.`,
+			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
 		)
 		return "asciidoc-changelog"
 	}
 	if (filename.endsWith(".md")) {
+		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.md"].join(
+			"/",
+		)
 		printWarning(
-			`${filename} is not a supported filename and must be renamed to 'CHANGELOG.md' in Updraft v2.0.0.`,
+			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
 		)
 		return "markdown-changelog"
 	}
