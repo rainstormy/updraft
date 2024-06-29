@@ -1,5 +1,43 @@
-import { dedent } from "+utilities/StringUtilities"
+import {
+	type SemanticVersionString,
+	dedent,
+	isPrerelease,
+} from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
+
+describe.each`
+	version
+	${"0.2.0+77dd7cf1"}
+	${"1.0.0-beta.1"}
+	${"2.1.0+4905fa03"}
+	${"2.3.4-alpha.0+e58c6301"}
+	${"10.4.1-rc.0"}
+	${"11.0.2-beta.2+7b93b61c"}
+`(
+	"when the version string is $version",
+	(props: { version: SemanticVersionString }) => {
+		it("is a prerelease", () => {
+			expect(isPrerelease(props.version)).toBe(true)
+		})
+	},
+)
+
+describe.each`
+	version
+	${"0.2.0"}
+	${"1.0.0"}
+	${"2.1.0"}
+	${"2.3.4"}
+	${"10.4.1"}
+	${"11.0.2"}
+`(
+	"when the version string is $version",
+	(props: { version: SemanticVersionString }) => {
+		it("is a not prerelease", () => {
+			expect(isPrerelease(props.version)).toBe(false)
+		})
+	},
+)
 
 describe("dedenting an empty string", () => {
 	const result = dedent``

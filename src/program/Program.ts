@@ -4,13 +4,18 @@ import { toolVersionProgram } from "+program/ToolVersionProgram/ToolVersionProgr
 import { usageInstructionsProgram } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import { parseArgs } from "+utilities/ArgsUtilities"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
-import { isSemanticVersionString } from "+utilities/StringUtilities"
+import {
+	isPrerelease,
+	isSemanticVersionString,
+} from "+utilities/StringUtilities"
 
 export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 	try {
 		const parsedArgs = parseArgs(args, [
 			"--files",
 			"--help",
+			"--prerelease-files",
+			"--release-files",
 			"--release-version",
 			"--version",
 		])
@@ -25,16 +30,14 @@ export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 		const rawReleaseVersions = parsedArgs["--release-version"]
 
 		if (rawReleaseVersions === null) {
-			return invalidConfigurationProgram("--release-version must be specified.")
+			return invalidConfigurationProgram("--release-version is required.")
 		}
 		if (rawReleaseVersions.length === 0) {
-			return invalidConfigurationProgram(
-				"--release-version must specify a value.",
-			)
+			return invalidConfigurationProgram("--release-version requires a value.")
 		}
 		if (rawReleaseVersions.length > 1) {
 			return invalidConfigurationProgram(
-				"--release-version must not specify more than one value.",
+				"--release-version cannot have more than one value.",
 			)
 		}
 
@@ -51,15 +54,31 @@ export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 		}
 
 		const files = parsedArgs["--files"]
-
-		if (files === null) {
-			return invalidConfigurationProgram("--files must be specified.")
-		}
-		if (files.length === 0) {
-			return invalidConfigurationProgram("--files must specify a value.")
+		if (files?.length === 0) {
+			return invalidConfigurationProgram("--files requires a value.")
 		}
 
-		return promotionProgram(files, releaseVersion)
+		const releaseFiles = parsedArgs["--release-files"]
+		if (releaseFiles?.length === 0) {
+			return invalidConfigurationProgram("--release-files requires a value.")
+		}
+
+		const prereleaseFiles = parsedArgs["--prerelease-files"]
+		if (prereleaseFiles?.length === 0) {
+			return invalidConfigurationProgram("--prerelease-files requires a value.")
+		}
+
+		if (files === null && releaseFiles === null && prereleaseFiles === null) {
+			return invalidConfigurationProgram(
+				"--files, --release-files, or --prerelease-files is required.",
+			)
+		}
+
+		const filePatterns = isPrerelease(releaseVersion)
+			? [...(files ?? []), ...(prereleaseFiles ?? [])]
+			: [...(files ?? []), ...(releaseFiles ?? [])]
+
+		return promotionProgram(filePatterns, releaseVersion)
 	} catch (error) {
 		assertError(error)
 		return invalidConfigurationProgram(error.message)

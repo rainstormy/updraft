@@ -28,6 +28,10 @@ export function isSemanticVersionString(
 	return semanticVersionNumberRegex.test(value)
 }
 
+export function isPrerelease(version: SemanticVersionString): boolean {
+	return version.includes("-") || version.includes("+")
+}
+
 const leadingAndTrailingLinesRegex = /^\n+|\n+$/gu
 
 export function dedent(

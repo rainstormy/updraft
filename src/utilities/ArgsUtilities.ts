@@ -11,7 +11,7 @@ export function parseArgs<Option extends string>(
 	for (const arg of args) {
 		if (isOption(arg)) {
 			if (parsedArgs[arg] !== null) {
-				throw new Error(`${arg} must be specified only once.`)
+				throw new Error(`${arg} cannot appear more than once.`)
 			}
 			currentOption = arg
 			parsedArgs[currentOption] = [] as Array<string>
