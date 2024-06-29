@@ -4,10 +4,7 @@ import { toolVersionProgram } from "+program/ToolVersionProgram/ToolVersionProgr
 import { usageInstructionsProgram } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import { parseArgs } from "+utilities/ArgsUtilities"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
-import {
-	isPrerelease,
-	isSemanticVersionString,
-} from "+utilities/StringUtilities"
+import { extractSemanticVersionString } from "+utilities/StringUtilities"
 
 export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 	try {
@@ -41,15 +38,11 @@ export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 			)
 		}
 
-		const rawReleaseVersion = rawReleaseVersions[0]
+		const releaseVersion = extractSemanticVersionString(rawReleaseVersions[0])
 
-		const releaseVersion = rawReleaseVersion.startsWith("v")
-			? rawReleaseVersion.slice(1)
-			: rawReleaseVersion
-
-		if (!isSemanticVersionString(releaseVersion)) {
+		if (releaseVersion === null) {
 			return invalidConfigurationProgram(
-				`--release-version has an invalid value '${rawReleaseVersion}'.`,
+				`--release-version has an invalid value '${rawReleaseVersions[0]}'.`,
 			)
 		}
 
@@ -74,11 +67,12 @@ export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 			)
 		}
 
-		const filePatterns = isPrerelease(releaseVersion)
-			? [...(files ?? []), ...(prereleaseFiles ?? [])]
-			: [...(files ?? []), ...(releaseFiles ?? [])]
-
-		return promotionProgram(filePatterns, releaseVersion)
+		return promotionProgram(
+			files ?? [],
+			prereleaseFiles ?? [],
+			releaseFiles ?? [],
+			releaseVersion,
+		)
 	} catch (error) {
 		assertError(error)
 		return invalidConfigurationProgram(error.message)
