@@ -1,6 +1,6 @@
 import type { File } from "+adapters/FileSystem/File"
 import { readMatchingFiles, writeFiles } from "+adapters/FileSystem/FileSystem"
-import { printError, printWarning } from "+adapters/Logger/Logger"
+import { printError, printMessage, printWarning } from "+adapters/Logger/Logger"
 import { today } from "+adapters/Today/Today"
 import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
 import { promoteMarkdownChangelog } from "+promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
@@ -8,7 +8,10 @@ import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackage
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
 import type { Release } from "+utilities/Release"
-import type { SemanticVersionString } from "+utilities/StringUtilities"
+import {
+	type SemanticVersionString,
+	isPrerelease,
+} from "+utilities/StringUtilities"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,
@@ -23,6 +26,15 @@ export async function promotionProgram(
 	filePatterns: Array<string>,
 	releaseVersion: SemanticVersionString,
 ): Promise<ExitCode> {
+	if (filePatterns.length === 0) {
+		printMessage(
+			`No files set to be updated in release version ${releaseVersion}, as it is ${
+				isPrerelease(releaseVersion) ? "a prerelease" : "not a prerelease"
+			}.`,
+		)
+		return 0
+	}
+
 	try {
 		const files = await readMatchingFiles(filePatterns)
 

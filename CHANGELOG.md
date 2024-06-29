@@ -10,6 +10,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Support for Markdown changelogs
   in [Keep a Changelog](https://keepachangelog.com/en/1.1.0) format.
+- New option: `--prerelease-files`.
+- New option: `--release-files`.
 
 ### Changed
 - Add a trailing newline character in the output files.
