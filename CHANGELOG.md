@@ -19,6 +19,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   other filenames has been deprecated and will be removed in the next major
   release.
 - Normalise blank lines in changelogs.
+- `--release-version` accepts any input containing a substring that is a semantic version number.
 
 ## [1.0.0] - 2023-12-08
 ### Added

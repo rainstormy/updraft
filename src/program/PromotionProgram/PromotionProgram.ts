@@ -23,9 +23,15 @@ type FileType = "asciidoc-changelog" | "markdown-changelog" | "package-json"
 type Promoter = (content: string, release: Release) => Promise<string>
 
 export async function promotionProgram(
-	filePatterns: Array<string>,
+	files: Array<string>,
+	prereleaseFiles: Array<string>,
+	releaseFiles: Array<string>,
 	releaseVersion: SemanticVersionString,
 ): Promise<ExitCode> {
+	const filePatterns = isPrerelease(releaseVersion)
+		? [...files, ...prereleaseFiles]
+		: [...files, ...releaseFiles]
+
 	if (filePatterns.length === 0) {
 		printMessage(
 			`No files set to be updated in release version ${releaseVersion}, as it is ${
