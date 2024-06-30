@@ -7,11 +7,11 @@ import { promoteMarkdownChangelog } from "+promoters/PromoteMarkdownChangelog/Pr
 import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
-import type { Release } from "+utilities/Release"
+import type { Release } from "+utilities/types/Release"
 import {
 	type SemanticVersionString,
 	isPrerelease,
-} from "+utilities/StringUtilities"
+} from "+utilities/types/SemanticVersionString"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,

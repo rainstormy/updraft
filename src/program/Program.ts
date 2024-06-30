@@ -7,7 +7,7 @@ import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import {
 	extractSemanticVersionString,
 	isPrerelease,
-} from "+utilities/StringUtilities"
+} from "+utilities/types/SemanticVersionString"
 
 const schema = defineOptions({
 	"--files": {

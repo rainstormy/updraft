@@ -5,7 +5,7 @@ import { injectPackageJsonVersionMock } from "+adapters/PackageJsonVersion/Packa
 
 import { mainProgram } from "+program/Program"
 import type { ExitCode } from "+utilities/ErrorUtilities"
-import type { SemanticVersionString } from "+utilities/StringUtilities"
+import type { SemanticVersionString } from "+utilities/types/SemanticVersionString"
 import { beforeEach, describe, expect, it } from "vitest"
 
 const { packageJsonVersion } = injectPackageJsonVersionMock()

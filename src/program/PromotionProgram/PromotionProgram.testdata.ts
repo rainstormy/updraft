@@ -1,9 +1,7 @@
 import type { File } from "+adapters/FileSystem/File"
-import {
-	type DateString,
-	type SemanticVersionString,
-	dedent,
-} from "+utilities/StringUtilities"
+import { dedent } from "+utilities/StringUtilities"
+import type { DateString } from "+utilities/types/DateString"
+import type { SemanticVersionString } from "+utilities/types/SemanticVersionString"
 
 export function anEmptyAsciidocChangelog(
 	path: AsciidocChangelogFilepath,
