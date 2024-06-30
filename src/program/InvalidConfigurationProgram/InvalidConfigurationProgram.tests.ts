@@ -11,31 +11,26 @@ const { printMessage, printWarning, printError } = injectLoggerMock()
 const { readMatchingFiles, writeFiles } = injectFileSystemMock()
 
 describe.each`
-	invalidArgs                                                                                                               | expectedErrorMessage
-	${["--file-patterns"]}                                                                                                    | ${"Unknown option '--file-patterns'"}
-	${["--release"]}                                                                                                          | ${"Unknown option '--release'"}
-	${["--check"]}                                                                                                            | ${"Unknown option '--check'"}
-	${["--help", "--help"]}                                                                                                   | ${"--help cannot appear more than once"}
-	${["--version", "--version"]}                                                                                             | ${"--version cannot appear more than once"}
-	${["--files", "CHANGELOG.adoc"]}                                                                                          | ${"--release-version is required"}
-	${["--files", "CHANGELOG.md", "--release-version"]}                                                                       | ${"--release-version requires a value"}
-	${["--release-version", "1.1.0", "--release-version", "2.1.0"]}                                                           | ${"--release-version cannot appear more than once"}
-	${["--files", "CHANGELOG.adoc", "--release-version", "1.0.1", "v1.0.2"]}                                                  | ${"--release-version cannot have more than one value"}
-	${["--files", "CHANGELOG.md", "--release-version", "1.1"]}                                                                | ${"--release-version has an invalid value '1.1'"}
-	${["--files", "CHANGELOG.adoc", "--release-version", "v2"]}                                                               | ${"--release-version has an invalid value 'v2'"}
-	${["--files", "CHANGELOG.md", "--release-version", "next"]}                                                               | ${"--release-version has an invalid value 'next'"}
-	${["--release-version", "1.0.1"]}                                                                                         | ${"--files, --release-files, or --prerelease-files is required"}
-	${["--files", "--release-version", "1.0.1", "--prerelease-files", "CHANGELOG.adoc", "--release-files", "CHANGELOG.md"]}   | ${"--files requires a value"}
-	${["--files", "packages/**/package.json", "packages/**/CHANGELOG.adoc", "--files", "CHANGELOG.md"]}                       | ${"--files cannot appear more than once"}
-	${["--release-version", "1.0.1", "--prerelease-files", "--files", "package.json", "CHANGELOG.adoc"]}                      | ${"--prerelease-files requires a value"}
-	${["--prerelease-files", "packages/**/package.json", "packages/**/CHANGELOG.adoc", "--prerelease-files", "CHANGELOG.md"]} | ${"--prerelease-files cannot appear more than once"}
-	${["--release-version", "1.0.1", "--files", "package.json", "CHANGELOG.md", "--release-files"]}                           | ${"--release-files requires a value"}
-	${["--release-files", "packages/**/package.json", "packages/**/CHANGELOG.adoc", "--release-files", "CHANGELOG.md"]}       | ${"--release-files cannot appear more than once"}
+	invalidArgs                                                                                                             | expectedError
+	${["--file-patterns"]}                                                                                                  | ${"Unknown option '--file-patterns'."}
+	${["--release"]}                                                                                                        | ${"Unknown option '--release'."}
+	${["--check"]}                                                                                                          | ${"Unknown option '--check'."}
+	${["--files", "CHANGELOG.adoc"]}                                                                                        | ${"--release-version is required."}
+	${["--files", "CHANGELOG.md", "--release-version"]}                                                                     | ${"--release-version requires 1 argument, but got 0."}
+	${["--release-version", "1.1.0", "--release-version", "2.1.0"]}                                                         | ${"--release-version requires 1 argument, but got 2."}
+	${["--files", "CHANGELOG.adoc", "--release-version", "1.0.1", "v1.0.2"]}                                                | ${"--release-version requires 1 argument, but got 2."}
+	${["--files", "CHANGELOG.md", "--release-version", "1.1"]}                                                              | ${"--release-version has an invalid value '1.1'."}
+	${["--files", "CHANGELOG.adoc", "--release-version", "v2"]}                                                             | ${"--release-version has an invalid value 'v2'."}
+	${["--files", "CHANGELOG.md", "--release-version", "next"]}                                                             | ${"--release-version has an invalid value 'next'."}
+	${["--release-version", "1.0.1"]}                                                                                       | ${"--files, --release-files, or --prerelease-files is required."}
+	${["--files", "--release-version", "1.0.1", "--prerelease-files", "CHANGELOG.adoc", "--release-files", "CHANGELOG.md"]} | ${"--files requires at least 1 argument, but got 0."}
+	${["--release-version", "1.0.1", "--prerelease-files", "--files", "package.json", "CHANGELOG.adoc"]}                    | ${"--prerelease-files requires at least 1 argument, but got 0."}
+	${["--release-version", "1.0.1", "--files", "package.json", "CHANGELOG.md", "--release-files"]}                         | ${"--release-files requires at least 1 argument, but got 0."}
 `(
 	"when the args are $invalidArgs",
 	(props: {
 		invalidArgs: Array<string>
-		expectedErrorMessage: string
+		expectedError: string
 	}) => {
 		let actualExitCode: ExitCode | null = null
 
@@ -47,11 +42,11 @@ describe.each`
 			expect(actualExitCode).toBe(2)
 		})
 
-		it(`displays an error message that says '${props.expectedErrorMessage}' and encourages the use of --help`, () => {
+		it("displays an error message and encourages the use of --help", () => {
 			expect(printMessage).not.toHaveBeenCalled()
 			expect(printWarning).not.toHaveBeenCalled()
 			expect(printError).toHaveBeenCalledWith(dedent`
-				${props.expectedErrorMessage}.
+				${props.expectedError}
 				For usage instructions, please run the program with the --help option.
 			`)
 			expect(printError).toHaveBeenCalledTimes(1)

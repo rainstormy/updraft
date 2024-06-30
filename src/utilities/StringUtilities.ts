@@ -86,3 +86,11 @@ const indentRegex = /^[ \t]*/u
 function extractIndent(line: string): string {
 	return indentRegex.exec(line)?.[0] ?? ""
 }
+
+export function pluralise(
+	subject: number,
+	singular: string,
+	plural = `${singular}s`,
+): string {
+	return subject === 1 ? singular : plural
+}
