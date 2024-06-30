@@ -1,4 +1,4 @@
-import type { Release } from "+utilities/Release"
+import type { Release } from "+utilities/types/Release"
 
 // Matches an unreleased section, including the heading and the body, which
 // spans the characters after the heading until the next '##' heading or until

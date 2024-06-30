@@ -40,7 +40,7 @@ import {
 	anUnsupportedFileB,
 } from "+program/PromotionProgram/PromotionProgram.testdata"
 import type { ExitCode } from "+utilities/ErrorUtilities"
-import type { DateString } from "+utilities/StringUtilities"
+import type { DateString } from "+utilities/types/DateString"
 import { beforeEach, describe, expect, it } from "vitest"
 
 const { today } = injectTodayMock()

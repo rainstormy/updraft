@@ -1,4 +1,4 @@
-import type { Release } from "+utilities/Release"
+import type { Release } from "+utilities/types/Release"
 
 // Matches the `version` field.
 const versionFieldRegex = /"version":\s*"(?<semanticVersionNumber>[^"]+)"/u
