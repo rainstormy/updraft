@@ -134,6 +134,9 @@ export function aPromotableAsciidocChangelogC(
 			== https://github.com/spdiswal/coolciv/releases/tag/v0.9.9[0.9.9] - 2023-04-09
 			=== Added
 			* A new cold water dispenser.
+
+			== https://github.com/spdiswal/coolciv/releases/tag/v0.9.8[0.9.8] - 2023-04-07
+			=== Added
 			* Skylights in the ceiling.
 		`,
 	}
@@ -162,6 +165,9 @@ export function aPromotedAsciidocChangelogC(
 			== https://github.com/spdiswal/coolciv/releases/tag/v0.9.9[0.9.9] - 2023-04-09
 			=== Added
 			* A new cold water dispenser.
+
+			== https://github.com/spdiswal/coolciv/releases/tag/v0.9.8[0.9.8] - 2023-04-07
+			=== Added
 			* Skylights in the ceiling.
 		`}\n`,
 	}
@@ -340,6 +346,9 @@ export function aPromotableMarkdownChangelogC(
 			## [0.9.9](https://github.com/spdiswal/coolciv/releases/tag/v0.9.9) - 2023-04-09
 			### Added
 			- A new cold water dispenser.
+
+			## [0.9.8](https://github.com/spdiswal/coolciv/releases/tag/v0.9.8) - 2023-04-07
+			### Added
 			- Skylights in the ceiling.
 		`,
 	}
@@ -368,6 +377,9 @@ export function aPromotedMarkdownChangelogC(
 			## [0.9.9](https://github.com/spdiswal/coolciv/releases/tag/v0.9.9) - 2023-04-09
 			### Added
 			- A new cold water dispenser.
+
+			## [0.9.8](https://github.com/spdiswal/coolciv/releases/tag/v0.9.8) - 2023-04-07
+			### Added
 			- Skylights in the ceiling.
 		`}\n`,
 	}

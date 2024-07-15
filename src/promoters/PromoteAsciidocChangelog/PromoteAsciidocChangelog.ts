@@ -1,4 +1,9 @@
+import { notNullish } from "+utilities/IterableUtilities"
 import type { Release } from "+utilities/types/Release"
+import {
+	checkSequentialRelease,
+	extractSemanticVersionString,
+} from "+utilities/types/SemanticVersionString"
 
 // Matches an unreleased section, including the heading and the body, which
 // spans the characters after the heading until the next '==' heading or until
@@ -17,21 +22,21 @@ export async function promoteAsciidocChangelog(
 	originalContent: string,
 	newRelease: Release,
 ): Promise<string> {
-	const unreleasedSection = unreleasedSectionRegex.exec(originalContent)
+	const unreleasedSectionMatch = unreleasedSectionRegex.exec(originalContent)
 
-	if (unreleasedSection === null) {
+	if (unreleasedSectionMatch === null) {
 		throw new Error("must have an 'Unreleased' section")
 	}
 
 	const trimmedUnreleasedBody =
-		unreleasedSection.groups?.unreleasedBody?.trim() ?? null
+		unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? null
 
 	if (trimmedUnreleasedBody === null || trimmedUnreleasedBody === "") {
 		throw new Error("must have at least one item in the 'Unreleased' section")
 	}
 
 	const unreleasedRepositoryLink =
-		unreleasedSection.groups?.unreleasedRepositoryLink ?? null
+		unreleasedSectionMatch.groups?.unreleasedRepositoryLink ?? null
 
 	if (unreleasedRepositoryLink === null) {
 		throw new Error(
@@ -39,8 +44,20 @@ export async function promoteAsciidocChangelog(
 		)
 	}
 
+	if (newRelease.checks.includes("sequential")) {
+		const previousReleaseVersionRegex =
+			/\[(\d+\.\d+\.\d+.*)\] - \d{4}-\d{2}-\d{2}\n/giu
+
+		const previousReleaseVersions = Array.from(
+			originalContent.matchAll(previousReleaseVersionRegex),
+			(match) => extractSemanticVersionString(match[1]),
+		).filter(notNullish)
+
+		checkSequentialRelease(newRelease.version, previousReleaseVersions)
+	}
+
 	const latestReleaseVersion =
-		unreleasedSection.groups?.latestReleaseVersion ?? null
+		unreleasedSectionMatch.groups?.latestReleaseVersion ?? null
 
 	const repositoryLink = unreleasedRepositoryLink.replace(
 		repositoryLinkPathRegex,

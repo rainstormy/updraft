@@ -60,13 +60,19 @@ function assertExactNumberOfOptionArguments<Option extends string>(
 	>
 
 	for (const [option, { args }] of constraints) {
-		const argsCount = parsedArgs[option]?.length ?? null
+		const optionArgs = parsedArgs[option]
+
+		if (optionArgs === undefined) {
+			continue
+		}
+
 		const min = args.min ?? null
 		const max = args.max ?? null
+		const count = optionArgs.length
 
-		if (min !== null && min === max && argsCount !== min) {
+		if (min !== null && min === max && count !== min) {
 			const constraint = `${min} ${pluralise(min, "argument")}`
-			throw new Error(`${option} requires ${constraint}, but got ${argsCount}.`)
+			throw new Error(`${option} requires ${constraint}, but got ${count}.`)
 		}
 	}
 }
@@ -80,12 +86,18 @@ function assertMinimumNumberOfOptionArguments<Option extends string>(
 	>
 
 	for (const [option, { args }] of constraints) {
-		const argsCount = parsedArgs[option]?.length ?? Number.POSITIVE_INFINITY
-		const min = args.min ?? null
+		const optionArgs = parsedArgs[option]
 
-		if (min !== null && argsCount < min) {
+		if (optionArgs === undefined) {
+			continue
+		}
+
+		const min = args.min ?? null
+		const count = optionArgs.length
+
+		if (min !== null && count < min) {
 			const constraint = `at least ${min} ${pluralise(min, "argument")}`
-			throw new Error(`${option} requires ${constraint}, but got ${argsCount}.`)
+			throw new Error(`${option} requires ${constraint}, but got ${count}.`)
 		}
 	}
 }
@@ -99,12 +111,18 @@ function assertMaximumNumberOfOptionArguments<Option extends string>(
 	>
 
 	for (const [option, { args }] of constraints) {
-		const argsCount = parsedArgs[option]?.length ?? Number.NEGATIVE_INFINITY
-		const max = args.max ?? null
+		const optionArgs = parsedArgs[option]
 
-		if (max !== null && argsCount > max) {
+		if (optionArgs === undefined) {
+			continue
+		}
+
+		const max = args.max ?? null
+		const count = optionArgs.length
+
+		if (max !== null && count > max) {
 			const constraint = `at most ${max} ${pluralise(max, "argument")}`
-			throw new Error(`${option} requires ${constraint}, but got ${argsCount}.`)
+			throw new Error(`${option} requires ${constraint}, but got ${count}.`)
 		}
 	}
 }

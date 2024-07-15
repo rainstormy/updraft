@@ -16,6 +16,11 @@ Supported file formats:
   - package.json.
 
 Options:
+  --check-sequential-release     Check if --release-version is a valid increment
+                                 from the latest version specified in each file
+                                 to be updated.
+
+
   --files <patterns>             Update files matching the glob patterns
                                  whenever --release-version is specified.
 

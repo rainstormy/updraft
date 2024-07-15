@@ -7,7 +7,7 @@ import { promoteMarkdownChangelog } from "+promoters/PromoteMarkdownChangelog/Pr
 import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
-import type { Release } from "+utilities/types/Release"
+import type { Release, ReleaseCheck } from "+utilities/types/Release"
 import {
 	type SemanticVersionString,
 	isPrerelease,
@@ -24,12 +24,17 @@ type Promoter = (content: string, release: Release) => Promise<string>
 
 export async function promotionProgram(
 	filePatterns: Array<string>,
-	releaseVersion: SemanticVersionString,
+	release: {
+		checks: Array<ReleaseCheck>
+		version: SemanticVersionString
+	},
 ): Promise<ExitCode> {
 	if (filePatterns.length === 0) {
 		printMessage(
-			`No files set to be updated in release version ${releaseVersion}, as it is ${
-				isPrerelease(releaseVersion) ? "a prerelease" : "not a prerelease"
+			`No files set to be updated in release version ${
+				release.version
+			}, as it is ${
+				isPrerelease(release.version) ? "a prerelease" : "not a prerelease"
 			}.`,
 		)
 		return 0
@@ -43,8 +48,7 @@ export async function promotionProgram(
 			return 0
 		}
 
-		const newRelease: Release = { version: releaseVersion, date: today() }
-
+		const newRelease: Release = { ...release, date: today() }
 		const promotionResults = await Promise.allSettled(files.map(promoteFile))
 
 		const errors = promotionResults.filter(isRejected).map(({ reason }) => {

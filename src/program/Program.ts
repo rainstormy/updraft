@@ -4,12 +4,17 @@ import { toolVersionProgram } from "+program/ToolVersionProgram/ToolVersionProgr
 import { usageInstructionsProgram } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import { defineOptions, parseArgs } from "+utilities/ArgsUtilities"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
+import { notNullish } from "+utilities/IterableUtilities"
+import type { ReleaseCheck } from "+utilities/types/Release"
 import {
 	extractSemanticVersionString,
 	isPrerelease,
 } from "+utilities/types/SemanticVersionString"
 
 const schema = defineOptions({
+	"--check-sequential-release": {
+		args: { min: 0, max: 0 },
+	},
 	"--files": {
 		args: { min: 1 },
 	},
@@ -42,6 +47,8 @@ export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 		return invalidConfigurationProgram(error.message)
 	}
 
+	const checkSequentialRelease =
+		parsedArgs["--check-sequential-release"] !== undefined
 	const files = parsedArgs["--files"] ?? []
 	const prereleaseFiles = parsedArgs["--prerelease-files"] ?? []
 	const releaseFiles = parsedArgs["--release-files"] ?? []
@@ -65,5 +72,14 @@ export async function mainProgram(args: Array<string>): Promise<ExitCode> {
 		? [...files, ...prereleaseFiles]
 		: [...files, ...releaseFiles]
 
-	return promotionProgram(filePatterns, semanticReleaseVersion)
+	const checks = (
+		[
+			checkSequentialRelease ? "sequential" : null,
+		] satisfies Array<ReleaseCheck | null>
+	).filter(notNullish)
+
+	return promotionProgram(filePatterns, {
+		checks,
+		version: semanticReleaseVersion,
+	})
 }

@@ -13,8 +13,11 @@ describe("when the package.json file does not have a 'version' field", () => {
 			"packageManager": "yarn@3.6.3"
 		}
 	`
-
-	const newRelease: Release = { version: "1.0.0", date: "2023-10-01" }
+	const newRelease: Release = {
+		checks: [],
+		date: "2023-10-01",
+		version: "1.0.0",
+	}
 	const throwingAction = () => promotePackageJson(originalContent, newRelease)
 
 	it("raises an error", async () => {
@@ -23,14 +26,15 @@ describe("when the package.json file does not have a 'version' field", () => {
 })
 
 describe.each`
-	currentVersion    | versionToRelease
-	${"1.0.0"}        | ${"1.0.1"}
-	${"7.1.3-beta.7"} | ${"7.1.3"}
+	currentVersion           | nextVersion
+	${"1.0.0"}               | ${"1.0.1"}
+	${"7.1.3-beta.7"}        | ${"7.1.3"}
+	${"9.0.5-rc.0+3a1c790f"} | ${"9.0.5"}
 `(
 	"when the package.json file has a 'version' field of $currentVersion",
 	async (props: {
 		currentVersion: SemanticVersionString
-		versionToRelease: SemanticVersionString
+		nextVersion: SemanticVersionString
 	}) => {
 		const originalContent = dedent`
 			{
@@ -48,7 +52,7 @@ describe.each`
 			{
 				"$schema": "https://json.schemastore.org/package.json",
 				"name": "@rainstormy/preset-prettier-base",
-				"version": "${props.versionToRelease}",
+				"version": "${props.nextVersion}",
 				"type": "module",
 				"main": "dist/prettier.config.js",
 				"types": "dist/prettier.config.d.ts",
@@ -58,16 +62,86 @@ describe.each`
 		`}\n`
 
 		const newRelease: Release = {
-			version: props.versionToRelease,
+			checks: [],
 			date: "2023-10-01",
+			version: props.nextVersion,
 		}
 		const actualPromotedContent = await promotePackageJson(
 			originalContent,
 			newRelease,
 		)
 
-		it(`updates the 'version' field to ${props.versionToRelease}`, () => {
+		it(`updates the 'version' field to ${props.nextVersion}`, () => {
 			expect(actualPromotedContent).toBe(expectedPromotedContent)
+		})
+	},
+)
+
+describe.each`
+	currentVersion           | nextVersion
+	${"1.0.0"}               | ${"1.1.1"}
+	${"7.1.3-beta.7"}        | ${"7.1.3-beta.4"}
+	${"9.0.5-rc.0+3a1c790f"} | ${"9.0.4"}
+`(
+	"when the package.json file is set to update to a non-sequential release of $nextVersion from $currentVersion",
+	async (props: {
+		currentVersion: SemanticVersionString
+		nextVersion: SemanticVersionString
+	}) => {
+		const originalContent = dedent`
+			{
+				"$schema": "https://json.schemastore.org/package.json",
+				"name": "@spdiswal/coolciv",
+				"version": "${props.currentVersion}",
+				"type": "module",
+				"packageManager": "pnpm@9.1.0+sha256.22e36fba7f4880ecf749a5ca128b8435da085ecd49575e7fb9e64d6bf4fad394"
+			}
+		`
+		const newRelease: Release = {
+			checks: ["sequential"],
+			date: "2023-10-01",
+			version: props.nextVersion,
+		}
+		const throwingAction = () => promotePackageJson(originalContent, newRelease)
+
+		it("raises an error", async () => {
+			await expect(throwingAction).rejects.toThrow(
+				`has latest release version ${props.currentVersion}, but was set to update to ${props.nextVersion}`,
+			)
+		})
+	},
+)
+
+describe.each`
+	currentVersion
+	${"1.0.0"}
+	${"7.1.3-beta.7"}
+	${"9.0.5-rc.0+3a1c790f"}
+`(
+	"when the package.json file is set to update to an existing release of $currentVersion",
+	async (props: {
+		currentVersion: SemanticVersionString
+	}) => {
+		const originalContent = dedent`
+			{
+				"$schema": "https://json.schemastore.org/package.json",
+				"name": "@spdiswal/coolciv",
+				"version": "${props.currentVersion}",
+				"type": "module",
+				"packageManager": "pnpm@9.1.0+sha256.22e36fba7f4880ecf749a5ca128b8435da085ecd49575e7fb9e64d6bf4fad394"
+			}
+		`
+		const newRelease: Release = {
+			checks: ["sequential"],
+			date: "2023-10-01",
+			version: props.currentVersion,
+		}
+		const throwingAction = () => promotePackageJson(originalContent, newRelease)
+
+		it("raises an error", async () => {
+			await expect(throwingAction).rejects.toThrow(
+				`already contains release version ${props.currentVersion}`,
+			)
 		})
 	},
 )
