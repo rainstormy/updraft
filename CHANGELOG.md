@@ -27,6 +27,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Disallow leading zeros in semantic version numbers and restrict the set of
   valid prerelease and build identifiers to contain only ASCII alphanumeric
   characters and hyphens.
+- Preserve any amount of whitespace between the key and the value of
+  the `version` field in `package.json` files.
 
 ## [1.0.0] - 2023-12-08
 ### Added

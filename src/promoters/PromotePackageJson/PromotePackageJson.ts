@@ -5,7 +5,7 @@ import {
 } from "+utilities/types/SemanticVersionString"
 
 // Matches the `version` field.
-const versionFieldRegex = /"version":\s*"(?<version>[^"]+)"/u
+const versionFieldRegex = /"version":(?<whitespace>\s*)"(?<version>[^"]+)"/u
 
 // Matches trailing newline characters.
 const trailingNewlinesRegex = /\n*$/u
@@ -20,7 +20,7 @@ export async function promotePackageJson(
 		throw new Error("must have a 'version' field")
 	}
 
-	const { version } = versionFieldMatch.groups
+	const { version, whitespace } = versionFieldMatch.groups
 
 	if (newRelease.checks.includes("sequential")) {
 		const existingVersion = extractSemanticVersionString(version)
@@ -31,7 +31,10 @@ export async function promotePackageJson(
 
 	return (
 		originalContent
-			.replace(versionFieldRegex, `"version": "${newRelease.version}"`)
+			.replace(
+				versionFieldRegex,
+				`"version":${whitespace}"${newRelease.version}"`,
+			)
 
 			// Insert exactly one trailing newline character.
 			.replace(trailingNewlinesRegex, "\n")
