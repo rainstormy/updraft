@@ -20,7 +20,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   other filenames has been deprecated and will be removed in the next major
   release.
 - Normalise blank lines in changelogs.
-- `--release-version` accepts any input containing a substring that is a semantic version number.
+- `--release-version` accepts any input containing a substring that is a
+  semantic version number.
+
+### Fixed
+- Disallow leading zeros in semantic version numbers and restrict the set of
+  valid prerelease and build identifiers to contain only ASCII alphanumeric
+  characters and hyphens.
 
 ## [1.0.0] - 2023-12-08
 ### Added
