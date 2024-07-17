@@ -1,6 +1,10 @@
 import type { Release } from "+utilities/Release"
 
+// Matches the `version` field.
 const versionFieldRegex = /"version":\s*"(?<semanticVersionNumber>[^"]+)"/u
+
+// Matches trailing newline characters.
+const trailingNewlinesRegex = /\n*$/u
 
 export async function promotePackageJson(
 	originalContent: string,
@@ -17,6 +21,6 @@ export async function promotePackageJson(
 			.replace(versionFieldRegex, `"version": "${newRelease.version}"`)
 
 			// Insert exactly one trailing newline character.
-			.replace(/\n*$/u, "\n")
+			.replace(trailingNewlinesRegex, "\n")
 	)
 }

@@ -11,6 +11,12 @@ const unreleasedSectionRegex =
 const unreleasedTrailingLinkRegex =
 	/\n\[unreleased\]: (?<unreleasedRepositoryLink>\S+)(?=\n+\[\S+\]: |\n*$)/iu
 
+// Matches the path segment of a link to the repository.
+const repositoryLinkPathRegex = /\/(?:compare|releases\/tag)\/v\S+/iu
+
+// Matches trailing newline characters.
+const trailingNewlinesRegex = /\n*$/u
+
 export async function promoteMarkdownChangelog(
 	originalContent: string,
 	newRelease: Release,
@@ -44,7 +50,7 @@ export async function promoteMarkdownChangelog(
 		unreleasedSection.groups?.latestReleaseVersion ?? null
 
 	const repositoryLink = unreleasedRepositoryLink.replace(
-		/\/(compare|releases\/tag)\/v\S+/iu,
+		repositoryLinkPathRegex,
 		"",
 	)
 	const newUnreleasedLink = `${repositoryLink}/compare/v${newRelease.version}...HEAD`
@@ -90,6 +96,6 @@ export async function promoteMarkdownChangelog(
 			.replace(/(?<=\[\S+\]: .+)\n+(?=\[\S+\]: )/gu, "\n")
 
 			// Insert exactly one trailing newline character.
-			.replace(/\n*$/u, "\n")
+			.replace(trailingNewlinesRegex, "\n")
 	)
 }
