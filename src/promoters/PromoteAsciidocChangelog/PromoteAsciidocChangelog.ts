@@ -7,8 +7,12 @@ import type { Release } from "+utilities/Release"
 const unreleasedSectionRegex =
 	/\n== ((?<unreleasedRepositoryLink>\S+)\[unreleased\]|unreleased)(?<unreleasedBody>.*?)(?=\n== \S+\[(?<latestReleaseVersion>\S+)\]|\n*$)/isu
 
-// Matches one blank line after a '==' heading,
-// except for a blank line directly between two '==' headings.
+// Matches the path segment of a link to the repository.
+const repositoryLinkPathRegex = /\/(?:compare|releases\/tag)\/v\S+/iu
+
+// Matches trailing newline characters.
+const trailingNewlinesRegex = /\n*$/u
+
 export async function promoteAsciidocChangelog(
 	originalContent: string,
 	newRelease: Release,
@@ -39,7 +43,7 @@ export async function promoteAsciidocChangelog(
 		unreleasedSection.groups?.latestReleaseVersion ?? null
 
 	const repositoryLink = unreleasedRepositoryLink.replace(
-		/\/(compare|releases\/tag)\/v\S+/iu,
+		repositoryLinkPathRegex,
 		"",
 	)
 	const newUnreleasedLink = `${repositoryLink}/compare/v${newRelease.version}\\...HEAD`
@@ -67,6 +71,6 @@ export async function promoteAsciidocChangelog(
 			.replace(/(?<=\n== .+)\n+(?=\n=== )/gu, "")
 
 			// Insert exactly one trailing newline character.
-			.replace(/\n*$/u, "\n")
+			.replace(trailingNewlinesRegex, "\n")
 	)
 }

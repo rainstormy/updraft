@@ -25,16 +25,16 @@
 	"type": "module",
 	"bin": "src/entry.cli.js",
 	"files": ["dist/main.js", "src/entry.cli.js"],
-	"packageManager": "pnpm@9.1.0+sha256.22e36fba7f4880ecf749a5ca128b8435da085ecd49575e7fb9e64d6bf4fad394",
+	"packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
 	"engines": {
-		"node": ">=20.12.2"
+		"node": ">=20.0.0"
 	},
 	"scripts": {
 		"build": "vite build --ssr src/main.ts",
 		"check": "pnpm check.format && pnpm check.types",
-		"check.format": "biome check --error-on-warnings .",
+		"check.format": "biome check --error-on-warnings",
 		"check.types": "tsc",
-		"fmt": "biome check --apply .",
+		"fmt": "biome check --write",
 		"no-verify": "pnpm lefthook uninstall",
 		"ready": "pnpm install && pnpm lefthook install",
 		"test": "vitest run",
@@ -42,20 +42,20 @@
 	},
 	"dependencies": {
 		"fast-glob": "3.3.2",
-		"tslib": "2.6.2"
+		"tslib": "2.6.3"
 	},
 	"// dependencies": {
 		"fast-glob": "This library executes glob patterns in the file system.",
 		"tslib": "This library optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.7.3",
-		"@types/node": "20.12.10",
+		"@biomejs/biome": "1.8.3",
+		"@types/node": "20.14.11",
 		"@vitest/coverage-v8": "1.6.0",
 		"@vitest/ui": "1.6.0",
-		"lefthook": "1.6.10",
-		"typescript": "5.4.5",
-		"vite": "5.2.11",
+		"lefthook": "1.7.2",
+		"typescript": "5.5.3",
+		"vite": "5.3.4",
 		"vitest": "1.6.0"
 	},
 	"// devDependencies": {
