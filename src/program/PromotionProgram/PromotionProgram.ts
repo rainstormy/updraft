@@ -1,14 +1,17 @@
 import type { File } from "+adapters/FileSystem/File"
 import { readMatchingFiles, writeFiles } from "+adapters/FileSystem/FileSystem"
-import { printError, printWarning } from "+adapters/Logger/Logger"
+import { printError, printMessage, printWarning } from "+adapters/Logger/Logger"
 import { today } from "+adapters/Today/Today"
 import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
 import { promoteMarkdownChangelog } from "+promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
 import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
-import type { Release } from "+utilities/Release"
-import type { SemanticVersionString } from "+utilities/StringUtilities"
+import type { Release, ReleaseCheck } from "+utilities/types/Release"
+import {
+	type SemanticVersionString,
+	isPrerelease,
+} from "+utilities/types/SemanticVersionString"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,
@@ -21,8 +24,22 @@ type Promoter = (content: string, release: Release) => Promise<string>
 
 export async function promotionProgram(
 	filePatterns: Array<string>,
-	releaseVersion: SemanticVersionString,
+	release: {
+		checks: Array<ReleaseCheck>
+		version: SemanticVersionString
+	},
 ): Promise<ExitCode> {
+	if (filePatterns.length === 0) {
+		printMessage(
+			`No files set to be updated in release version ${
+				release.version
+			}, as it is ${
+				isPrerelease(release.version) ? "a prerelease" : "not a prerelease"
+			}.`,
+		)
+		return 0
+	}
+
 	try {
 		const files = await readMatchingFiles(filePatterns)
 
@@ -31,8 +48,7 @@ export async function promotionProgram(
 			return 0
 		}
 
-		const newRelease: Release = { version: releaseVersion, date: today() }
-
+		const newRelease: Release = { ...release, date: today() }
 		const promotionResults = await Promise.allSettled(files.map(promoteFile))
 
 		const errors = promotionResults.filter(isRejected).map(({ reason }) => {
@@ -75,7 +91,8 @@ export async function promotionProgram(
 }
 
 function detectFileType(path: string): FileType {
-	const filename = path.split("/").at(-1) ?? ""
+	const pathSegments = path.split("/")
+	const filename = pathSegments.at(-1) ?? ""
 
 	switch (filename) {
 		case "CHANGELOG.adoc":
@@ -87,14 +104,20 @@ function detectFileType(path: string): FileType {
 	}
 
 	if (filename.endsWith(".adoc")) {
+		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.adoc"].join(
+			"/",
+		)
 		printWarning(
-			`${filename} is not a supported filename and must be renamed to 'CHANGELOG.adoc' in Updraft v2.0.0.`,
+			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
 		)
 		return "asciidoc-changelog"
 	}
 	if (filename.endsWith(".md")) {
+		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.md"].join(
+			"/",
+		)
 		printWarning(
-			`${filename} is not a supported filename and must be renamed to 'CHANGELOG.md' in Updraft v2.0.0.`,
+			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
 		)
 		return "markdown-changelog"
 	}

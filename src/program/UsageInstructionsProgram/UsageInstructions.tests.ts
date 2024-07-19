@@ -10,25 +10,48 @@ it("is a list of program arguments and options", () => {
 		and bumping version numbers in package.json files.
 
 		Supported file formats:
-		  * CHANGELOG.md and CHANGELOG.adoc in Keep a Changelog format.
-		  * package.json.
+		  - CHANGELOG.md and CHANGELOG.adoc in Keep a Changelog format.
+		  - package.json.
 
 		Options:
-		  --files <patterns>           Update files matching the glob patterns.
-		                               Mandatory when --release-version is specified.
+		  --check-sequential-release     Check if --release-version is a valid increment
+		                                 from the latest version specified in each file
+		                                 to be updated.
 
-		                               Use whitespace to separate multiple patterns:
-		                               <pattern-1> <pattern-2> <pattern-3>
 
-		  --help                       Display this help screen and exit.
+		  --files <patterns>             Update files matching the glob patterns
+		                                 whenever --release-version is specified.
 
-		  --release-version <version>  The semantic version of the upcoming release.
-		                               Mandatory when --files is specified.
+		                                 Use whitespace to separate multiple patterns:
+		                                 <pattern-1> <pattern-2> <pattern-3>
 
-		                               Expected format (optional parts in brackets):
-		                               [v]major.minor.patch[-prerelease][+buildinfo]
 
-		  --version                    Display the version of this tool and exit.
+		  --help                         Display this help screen and exit.
+
+
+		  --prerelease-files <patterns>  Update files matching the glob patterns only
+		                                 when --release-version contains a [-prerelease]
+		                                 or [+buildinfo] segment.
+
+		                                 Use whitespace to separate multiple patterns:
+		                                 <pattern-1> <pattern-2> <pattern-3>
+
+
+		  --release-files <patterns>     Update files matching the glob patterns only
+		                                 when --release-version does not contain a
+		                                 [-prerelease] or [+buildinfo] segment.
+
+		                                 Use whitespace to separate multiple patterns:
+		                                 <pattern-1> <pattern-2> <pattern-3>
+
+
+		  --release-version <version>    The semantic version of the upcoming release.
+
+		                                 Expected format (optional parts in brackets):
+		                                 [v]major.minor.patch[-prerelease][+buildinfo]
+
+
+		  --version                      Display the version of this tool and exit.
 	`)
 })
 

@@ -1,9 +1,11 @@
+// Mock injection imports must be at the top, separated from the regular imports by a blank line.
 import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
 import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 import { injectPackageJsonVersionMock } from "+adapters/PackageJsonVersion/PackageJsonVersion.mock"
+
 import { mainProgram } from "+program/Program"
 import type { ExitCode } from "+utilities/ErrorUtilities"
-import type { SemanticVersionString } from "+utilities/StringUtilities"
+import type { SemanticVersionString } from "+utilities/types/SemanticVersionString"
 import { beforeEach, describe, expect, it } from "vitest"
 
 const { packageJsonVersion } = injectPackageJsonVersionMock()

@@ -1,33 +1,3 @@
-export type DateString =
-	`${DateString.Year}-${DateString.Month}-${DateString.Day}`
-
-export namespace DateString {
-	export type Year = `${number}${number}${number}${number}`
-	export type Month = `${number}${number}`
-	export type Day = `${number}${number}`
-}
-
-export type SemanticVersionString =
-	| `${SemanticVersionString.MajorMinorPatch}`
-	| `${SemanticVersionString.MajorMinorPatch}${SemanticVersionString.Build}`
-	| `${SemanticVersionString.MajorMinorPatch}${SemanticVersionString.Prerelease}`
-	| `${SemanticVersionString.MajorMinorPatch}${SemanticVersionString.Prerelease}${SemanticVersionString.Build}`
-
-export namespace SemanticVersionString {
-	export type MajorMinorPatch = `${number}.${number}.${number}`
-	export type Prerelease = `-${string}`
-	export type Build = `+${string}`
-}
-
-const semanticVersionNumberRegex =
-	/^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?<prerelease>-[-\w]+(\.[-\w]+)*)?(?<build>\+[-\w]+(\.[-\w]+)*)?$/
-
-export function isSemanticVersionString(
-	value: string,
-): value is SemanticVersionString {
-	return semanticVersionNumberRegex.test(value)
-}
-
 const leadingAndTrailingLinesRegex = /^\n+|\n+$/gu
 
 export function dedent(
@@ -69,4 +39,12 @@ const indentRegex = /^[ \t]*/u
 
 function extractIndent(line: string): string {
 	return indentRegex.exec(line)?.[0] ?? ""
+}
+
+export function pluralise(
+	subject: number,
+	singular: string,
+	plural = `${singular}s`,
+): string {
+	return subject === 1 ? singular : plural
 }

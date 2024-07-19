@@ -1,10 +1,8 @@
 import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
-import type { Release } from "+utilities/Release"
-import {
-	type DateString,
-	type SemanticVersionString,
-	dedent,
-} from "+utilities/StringUtilities"
+import { dedent } from "+utilities/StringUtilities"
+import type { DateString } from "+utilities/types/DateString"
+import type { Release } from "+utilities/types/Release"
+import type { SemanticVersionString } from "+utilities/types/SemanticVersionString"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -21,8 +19,9 @@ describe.each`
 		githubRepositoryUrl: string
 	}) => {
 		const release: Release = {
-			version: releaseProps.releaseVersion,
+			checks: [],
 			date: releaseProps.releaseDate,
+			version: releaseProps.releaseVersion,
 		}
 
 		describe("and the changelog is completely empty", () => {
@@ -621,6 +620,118 @@ describe.each`
 				await expect(
 					promoteAsciidocChangelog(originalContent, release),
 				).resolves.toBe(expectedPromotedContent)
+			})
+		})
+
+		describe.each`
+			latestReleaseVersion
+			${"1.0.1"}
+			${"5.0.0-beta.1"}
+		`(
+			`and the changelog is set to update to a non-sequential release of ${release.version} from $latestReleaseVersion`,
+			(props: {
+				latestReleaseVersion: SemanticVersionString
+			}) => {
+				const originalContent = dedent`
+					= Releases
+
+					You can find all releases in this document.
+
+					== ${releaseProps.githubRepositoryUrl}[Unreleased]
+					=== Added
+					* A new shower mode: \`jet-stream\`.
+
+					== ${releaseProps.githubRepositoryUrl}/releases/tag/v${props.latestReleaseVersion}[${props.latestReleaseVersion}] - 2023-04-01
+					=== Added
+					* A new cold water dispenser.
+					* Skylights in the ceiling.
+
+					=== Fixed
+					* Milk in the refrigerator is now fresh.
+				`
+
+				const checkedRelease: Release = {
+					...release,
+					checks: ["sequential"],
+				}
+
+				it("raises an error", async () => {
+					await expect(
+						promoteAsciidocChangelog(originalContent, checkedRelease),
+					).rejects.toThrow(
+						`has latest release version ${props.latestReleaseVersion}, but was set to update to ${checkedRelease.version}`,
+					)
+				})
+			},
+		)
+
+		describe(`and the changelog is set to update to an existing latest release of ${release.version}`, () => {
+			const originalContent = dedent`
+				= Changelog
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v${release.version}\\...HEAD[Unreleased]
+				=== Added
+				* A new shower mode: \`jet-stream\`.
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v0.0.1\\...v${release.version}[${release.version}] - 2021-06-11
+				=== Changed
+				* The office is now open 24/7.
+
+				=== Removed
+				* Dust on the floor.
+
+				== ${releaseProps.githubRepositoryUrl}/releases/tag/v0.0.1[0.0.1] - 2021-05-04
+				=== Added
+				* Soft toilet paper.
+				* Ambient music.
+			`
+
+			const checkedRelease: Release = {
+				...release,
+				checks: ["sequential"],
+			}
+
+			it("raises an error", async () => {
+				await expect(
+					promoteAsciidocChangelog(originalContent, checkedRelease),
+				).rejects.toThrow(
+					`already contains release version ${checkedRelease.version}`,
+				)
+			})
+		})
+
+		describe(`and the changelog is set to update to an existing previous release of ${release.version}`, () => {
+			const originalContent = dedent`
+				= Changelog
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v10.0.0\\...HEAD[Unreleased]
+				=== Added
+				* A new shower mode: \`jet-stream\`.
+
+				== ${releaseProps.githubRepositoryUrl}/compare/v${release.version}\\...v10.0.0[10.0.0] - 2021-06-11
+				=== Changed
+				* The office is now open 24/7.
+
+				=== Removed
+				* Dust on the floor.
+
+				== ${releaseProps.githubRepositoryUrl}/releases/tag/v${release.version}[${release.version}] - 2021-05-04
+				=== Added
+				* Soft toilet paper.
+				* Ambient music.
+			`
+
+			const checkedRelease: Release = {
+				...release,
+				checks: ["sequential"],
+			}
+
+			it("raises an error", async () => {
+				await expect(
+					promoteAsciidocChangelog(originalContent, checkedRelease),
+				).rejects.toThrow(
+					`already contains release version ${checkedRelease.version}`,
+				)
 			})
 		})
 	},
