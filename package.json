@@ -37,14 +37,16 @@
 		"fmt": "biome check --write",
 		"no-verify": "pnpm lefthook uninstall",
 		"ready": "pnpm install && pnpm lefthook install",
-		"test": "vitest run",
-		"vi": "vitest watch --ui"
+		"test": "CI=1 vitest run",
+		"vi": "CI=1 vitest watch --ui"
 	},
 	"dependencies": {
+		"ansis": "3.3.1",
 		"fast-glob": "3.3.2",
 		"tslib": "2.6.3"
 	},
 	"// dependencies": {
+		"ansis": "This library formats console output.",
 		"fast-glob": "This library executes glob patterns in the file system.",
 		"tslib": "This library optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},

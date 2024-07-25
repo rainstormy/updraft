@@ -1,62 +1,57 @@
 import { usageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import { dedent } from "+utilities/StringUtilities"
+import { bold, cyan, yellow } from "ansis"
 import { expect, it } from "vitest"
 
 it("is a list of program arguments and options", () => {
 	expect(usageInstructions).toBe(dedent`
-		Usage: updraft [options]
+		${bold`Usage:`} updraft [options]
 
 		This tool prepares a repository for an upcoming release by updating changelogs
 		and bumping version numbers in package.json files.
 
 		Supported file formats:
-		  - CHANGELOG.md and CHANGELOG.adoc in Keep a Changelog format.
-		  - package.json.
+		  - ${yellow`CHANGELOG.md`} and ${yellow`CHANGELOG.adoc`} in Keep a Changelog format.
+		  - ${yellow`package.json`}.
 
 		Options:
-		  --check-sequential-release     Check if --release-version is a valid increment
-		                                 from the latest version specified in each file
-		                                 to be updated.
+		  ${cyan.bold`--check-sequential-release`}
+		      Verify that ${cyan`--release-version`} specifies a valid increment from the latest
+		      version detected in each file to be updated.
 
+		  ${cyan`${bold`--files`} <pattern-1> <pattern-2> <pattern-3>...`}
+		      Update the files matching the specified glob patterns whenever
+		      ${cyan`--release-version`} is specified.
 
-		  --files <patterns>             Update files matching the glob patterns
-		                                 whenever --release-version is specified.
+		  ${cyan.bold`--help`}
+		      Display this help screen and exit.
 
-		                                 Use whitespace to separate multiple patterns:
-		                                 <pattern-1> <pattern-2> <pattern-3>
+		  ${cyan`${bold`--prerelease-files`} <pattern-1> <pattern-2> <pattern-3>...`}
+		      Update the files matching the specified glob patterns only when
+		      ${cyan`--release-version`} has a ${yellow`-prerelease`} or ${yellow`+buildinfo`} segment.
 
+		  ${cyan`${bold`--release-files`} <pattern-1> <pattern-2> <pattern-3>...`}
+		      Update the files matching the specified glob patterns only when
+		      ${cyan`--release-version`} does not have a ${yellow`-prerelease`} or ${yellow`+buildinfo`} segment.
 
-		  --help                         Display this help screen and exit.
+		  ${cyan`${bold`--release-version`} <major.minor.patch[-prerelease][+buildinfo]>`}
+		      The semantic version number (SemVer) of the next release. The ${yellow`-prerelease`}
+		      and ${yellow`+buildinfo`} segments are optional.
+		      It accepts any input containing a substring that is a semantic version
+		      number, e.g. ${yellow`v2.0.0`} or ${yellow`release/1.5.0-rc.0`}.
 
-
-		  --prerelease-files <patterns>  Update files matching the glob patterns only
-		                                 when --release-version contains a [-prerelease]
-		                                 or [+buildinfo] segment.
-
-		                                 Use whitespace to separate multiple patterns:
-		                                 <pattern-1> <pattern-2> <pattern-3>
-
-
-		  --release-files <patterns>     Update files matching the glob patterns only
-		                                 when --release-version does not contain a
-		                                 [-prerelease] or [+buildinfo] segment.
-
-		                                 Use whitespace to separate multiple patterns:
-		                                 <pattern-1> <pattern-2> <pattern-3>
-
-
-		  --release-version <version>    The semantic version of the upcoming release.
-
-		                                 Expected format (optional parts in brackets):
-		                                 [v]major.minor.patch[-prerelease][+buildinfo]
-
-
-		  --version                      Display the version of this tool and exit.
+		  ${cyan.bold`--version`}
+		      Display the version of this tool and exit.
 	`)
 })
 
 it("fits within 80 columns", () => {
-	const lines = usageInstructions.split("\n")
+	const usageInstructionsWithoutColorCodes = usageInstructions.replace(
+		// biome-ignore lint/suspicious/noControlCharactersInRegex: We use control characters to detect ANSI colour codes.
+		/\u001b\[.*?m/g,
+		"",
+	)
+	const lines = usageInstructionsWithoutColorCodes.split("\n")
 
 	for (const line of lines) {
 		expect(line.length).toBeLessThanOrEqual(80)

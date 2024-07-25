@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      ansis:
+        specifier: 3.3.1
+        version: 3.3.1
       fast-glob:
         specifier: 3.3.2
         version: 3.3.2
@@ -424,6 +427,10 @@ packages:
   ansi-styles@5.2.0:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
+
+  ansis@3.3.1:
+    resolution: {integrity: sha512-dW/sqnbVeWXW1UMRyKGHiJj+vBrlnnDcvyNMDB8BBI4Gu0tsohweIkvcqb3bNNwcVn70LTyvvnGgjUzUVFnK6Q==}
+    engines: {node: '>=15'}
 
   assertion-error@1.1.0:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
@@ -1206,6 +1213,8 @@ snapshots:
   acorn@8.12.1: {}
 
   ansi-styles@5.2.0: {}
+
+  ansis@3.3.1: {}
 
   assertion-error@1.1.0: {}
 
