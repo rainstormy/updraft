@@ -45,7 +45,7 @@
 		"vi": "CI=1 vitest watch --ui"
 	},
 	"dependencies": {
-		"ansis": "3.3.1",
+		"ansis": "3.3.2",
 		"fast-glob": "3.3.2",
 		"tslib": "2.6.3"
 	},
@@ -56,12 +56,12 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
-		"@types/node": "20.14.11",
+		"@types/node": "20.14.12",
 		"@vitest/coverage-v8": "1.6.0",
 		"@vitest/ui": "1.6.0",
-		"lefthook": "1.7.2",
-		"typescript": "5.5.3",
-		"vite": "5.3.4",
+		"lefthook": "1.7.9",
+		"typescript": "5.5.4",
+		"vite": "5.3.5",
 		"vitest": "1.6.0"
 	},
 	"// devDependencies": {
