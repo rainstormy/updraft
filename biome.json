@@ -45,9 +45,12 @@
 	},
 	"overrides": [
 		{
-			"include": ["entry.cli.js", "main.ts"],
+			"include": ["bin/updraft.js", "src/index.ts"],
 			"linter": {
 				"rules": {
+					"performance": {
+						"noBarrelFile": "off"
+					},
 					"style": {
 						"useFilenamingConvention": {
 							"level": "error",

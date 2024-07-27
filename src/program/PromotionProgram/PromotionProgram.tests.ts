@@ -4,7 +4,6 @@ import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 import { injectTodayMock } from "+adapters/Today/Today.mock"
 
 import type { Files } from "+adapters/FileSystem/File"
-import { mainProgram } from "+program/Program"
 import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
@@ -39,6 +38,7 @@ import {
 	anUnsupportedFileA,
 	anUnsupportedFileB,
 } from "+program/PromotionProgram/PromotionProgram.testdata"
+import { updraftProgram } from "+program/UpdraftProgram"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 import type { DateString } from "+utilities/types/DateString"
 import { beforeEach, describe, expect, it } from "vitest"
@@ -68,7 +68,7 @@ describe.each`
 
 		beforeEach(async () => {
 			today.mockImplementation(() => props.today)
-			actualExitCode = await mainProgram(props.args.split(" "))
+			actualExitCode = await updraftProgram(props.args.split(" "))
 		})
 
 		it("returns an exit code of 0", () => {
@@ -126,7 +126,7 @@ describe.each`
 		beforeEach(async () => {
 			today.mockImplementation(() => props.today)
 			readMatchingFiles.mockImplementation(async () => []) // No matched files.
-			actualExitCode = await mainProgram(props.args.split(" "))
+			actualExitCode = await updraftProgram(props.args.split(" "))
 		})
 
 		it("returns an exit code of 0", () => {
@@ -205,7 +205,7 @@ describe.each`
 		beforeEach(async () => {
 			today.mockImplementation(() => props.today)
 			readMatchingFiles.mockImplementation(async () => props.files)
-			actualExitCode = await mainProgram(props.args.split(" "))
+			actualExitCode = await updraftProgram(props.args.split(" "))
 		})
 
 		it("returns an exit code of 1", () => {
@@ -257,7 +257,7 @@ describe.each`
 		beforeEach(async () => {
 			today.mockImplementation(() => props.today)
 			readMatchingFiles.mockImplementation(async () => props.files)
-			actualExitCode = await mainProgram(props.args.split(" "))
+			actualExitCode = await updraftProgram(props.args.split(" "))
 		})
 
 		it("returns an exit code of 0", () => {
@@ -298,7 +298,7 @@ describe.each`
 		beforeEach(async () => {
 			today.mockImplementation(() => props.today)
 			readMatchingFiles.mockImplementation(async () => props.files)
-			actualExitCode = await mainProgram(props.args.split(" "))
+			actualExitCode = await updraftProgram(props.args.split(" "))
 		})
 
 		it("returns an exit code of 0", () => {
@@ -337,7 +337,7 @@ describe.each`
 			readMatchingFiles.mockImplementation(async () => {
 				throw new Error(props.expectedError)
 			})
-			actualExitCode = await mainProgram(props.args.split(" "))
+			actualExitCode = await updraftProgram(props.args.split(" "))
 		})
 
 		it("returns an exit code of 1", () => {
@@ -375,7 +375,7 @@ describe.each`
 			writeFiles.mockImplementation(async () => {
 				throw new Error(props.expectedError)
 			})
-			actualExitCode = await mainProgram(props.args.split(" "))
+			actualExitCode = await updraftProgram(props.args.split(" "))
 		})
 
 		it("returns an exit code of 1", () => {

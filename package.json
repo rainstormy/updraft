@@ -23,14 +23,18 @@
 	"license": "MIT",
 	"author": "Steffen Diswal",
 	"type": "module",
-	"bin": "src/entry.cli.js",
-	"files": ["dist/main.js", "src/entry.cli.js"],
+	"bin": {
+		"updraft": "bin/updraft.js"
+	},
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": ["bin/", "dist/"],
 	"packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
 	"engines": {
 		"node": ">=20.0.0"
 	},
 	"scripts": {
-		"build": "vite build --ssr src/main.ts",
+		"build": "vite build --ssr src/index.ts",
 		"check": "pnpm check.format && pnpm check.types",
 		"check.format": "biome check --error-on-warnings",
 		"check.types": "tsc",

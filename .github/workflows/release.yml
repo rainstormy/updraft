@@ -57,18 +57,10 @@ jobs:
         #
       - name: Update release artifacts
         # Run the newest version of Updraft on itself.
-        # Use double quotes to enclose a space-separated list of files to ensure correct shell expansion.
         # language=sh
-        run: |
-          VERSION=$(echo "$RAW_VERSION" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?')
-          if [[ "$VERSION" == *'-'* || "$VERSION" == *'+'* ]]; then
-            FILES="package.json"
-          else
-            FILES="CHANGELOG.adoc package.json"
-          fi
-          node ./src/entry.cli.js --files $FILES --release-version $VERSION
+        run: node ./bin/updraft.js --files 'package.json' --release-files 'CHANGELOG.md' --check-sequential-release --release-version $VERSION
         env:
-          RAW_VERSION: ${{ inputs.version }}
+          VERSION: ${{ inputs.version }}
         #
       - name: Use Nimbus (Bot) in Git
         uses: rainstormy-actions/rainstorm-release/bot-nimbus@9317ddb0235eac4f442e89565d0b5dec80135842 # https://github.com/rainstormy-actions/rainstorm-release
