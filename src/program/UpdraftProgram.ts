@@ -30,7 +30,7 @@ const schema = defineOptions({
 	},
 })
 
-export async function mainProgram(args: Array<string>): Promise<ExitCode> {
+export async function updraftProgram(args: Array<string>): Promise<ExitCode> {
 	if (args.length === 0 || args.includes("--help")) {
 		return usageInstructionsProgram()
 	}

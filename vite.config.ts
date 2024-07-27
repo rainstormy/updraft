@@ -8,7 +8,7 @@ const projectDirectory = joinPath(fileURLToPath(import.meta.url), "..")
 export default defineConfig(() => ({
 	build: {
 		emptyOutDir: true,
-		minify: "esbuild" as const,
+		minify: false,
 		reportCompressedSize: false,
 	},
 	cacheDir: inProjectDirectory("node_modules/.cache/"),

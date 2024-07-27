@@ -13,6 +13,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - New option: `--check-sequential-release`.
 - New option: `--prerelease-files`.
 - New option: `--release-files`.
+- An ESM export of the main program entrypoint.
 
 ### Changed
 - Add a trailing newline character in the output files.

@@ -66,7 +66,7 @@ jobs:
           else
             FILES="CHANGELOG.adoc package.json"
           fi
-          node ./src/entry.cli.js --files $FILES --release-version $VERSION
+          node ./bin/updraft.js --files $FILES --release-version $VERSION
         env:
           RAW_VERSION: ${{ inputs.version }}
         #
