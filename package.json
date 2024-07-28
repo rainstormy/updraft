@@ -35,14 +35,14 @@
 	},
 	"scripts": {
 		"build": "vite build --ssr src/index.ts",
-		"check": "pnpm check.format && pnpm check.types",
-		"check.format": "biome check --error-on-warnings",
+		"check": "pnpm check.fmt && pnpm check.types",
+		"check.fmt": "biome check --error-on-warnings",
 		"check.types": "tsc",
 		"fmt": "biome check --write",
-		"no-verify": "pnpm lefthook uninstall",
-		"ready": "pnpm install && pnpm lefthook install",
+		"postinstall": "lefthook install",
 		"test": "CI=1 vitest run",
-		"vi": "CI=1 vitest watch --ui"
+		"vi": "CI=1 vitest watch --ui",
+		"yolo": "lefthook uninstall"
 	},
 	"dependencies": {
 		"ansis": "3.3.2",
