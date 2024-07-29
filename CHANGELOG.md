@@ -7,6 +7,8 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.1.0] - 2024-07-29
 ### Added
 - Support for Markdown changelogs
   in [Keep a Changelog](https://keepachangelog.com/en/1.1.0) format.
@@ -43,5 +45,6 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   in [Keep a Changelog](https://keepachangelog.com/en/1.1.0) format.
 - Support for package.json files.
 
-[unreleased]: https://github.com/rainstormy/updraft/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/rainstormy/updraft/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/rainstormy/updraft/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/rainstormy/updraft/releases/tag/v1.0.0
