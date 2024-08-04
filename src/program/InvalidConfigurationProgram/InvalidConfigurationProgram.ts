@@ -3,10 +3,8 @@ import type { ExitCode } from "+utilities/ErrorUtilities"
 
 export async function invalidConfigurationProgram(
 	errorMessage: string,
+	usageInstructionsReminder: string,
 ): Promise<ExitCode> {
-	printError(`${errorMessage}\n${usageInstructionsReminder}`)
+	printError(`${errorMessage}${usageInstructionsReminder}`)
 	return 2
 }
-
-const usageInstructionsReminder =
-	"For usage instructions, please run the program with the --help option."

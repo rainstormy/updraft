@@ -37,14 +37,23 @@ export async function updraftProgram(args: Array<string>): Promise<ExitCode> {
 	if (args.includes("--version")) {
 		return toolVersionProgram()
 	}
+	return updraftCoreProgram(
+		args,
+		"\nFor usage instructions, please run the program with the --help option.",
+	)
+}
 
+export async function updraftCoreProgram(
+	args: Array<string>,
+	usageInstructionsReminder = "",
+): Promise<ExitCode> {
 	let parsedArgs: Record<keyof typeof schema, Array<string> | undefined>
 
 	try {
 		parsedArgs = parseArgs(schema, args)
 	} catch (error) {
 		assertError(error)
-		return invalidConfigurationProgram(error.message)
+		return invalidConfigurationProgram(error.message, usageInstructionsReminder)
 	}
 
 	const checkSequentialRelease =
@@ -57,6 +66,7 @@ export async function updraftProgram(args: Array<string>): Promise<ExitCode> {
 	if (files.length + prereleaseFiles.length + releaseFiles.length === 0) {
 		return invalidConfigurationProgram(
 			"--files, --release-files, or --prerelease-files is required.",
+			usageInstructionsReminder,
 		)
 	}
 
@@ -65,6 +75,7 @@ export async function updraftProgram(args: Array<string>): Promise<ExitCode> {
 	if (semanticReleaseVersion === null) {
 		return invalidConfigurationProgram(
 			`--release-version has an invalid value '${releaseVersion}'.`,
+			usageInstructionsReminder,
 		)
 	}
 
