@@ -56,3 +56,8 @@ jobs:
         with:
           access-level: public
           npm-auth-token: ${{ secrets.BOT_NIMBUS_NPM_TOKEN }}
+          packagejson-excluded-fields: |
+            packageManager
+            scripts
+            // dependencies
+            // devDependencies
