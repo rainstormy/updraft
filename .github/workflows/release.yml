@@ -39,12 +39,12 @@ jobs:
   pull-request:
     name: Pull request
     needs: quality-assurance
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions: { }
     steps:
       - name: Check out the repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # https://github.com/actions/checkout/releases/tag/v4.1.7
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           # Use a separate access token with permission to commit and push.
           token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
@@ -63,14 +63,14 @@ jobs:
           VERSION: ${{ inputs.version }}
         #
       - name: Use Nimbus (Bot) in Git
-        uses: rainstormy-actions/rainstorm-release/bot-nimbus@9317ddb0235eac4f442e89565d0b5dec80135842 # https://github.com/rainstormy-actions/rainstorm-release
+        uses: rainstormy-actions/rainstorm-release/bot-nimbus@9317ddb0235eac4f442e89565d0b5dec80135842
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
           __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
       - name: Create a release-triggering pull request in GitHub
-        uses: rainstormy-actions/release/pr@f27c642f46a7c4c6125f6714756305420007537f # https://github.com/rainstormy-actions/release/releases/tag/v1.0.0
+        uses: rainstormy-actions/release/pr@f27c642f46a7c4c6125f6714756305420007537f # v1.0.0
         with:
           gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
           version: ${{ inputs.version }}
