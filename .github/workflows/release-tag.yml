@@ -28,20 +28,20 @@ jobs:
     permissions: { }
     steps:
       - name: Check out the repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # https://github.com/actions/checkout/releases/tag/v4.1.7
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           # Use a separate access token to allow the push tag event in this workflow to trigger the subsequent `release-github.yml` and `release-npm.yml` workflows.
           # https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
           token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
         #
       - name: Use Nimbus (Bot) in Git
-        uses: rainstormy-actions/rainstorm-release/bot-nimbus@9317ddb0235eac4f442e89565d0b5dec80135842 # https://github.com/rainstormy-actions/rainstorm-release
+        uses: rainstormy-actions/rainstorm-release/bot-nimbus@9317ddb0235eac4f442e89565d0b5dec80135842
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
           __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
       - name: Create a semantic version tag in Git
-        uses: rainstormy-actions/release/tag@f27c642f46a7c4c6125f6714756305420007537f # https://github.com/rainstormy-actions/release/releases/tag/v1.0.0
+        uses: rainstormy-actions/release/tag@f27c642f46a7c4c6125f6714756305420007537f # v1.0.0
         with:
           version: ${{ github.head_ref }}

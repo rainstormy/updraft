@@ -43,7 +43,7 @@ jobs:
       id-token: write # Allow npm to publish the package with provenance.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # https://github.com/actions/checkout/releases/tag/v4.1.7
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         #
       - name: Restore build artifacts
         uses: ./.github/actions/build-artifacts
@@ -52,7 +52,7 @@ jobs:
         uses: ./.github/actions/pnpm
         #
       - name: Publish the package to npm
-        uses: rainstormy-actions/release/npm@f27c642f46a7c4c6125f6714756305420007537f # https://github.com/rainstormy-actions/release/releases/tag/v1.0.0
+        uses: rainstormy-actions/release/npm@f27c642f46a7c4c6125f6714756305420007537f # v1.0.0
         with:
           access-level: public
           npm-auth-token: ${{ secrets.BOT_NIMBUS_NPM_TOKEN }}
