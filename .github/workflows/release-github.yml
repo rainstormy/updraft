@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         #
       - name: Create a draft GitHub release
-        uses: rainstormy-actions/release/github@f27c642f46a7c4c6125f6714756305420007537f # v1.0.0
+        uses: rainstormy-actions/release/github@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
         with:
           gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
           version: ${{ github.ref_name }}
