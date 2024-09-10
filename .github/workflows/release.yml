@@ -70,7 +70,7 @@ jobs:
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
       - name: Create a release-triggering pull request in GitHub
-        uses: rainstormy-actions/release/pr@f27c642f46a7c4c6125f6714756305420007537f # v1.0.0
+        uses: rainstormy-actions/release/pr@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
         with:
           gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
           version: ${{ inputs.version }}
