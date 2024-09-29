@@ -252,11 +252,11 @@ export function aPromotableMarkdownChangelogA(
 			and this project adheres
 			to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-			## [Unreleased](https://github.com/rainstormy-actions/release/compare/v2.0.0-rc.1...HEAD)
+			## [Unreleased](https://github.com/rainstormy/release/compare/v2.0.0-rc.1...HEAD)
 			### Changed
 			- The fruit basket is now refilled every day.
 
-			## [2.0.0-rc.1](https://github.com/rainstormy-actions/release/releases/tag/v2.0.0-rc.1) - 2023-12-03
+			## [2.0.0-rc.1](https://github.com/rainstormy/release/releases/tag/v2.0.0-rc.1) - 2023-12-03
 			### Added
 			- A new shiny fruit basket.
 		`,
@@ -278,13 +278,13 @@ export function aPromotedMarkdownChangelogA(
 			and this project adheres
 			to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-			## [Unreleased](https://github.com/rainstormy-actions/release/compare/v${releaseVersion}...HEAD)
+			## [Unreleased](https://github.com/rainstormy/release/compare/v${releaseVersion}...HEAD)
 
-			## [${releaseVersion}](https://github.com/rainstormy-actions/release/compare/v2.0.0-rc.1...v${releaseVersion}) - ${releaseDate}
+			## [${releaseVersion}](https://github.com/rainstormy/release/compare/v2.0.0-rc.1...v${releaseVersion}) - ${releaseDate}
 			### Changed
 			- The fruit basket is now refilled every day.
 
-			## [2.0.0-rc.1](https://github.com/rainstormy-actions/release/releases/tag/v2.0.0-rc.1) - 2023-12-03
+			## [2.0.0-rc.1](https://github.com/rainstormy/release/releases/tag/v2.0.0-rc.1) - 2023-12-03
 			### Added
 			- A new shiny fruit basket.
 		`}\n`,
