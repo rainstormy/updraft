@@ -58,7 +58,7 @@ jobs:
       - name: Update release artifacts
         # Run the newest version of Updraft on itself.
         # language=sh
-        run: node ./bin/updraft.js --files 'package.json' --release-files 'CHANGELOG.md' --check-sequential-release --release-version $VERSION
+        run: node ./dist/cli/index.js --files 'package.json' --release-files 'CHANGELOG.md' --check-sequential-release --release-version $VERSION
         env:
           VERSION: ${{ inputs.version }}
         #

@@ -24,17 +24,19 @@
 	"author": "Steffen Diswal",
 	"type": "module",
 	"bin": {
-		"updraft": "bin/updraft.js"
+		"updraft": "dist/cli/index.js"
 	},
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"files": ["bin/", "dist/"],
+	"main": "dist/lib/index.js",
+	"types": "dist/lib/index.d.ts",
+	"files": ["dist/cli/", "dist/lib/"],
 	"packageManager": "pnpm@9.11.0+sha256.1c0e33f70e5df9eede84a357bdfa0b1f9dba6e58194628d48a1055756f553754",
 	"engines": {
 		"node": ">=20.0.0"
 	},
 	"scripts": {
-		"build": "vite build --ssr src/index.ts",
+		"build": "pnpm /^build\\..*/",
+		"build.cli": "MODULE=cli vite build --outDir dist/cli/ --minify",
+		"build.lib": "MODULE=lib vite build --outDir dist/lib/",
 		"check": "pnpm check.fmt && pnpm check.types",
 		"check.fmt": "biome check --error-on-warnings",
 		"check.types": "tsc",
