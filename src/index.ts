@@ -1,1 +1,1 @@
-export { updraftProgram, updraftCoreProgram } from "+program/UpdraftProgram"
+export { updraftCliProgram, updraftProgram } from "+program/UpdraftCliProgram"

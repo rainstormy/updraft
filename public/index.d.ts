@@ -1,3 +1,6 @@
-export function updraftProgram(args: Array<string>): Promise<number>
+export declare function updraftCliProgram(args: Array<string>): Promise<number>
 
-export function updraftCoreProgram(args: Array<string>): Promise<number>
+export declare function updraftProgram(
+	args: Array<string>,
+	usageInstructionsReminder?: string,
+): Promise<number>

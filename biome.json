@@ -45,7 +45,7 @@
 	},
 	"overrides": [
 		{
-			"include": ["bin/updraft.js", "src/index.ts"],
+			"include": ["src/index.ts"],
 			"linter": {
 				"rules": {
 					"performance": {

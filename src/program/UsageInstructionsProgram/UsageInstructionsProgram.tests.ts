@@ -2,7 +2,7 @@
 import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
 import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 
-import { updraftProgram } from "+program/UpdraftProgram"
+import { updraftCliProgram } from "+program/UpdraftCliProgram"
 import { usageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 import { beforeEach, describe, expect, it } from "vitest"
@@ -23,7 +23,7 @@ describe.each`
 		let actualExitCode: ExitCode | null = null
 
 		beforeEach(async () => {
-			actualExitCode = await updraftProgram(props.helpScreenArgs)
+			actualExitCode = await updraftCliProgram(props.helpScreenArgs)
 		})
 
 		it("returns an exit code of 0", () => {

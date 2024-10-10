@@ -2,7 +2,7 @@
 	"editor.defaultFormatter": "biomejs.biome",
 	"javascript.preferences.importModuleSpecifier": "relative",
 	"search.exclude": {
-		"dist/": true,
+		"dist/lib/": true,
 		"node_modules/": true,
 		"pnpm-lock.yaml": true
 	},
