@@ -17,7 +17,6 @@
 			},
 			"style": {
 				"noImplicitBoolean": "off",
-				"noNamespace": "off",
 				"useConsistentArrayType": {
 					"level": "error",
 					"options": { "syntax": "generic" }
