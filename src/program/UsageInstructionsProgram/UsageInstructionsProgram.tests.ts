@@ -3,7 +3,7 @@ import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
 import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 
 import { updraftCliProgram } from "+program/UpdraftCliProgram"
-import { usageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
+import { getUsageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 import { beforeEach, describe, expect, it } from "vitest"
 
@@ -31,7 +31,7 @@ describe.each`
 		})
 
 		it("displays the usage instructions", () => {
-			expect(printMessage).toHaveBeenCalledWith(usageInstructions)
+			expect(printMessage).toHaveBeenCalledWith(getUsageInstructions())
 			expect(printMessage).toHaveBeenCalledTimes(1)
 		})
 

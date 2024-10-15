@@ -3,11 +3,12 @@ import type { ExitCode } from "+utilities/ErrorUtilities"
 import { bold, cyan, yellow } from "ansis"
 
 export async function usageInstructionsProgram(): Promise<ExitCode> {
-	printMessage(usageInstructions)
+	printMessage(getUsageInstructions())
 	return 0
 }
 
-export const usageInstructions = `${bold`Usage:`} updraft [options]
+export function getUsageInstructions(): string {
+	return `${bold`Usage:`} updraft [options]
 
 This tool prepares a repository for an upcoming release by updating changelogs
 and bumping version numbers in package.json files.
@@ -44,3 +45,4 @@ Options:
 
   ${cyan.bold`--version`}
       Display the version of this tool and exit.`
+}
