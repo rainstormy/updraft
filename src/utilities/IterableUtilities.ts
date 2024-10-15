@@ -3,3 +3,7 @@ export function notNullish<Value>(
 ): value is Value {
 	return value !== null && value !== undefined
 }
+
+export function notFalse<Value>(value: Value | false): value is Value {
+	return value !== false
+}

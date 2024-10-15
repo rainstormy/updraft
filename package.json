@@ -36,6 +36,7 @@
 	"scripts": {
 		"build": "pnpm /^build\\..*/",
 		"build.cli": "MODULE=cli vite build --outDir dist/cli/ --minify",
+		"build.gha": "MODULE=gha vite build --outDir dist/gha/ --minify",
 		"build.lib": "MODULE=lib vite build --outDir dist/lib/",
 		"check": "pnpm check.fmt && pnpm check.types",
 		"check.fmt": "biome check --error-on-warnings",

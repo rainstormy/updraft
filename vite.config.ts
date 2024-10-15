@@ -21,6 +21,12 @@ export default defineConfig(() => {
 			emptyOutDir: true,
 			minify: false,
 			reportCompressedSize: false,
+			rollupOptions: {
+				output: {
+					format: "esm",
+					entryFileNames: "index.js",
+				},
+			},
 		},
 		cacheDir: inProjectDirectory("node_modules/.cache/"),
 		plugins: [],
@@ -49,12 +55,20 @@ export default defineConfig(() => {
 						external: [...allDependencies, "+program/UpdraftCliProgram"],
 						input: inProjectDirectory("src/CommandLineInterface.ts"),
 						output: {
-							format: "esm",
-							entryFileNames: "index.js",
 							paths: {
 								"+program/UpdraftCliProgram": "../lib/index.js",
 							},
 						},
+					},
+				},
+			} satisfies UserConfig)
+		}
+		case "gha": {
+			return mergeConfig(baseConfiguration, {
+				build: {
+					rollupOptions: {
+						external: nodeDependencies,
+						input: inProjectDirectory("src/GitHubActions.ts"),
 					},
 				},
 			} satisfies UserConfig)
@@ -65,10 +79,6 @@ export default defineConfig(() => {
 					rollupOptions: {
 						external: allDependencies, // Prevents inlining the dependencies into the build artifacts.
 						input: inProjectDirectory("src/index.ts"),
-						output: {
-							format: "esm",
-							entryFileNames: "index.js",
-						},
 						preserveEntrySignatures: "allow-extension" as const, // Preserves the exports of `index.ts`.
 					},
 				},
