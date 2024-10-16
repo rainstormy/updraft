@@ -3,7 +3,7 @@ import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
 import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
 import { injectPackageJsonVersionMock } from "+adapters/PackageJsonVersion/PackageJsonVersion.mock"
 
-import { updraftProgram } from "+program/UpdraftProgram"
+import { updraftCliProgram } from "+program/UpdraftCliProgram"
 import type { ExitCode } from "+utilities/ErrorUtilities"
 import type { SemanticVersionString } from "+utilities/types/SemanticVersionString"
 import { beforeEach, describe, expect, it } from "vitest"
@@ -27,7 +27,7 @@ describe.each`
 
 		beforeEach(async () => {
 			packageJsonVersion.mockImplementation(() => props.toolVersion)
-			actualExitCode = await updraftProgram(props.toolVersionArgs)
+			actualExitCode = await updraftCliProgram(props.toolVersionArgs)
 		})
 
 		it("returns an exit code of 0", () => {

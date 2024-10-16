@@ -17,7 +17,6 @@
 			},
 			"style": {
 				"noImplicitBoolean": "off",
-				"noNamespace": "off",
 				"useConsistentArrayType": {
 					"level": "error",
 					"options": { "syntax": "generic" }
@@ -45,7 +44,7 @@
 	},
 	"overrides": [
 		{
-			"include": ["bin/updraft.js", "src/index.ts"],
+			"include": ["src/index.ts"],
 			"linter": {
 				"rules": {
 					"performance": {

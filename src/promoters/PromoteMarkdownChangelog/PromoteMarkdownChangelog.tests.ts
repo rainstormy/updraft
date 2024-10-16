@@ -9,7 +9,7 @@ describe.each`
 	releaseVersion      | releaseDate     | githubRepositoryUrl
 	${"0.12.7"}         | ${"2023-05-04"} | ${"https://github.com/rainstormy/updraft"}
 	${"1.0.0"}          | ${"2018-06-26"} | ${"https://github.com/spdiswal/coolciv"}
-	${"2.1.6"}          | ${"2022-07-01"} | ${"https://github.com/rainstormy-actions/release"}
+	${"2.1.6"}          | ${"2022-07-01"} | ${"https://github.com/rainstormy/release"}
 	${"10.12.9-beta.6"} | ${"2021-09-25"} | ${"https://github.com/rainstormy/github-action-validate-commit-messages"}
 `(
 	"when the new release is $releaseVersion on $releaseDate and the GitHub repository URL is $githubRepositoryUrl",

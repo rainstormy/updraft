@@ -3,7 +3,8 @@
 # https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
 # Build artifacts
-dist/
+dist/*
+!dist/gha/
 
 # Caches and third-party dependencies
 node_modules/

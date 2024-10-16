@@ -8,8 +8,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 ### Added
-- An ESM export of the program entrypoint without usage instructions and without
-  support for the `--help` and `--version` options.
+- A Node.js-based GitHub action: `rainstormy/updraft`.
+- An ESM export of the program entrypoint with usage instructions and support
+  for the `--help` and `--version` options.
+
+### Changed
+- The main program entrypoint no longer supports the `--help` and `--version`
+  options.
 
 ## [1.1.0] - 2024-07-29
 ### Added

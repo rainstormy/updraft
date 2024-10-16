@@ -21,6 +21,9 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
+      '@rainstormy/presets-typescript':
+        specifier: 1.0.0-alpha.0
+        version: 1.0.0-alpha.0(typescript@5.6.3)
       '@types/node':
         specifier: 20.16.5
         version: 20.16.5
@@ -300,6 +303,12 @@ packages:
 
   '@polka/url@1.0.0-next.25':
     resolution: {integrity: sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==}
+
+  '@rainstormy/presets-typescript@1.0.0-alpha.0':
+    resolution: {integrity: sha512-HB+Zcc2l8gENX6Q3d7FyL6tmlFf+Yj1L5fmneOyf6Shd0yAokdhWtOhtJsClbT7Wlh+BS5u0FhCJr7yQvQw8Rw==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      typescript: '>=5.5.2 <6.0.0'
 
   '@rollup/rollup-android-arm-eabi@4.21.2':
     resolution: {integrity: sha512-fSuPrt0ZO8uXeS+xP3b+yYTCBUd05MoSp2N/MFOgjhhUhMmchXlpTQrTpI8T+YAwAQuK7MafsCOxW7VrPMrJcg==}
@@ -1095,6 +1104,10 @@ snapshots:
       fastq: 1.17.1
 
   '@polka/url@1.0.0-next.25': {}
+
+  '@rainstormy/presets-typescript@1.0.0-alpha.0(typescript@5.6.3)':
+    dependencies:
+      typescript: 5.6.3
 
   '@rollup/rollup-android-arm-eabi@4.21.2':
     optional: true

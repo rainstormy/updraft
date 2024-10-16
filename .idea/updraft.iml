@@ -3,7 +3,9 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludePattern pattern="dist" />
+      <excludeFolder url="file://$MODULE_DIR$/dist/cli" />
+      <excludeFolder url="file://$MODULE_DIR$/dist/lib" />
+      <excludePattern pattern="pnpm-lock.yaml" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

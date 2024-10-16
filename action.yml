@@ -1,0 +1,47 @@
+name: Updraft
+description: >
+  Updates changelogs and bumps version numbers to prepare for an upcoming
+  release of the repository. It saves the changes to the files on the GitHub
+  Actions runner in the current workflow run, but it does not make any Git
+  commits or GitHub releases.
+author: Steffen Diswal
+
+inputs:
+  check-sequential-release:
+    description: >
+      A boolean indicating whether to verify that `release-version` specifies a
+      valid increment from the latest version detected in each file to be
+      updated.
+    required: false
+    default: 'false'
+  #
+  files:
+    description: >
+      A whitespace-separated list of glob patterns of files to update in every
+      release.
+    required: false
+  #
+  prerelease-files:
+    description: >
+      A whitespace-separated list of glob patterns of files to update in every
+      prerelease, i.e. only when `release-version` has a `-prerelease`
+      or `+buildinfo` segment.
+    required: false
+  #
+  release-files:
+    description: >
+      A whitespace-separated list of glob patterns of files to update in every
+      major, minor, and patch release, i.e. only when `release-version` does not
+      have a `-prerelease` or `+buildinfo` segment.
+    required: false
+  #
+  release-version:
+    description: >
+      A string that contains a substring with the semantic version number of the
+      next release on the form `<major.minor.patch[-prerelease][+buildinfo]>`.
+      The `-prerelease` and `+buildinfo` segments are optional.
+    required: true
+
+runs:
+  using: node20
+  main: dist/gha/index.js

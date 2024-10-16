@@ -1,7 +1,5 @@
 import { invalidConfigurationProgram } from "+program/InvalidConfigurationProgram/InvalidConfigurationProgram"
 import { promotionProgram } from "+program/PromotionProgram/PromotionProgram"
-import { toolVersionProgram } from "+program/ToolVersionProgram/ToolVersionProgram"
-import { usageInstructionsProgram } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import { defineOptions, parseArgs } from "+utilities/ArgsUtilities"
 import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
 import { notNullish } from "+utilities/IterableUtilities"
@@ -11,42 +9,18 @@ import {
 	isPrerelease,
 } from "+utilities/types/SemanticVersionString"
 
-const schema = defineOptions({
-	"--check-sequential-release": {
-		args: { min: 0, max: 0 },
-	},
-	"--files": {
-		args: { min: 1 },
-	},
-	"--prerelease-files": {
-		args: { min: 1 },
-	},
-	"--release-files": {
-		args: { min: 1 },
-	},
-	"--release-version": {
-		required: true,
-		args: { min: 1, max: 1 },
-	},
-})
-
-export async function updraftProgram(args: Array<string>): Promise<ExitCode> {
-	if (args.length === 0 || args.includes("--help")) {
-		return usageInstructionsProgram()
-	}
-	if (args.includes("--version")) {
-		return toolVersionProgram()
-	}
-	return updraftCoreProgram(
-		args,
-		"\nFor usage instructions, please run the program with the --help option.",
-	)
-}
-
-export async function updraftCoreProgram(
+export async function updraftProgram(
 	args: Array<string>,
 	usageInstructionsReminder = "",
 ): Promise<ExitCode> {
+	const schema = defineOptions({
+		"--check-sequential-release": { args: { min: 0, max: 0 } },
+		"--files": { args: { min: 1 } },
+		"--prerelease-files": { args: { min: 1 } },
+		"--release-files": { args: { min: 1 } },
+		"--release-version": { required: true, args: { min: 1, max: 1 } },
+	})
+
 	let parsedArgs: Record<keyof typeof schema, Array<string> | undefined>
 
 	try {

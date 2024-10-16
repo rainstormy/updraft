@@ -8,6 +8,24 @@
 		},
 		{
 			"type": "npm",
+			"script": "build.cli",
+			"problemMatcher": [],
+			"label": "build.cli"
+		},
+		{
+			"type": "npm",
+			"script": "build.gha",
+			"problemMatcher": [],
+			"label": "build.gha"
+		},
+		{
+			"type": "npm",
+			"script": "build.lib",
+			"problemMatcher": [],
+			"label": "build.lib"
+		},
+		{
+			"type": "npm",
 			"script": "check",
 			"problemMatcher": [],
 			"label": "check"

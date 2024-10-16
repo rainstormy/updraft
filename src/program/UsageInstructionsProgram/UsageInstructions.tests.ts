@@ -1,10 +1,10 @@
-import { usageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
+import { getUsageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
 import { dedent } from "+utilities/StringUtilities"
 import { bold, cyan, yellow } from "ansis"
 import { expect, it } from "vitest"
 
 it("is a list of program arguments and options", () => {
-	expect(usageInstructions).toBe(dedent`
+	expect(getUsageInstructions()).toBe(dedent`
 		${bold`Usage:`} updraft [options]
 
 		This tool prepares a repository for an upcoming release by updating changelogs
@@ -46,7 +46,7 @@ it("is a list of program arguments and options", () => {
 })
 
 it("fits within 80 columns", () => {
-	const usageInstructionsWithoutColorCodes = usageInstructions.replace(
+	const usageInstructionsWithoutColorCodes = getUsageInstructions().replace(
 		// biome-ignore lint/suspicious/noControlCharactersInRegex: We use control characters to detect ANSI colour codes.
 		/\u001b\[.*?m/g,
 		"",

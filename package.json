@@ -24,17 +24,20 @@
 	"author": "Steffen Diswal",
 	"type": "module",
 	"bin": {
-		"updraft": "bin/updraft.js"
+		"updraft": "dist/cli/index.js"
 	},
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"files": ["bin/", "dist/"],
+	"main": "dist/lib/index.js",
+	"types": "dist/lib/index.d.ts",
+	"files": ["dist/cli/", "dist/lib/"],
 	"packageManager": "pnpm@9.11.0+sha256.1c0e33f70e5df9eede84a357bdfa0b1f9dba6e58194628d48a1055756f553754",
 	"engines": {
 		"node": ">=20.0.0"
 	},
 	"scripts": {
-		"build": "vite build --ssr src/index.ts",
+		"build": "pnpm /^build\\..*/",
+		"build.cli": "MODULE=cli vite build --outDir dist/cli/ --minify",
+		"build.gha": "MODULE=gha vite build --outDir dist/gha/ --minify",
+		"build.lib": "MODULE=lib vite build --outDir dist/lib/",
 		"check": "pnpm check.fmt && pnpm check.types",
 		"check.fmt": "biome check --error-on-warnings",
 		"check.types": "tsc",
@@ -56,6 +59,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
+		"@rainstormy/presets-typescript": "1.0.0-alpha.0",
 		"@types/node": "20.16.5",
 		"@vitest/coverage-v8": "1.6.0",
 		"@vitest/ui": "1.6.0",
@@ -66,6 +70,7 @@
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
+		"@rainstormy/presets-typescript": "This is a set of predefined TypeScript configurations.",
 		"@types/node": "These type definitions cover Node.js modules.",
 		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
 		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",
