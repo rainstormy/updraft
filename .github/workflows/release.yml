@@ -63,7 +63,7 @@ jobs:
           VERSION: ${{ inputs.version }}
         #
       - name: Use Nimbus (Bot) in Git
-        uses: rainstormy/rainstorm-release/bot-nimbus@5aa67a14e95403e7db0a7a43f8e18c1cdd51ba5f
+        uses: rainstormy/rainstorm-release/bot-nimbus@5aa67a14e95403e7db0a7a43f8e18c1cdd51ba5f # v1.0.0
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
           __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
