@@ -1,3 +1,4 @@
+import process from "node:process"
 import { notFalse } from "+utilities/IterableUtilities"
 import { toStringArray } from "+utilities/StringUtilities"
 
