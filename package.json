@@ -50,7 +50,7 @@
 	"dependencies": {
 		"ansis": "3.3.2",
 		"fast-glob": "3.3.2",
-		"tslib": "2.8.0"
+		"tslib": "2.8.1"
 	},
 	"// dependencies": {
 		"ansis": "This library formats console output.",
