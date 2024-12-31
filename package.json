@@ -59,6 +59,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@rainstormy/presets-biome": "1.0.0-alpha.3",
 		"@rainstormy/presets-typescript": "1.0.1",
 		"@types/node": "20.17.10",
 		"@vitest/coverage-v8": "2.1.8",
@@ -70,7 +71,8 @@
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
-		"@rainstormy/presets-typescript": "This is a set of predefined TypeScript configurations.",
+		"@rainstormy/presets-biome": "This library provides predefined, opinionated Biome configurations.",
+		"@rainstormy/presets-typescript": "This library provides predefined, opinionated TypeScript configurations.",
 		"@types/node": "These type definitions cover Node.js modules.",
 		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
 		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",

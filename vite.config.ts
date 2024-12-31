@@ -112,10 +112,10 @@ function copyFilePlugin(sourcePathname: string): Plugin {
 
 	return {
 		name: "copy-file",
-		configResolved: (configuration) => {
+		configResolved: (configuration): void => {
 			outputDirectory = configuration.build.outDir
 		},
-		closeBundle: async () => {
+		closeBundle: async (): Promise<void> => {
 			const outputPathname = joinPath(outputDirectory, basename(sourcePathname))
 			await copyFile(sourcePathname, outputPathname)
 		},

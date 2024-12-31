@@ -18,7 +18,9 @@ describe("when the package.json file does not have a 'version' field", () => {
 		date: "2023-10-01",
 		version: "1.0.0",
 	}
-	const throwingAction = () => promotePackageJson(originalContent, newRelease)
+
+	const throwingAction = (): Promise<string> =>
+		promotePackageJson(originalContent, newRelease)
 
 	it("raises an error", async () => {
 		await expect(throwingAction).rejects.toThrow("must have a 'version' field")
@@ -145,7 +147,9 @@ describe.each`
 			date: "2023-10-01",
 			version: props.nextVersion,
 		}
-		const throwingAction = () => promotePackageJson(originalContent, newRelease)
+
+		const throwingAction = (): Promise<string> =>
+			promotePackageJson(originalContent, newRelease)
 
 		it("raises an error", async () => {
 			await expect(throwingAction).rejects.toThrow(
@@ -179,7 +183,9 @@ describe.each`
 			date: "2023-10-01",
 			version: props.currentVersion,
 		}
-		const throwingAction = () => promotePackageJson(originalContent, newRelease)
+
+		const throwingAction = (): Promise<string> =>
+			promotePackageJson(originalContent, newRelease)
 
 		it("raises an error", async () => {
 			await expect(throwingAction).rejects.toThrow(
