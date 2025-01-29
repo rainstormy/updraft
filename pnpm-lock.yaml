@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       ansis:
-        specifier: 3.5.2
-        version: 3.5.2
+        specifier: 3.9.0
+        version: 3.9.0
       fast-glob:
         specifier: 3.3.3
         version: 3.3.3
@@ -468,8 +468,8 @@ packages:
     resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
     engines: {node: '>=12'}
 
-  ansis@3.5.2:
-    resolution: {integrity: sha512-5uGcUZRbORJeEppVdWfZOSybTMz+Ou+84HepgK081Yk5+pPMMzWf/XGxiAT6bfBqCghRB4MwBtYn0CHqINRVag==}
+  ansis@3.9.0:
+    resolution: {integrity: sha512-PcDrVe15ldexeZMsVLBAzBwF2KhZgaU0R+CHxH+x5kqn/pO+UWVBZJ+NEXMPpEOLUFeNsnNdoWYc2gwO+MVkDg==}
     engines: {node: '>=16'}
 
   assertion-error@2.0.1:
@@ -1269,7 +1269,7 @@ snapshots:
 
   ansi-styles@6.2.1: {}
 
-  ansis@3.5.2: {}
+  ansis@3.9.0: {}
 
   assertion-error@2.0.1: {}
 
