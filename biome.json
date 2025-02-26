@@ -7,16 +7,6 @@
 	"files": {
 		"ignore": ["dist/", "node_modules/"]
 	},
-	"linter": {
-		"rules": {
-			"suspicious": {
-				"noConsoleLog": "off"
-			},
-			"nursery": {
-				"noNestedTernary": "off"
-			}
-		}
-	},
 	"overrides": [
 		{
 			"include": [
