@@ -5,7 +5,9 @@
 		"@rainstormy/presets-typescript/es2023"
 	],
 	"compilerOptions": {
+		"erasableSyntaxOnly": true,
 		"incremental": true,
+		"libReplacement": false,
 		"paths": {
 			"+adapters/*": ["./src/adapters/*"],
 			"+promoters/*": ["./src/promoters/*"],
