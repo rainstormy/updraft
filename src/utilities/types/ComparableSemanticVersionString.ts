@@ -1,3 +1,4 @@
+import { assertNotNullish } from "+utilities/Assertions"
 import {
 	type SemanticVersionString,
 	semanticVersionRegex,
@@ -22,19 +23,21 @@ export function toComparableSemanticVersionString(
 ): ComparableSemanticVersionString {
 	const versionMatch = semanticVersionRegex.exec(version)
 
-	if (versionMatch === null || versionMatch.groups === undefined) {
-		throw new Error(`Expected a semantic version string, but got '${version}'.`)
+	if (!versionMatch?.groups) {
+		throw new Error(
+			`Expected a semantic version string, but it was '${version}'`,
+		)
 	}
 
 	const { major, minor, patch, prerelease, build } = versionMatch.groups
+	assertNotNullish(major, "major")
+	assertNotNullish(minor, "minor")
+	assertNotNullish(patch, "patch")
 
 	const incrementMatch =
 		prerelease !== undefined ? incrementRegex.exec(prerelease) : null
 
-	const increment =
-		incrementMatch !== null && incrementMatch.groups !== undefined
-			? incrementMatch.groups.increment
-			: null
+	const increment = incrementMatch?.groups?.increment ?? null
 
 	return {
 		major: Number.parseInt(major),

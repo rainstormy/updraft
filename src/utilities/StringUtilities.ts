@@ -1,3 +1,5 @@
+import { assertNotNullish } from "+utilities/Assertions"
+
 const leadingAndTrailingLinesRegex = /^\n+|\n+$/gu
 
 export function dedent(
@@ -10,8 +12,11 @@ export function dedent(
 				return segment
 			}
 
+			const interpolatedValue = interpolatedValues[index]
+			assertNotNullish(interpolatedValue, "interpolatedValue")
+
+			const interpolationLines = interpolatedValue.split("\n")
 			const indentBeforeInterpolation = extractIndent(lastLine(segment))
-			const interpolationLines = interpolatedValues[index].split("\n")
 
 			return segment + interpolationLines.join(`\n${indentBeforeInterpolation}`)
 		})

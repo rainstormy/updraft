@@ -1,3 +1,4 @@
+import { isNonEmptyArray } from "+utilities/Arrays"
 import { isSequentialUpgrade } from "+utilities/types/ComparableSemanticVersionString"
 
 export type SemanticVersionString =
@@ -24,15 +25,14 @@ export function checkSequentialRelease(
 	releaseVersion: SemanticVersionString,
 	previousReleaseVersions: Array<SemanticVersionString>,
 ): void {
-	if (previousReleaseVersions.length === 0) {
-		return
-	}
-	if (previousReleaseVersions.includes(releaseVersion)) {
-		throw new Error(`already contains release version ${releaseVersion}`)
-	}
-	if (!isSequentialUpgrade(previousReleaseVersions[0], releaseVersion)) {
-		throw new Error(
-			`has latest release version ${previousReleaseVersions[0]}, but was set to update to ${releaseVersion}`,
-		)
+	if (isNonEmptyArray(previousReleaseVersions)) {
+		if (previousReleaseVersions.includes(releaseVersion)) {
+			throw new Error(`already contains release version ${releaseVersion}`)
+		}
+		if (!isSequentialUpgrade(previousReleaseVersions[0], releaseVersion)) {
+			throw new Error(
+				`has latest release version ${previousReleaseVersions[0]}, but was set to update to ${releaseVersion}`,
+			)
+		}
 	}
 }

@@ -4,7 +4,11 @@ import { basename, join as joinPath, resolve as resolvePath } from "node:path"
 import process from "node:process"
 import { fileURLToPath } from "node:url"
 import type { Plugin } from "vite"
-import { type UserConfig, defineConfig, mergeConfig } from "vitest/config"
+import {
+	type ViteUserConfig as ViteConfig,
+	defineConfig,
+	mergeConfig,
+} from "vitest/config"
 import packageJson from "./package.json" assert { type: "json" }
 import tsconfigJson from "./tsconfig.json" assert { type: "json" }
 
@@ -16,7 +20,7 @@ export default defineConfig(() => {
 	]
 	const allDependencies = [...nodeDependencies, ...npmDependencies]
 
-	const baseConfiguration: UserConfig = {
+	const baseConfiguration: ViteConfig = {
 		build: {
 			emptyOutDir: true,
 			minify: false,
@@ -31,7 +35,7 @@ export default defineConfig(() => {
 		cacheDir: inProjectDirectory("node_modules/.cache/"),
 		plugins: [],
 		resolve: {
-			alias: getAliasesFromTsconfig(),
+			alias: tsconfigPathAliases(),
 		},
 		test: {
 			coverage: {
@@ -61,7 +65,7 @@ export default defineConfig(() => {
 						},
 					},
 				},
-			} satisfies UserConfig)
+			} satisfies ViteConfig)
 		}
 		case "gha": {
 			return mergeConfig(baseConfiguration, {
@@ -71,7 +75,7 @@ export default defineConfig(() => {
 						input: inProjectDirectory("src/GitHubActions.ts"),
 					},
 				},
-			} satisfies UserConfig)
+			} satisfies ViteConfig)
 		}
 		case "lib": {
 			return mergeConfig(baseConfiguration, {
@@ -83,22 +87,35 @@ export default defineConfig(() => {
 					},
 				},
 				plugins: [copyFilePlugin(inProjectDirectory("src/index.d.ts"))],
-			} satisfies UserConfig)
+			} satisfies ViteConfig)
 		}
 	}
 
 	return baseConfiguration
 })
 
-function getAliasesFromTsconfig(): Record<string, string> {
+function tsconfigPathAliases(): Record<string, string> {
 	return Object.fromEntries(
-		Object.entries(tsconfigJson.compilerOptions.paths).map(
-			([alias, [path]]) => [
+		Object.entries(tsconfigJson.compilerOptions.paths).map((entry) => {
+			assertSinglePath(entry)
+			const [alias, [path]] = entry
+			return [
 				alias.slice(0, -"/*".length),
 				inProjectDirectory(path.slice(0, -"/*".length)),
-			],
-		),
+			]
+		}),
 	)
+}
+
+function assertSinglePath(
+	entry: [alias: string, paths: Array<string>],
+): asserts entry is [alias: string, paths: [string]] {
+	const [alias, paths] = entry
+	if (paths.length !== 1) {
+		throw new Error(
+			`Path alias '${alias}' in 'tsconfig.json' must specify exactly one path, but has ${paths.length} paths`,
+		)
+	}
 }
 
 const projectDirectory = joinPath(fileURLToPath(import.meta.url), "..")

@@ -25,8 +25,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0(@biomejs/biome@1.9.4)
       '@rainstormy/presets-typescript':
-        specifier: 1.0.1
-        version: 1.0.1(typescript@5.8.3)
+        specifier: 1.1.0
+        version: 1.1.0(typescript@5.8.3)
       '@types/node':
         specifier: 20.17.30
         version: 20.17.30
@@ -330,8 +330,8 @@ packages:
     peerDependencies:
       '@biomejs/biome': '>=1.9.0 <1.10.0'
 
-  '@rainstormy/presets-typescript@1.0.1':
-    resolution: {integrity: sha512-eXY5oXU1b7ZZyvIrc6oV3tkKL5Lx8Z+NxwHvVCNCwfzuunU3CK5VsIFE2rsjOdvT8g9UjpoplSh4VT+TGsYU0A==}
+  '@rainstormy/presets-typescript@1.1.0':
+    resolution: {integrity: sha512-zoIdH83jWKt79OOI6ej9c4uM27AlVAQFlINECOUM5X7Li8Q9utkW3GFenKIUBLLDeUdn21etecZQaEIYO/QrCQ==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       typescript: '>=5.6.2 <6.0.0'
@@ -1183,7 +1183,7 @@ snapshots:
     dependencies:
       '@biomejs/biome': 1.9.4
 
-  '@rainstormy/presets-typescript@1.0.1(typescript@5.8.3)':
+  '@rainstormy/presets-typescript@1.1.0(typescript@5.8.3)':
     dependencies:
       typescript: 5.8.3
 
