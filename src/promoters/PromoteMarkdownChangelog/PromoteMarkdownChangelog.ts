@@ -35,7 +35,7 @@ export async function promoteMarkdownChangelog(
 	const trimmedUnreleasedBody =
 		unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? null
 
-	if (trimmedUnreleasedBody === null || trimmedUnreleasedBody === "") {
+	if (!trimmedUnreleasedBody) {
 		throw new Error("must have at least one item in the 'Unreleased' section")
 	}
 
@@ -52,11 +52,15 @@ export async function promoteMarkdownChangelog(
 	}
 
 	if (newRelease.checks.includes("sequential")) {
-		const previousReleaseVersionRegex = /\n## \[(\d+\.\d+\.\d+.*)\]\(/giu
+		const previousReleaseVersionRegex =
+			/\n## \[(?<version>\d+\.\d+\.\d+.*)\]\(/giu
 
 		const previousReleaseVersions = Array.from(
 			originalContent.matchAll(previousReleaseVersionRegex),
-			(match) => extractSemanticVersionString(match[1]),
+			(match) => {
+				const version = match.groups?.version
+				return version ? extractSemanticVersionString(version) : null
+			},
 		).filter(notNullish)
 
 		checkSequentialRelease(newRelease.version, previousReleaseVersions)

@@ -1,3 +1,4 @@
+import { assertNotNullish } from "+utilities/Assertions"
 import type { Release } from "+utilities/types/Release"
 import {
 	checkSequentialRelease,
@@ -16,11 +17,13 @@ export async function promotePackageJson(
 ): Promise<string> {
 	const versionFieldMatch = versionFieldRegex.exec(originalContent)
 
-	if (versionFieldMatch === null || versionFieldMatch.groups === undefined) {
+	if (!versionFieldMatch?.groups) {
 		throw new Error("must have a 'version' field")
 	}
 
 	const { version, whitespace } = versionFieldMatch.groups
+	assertNotNullish(version, "version")
+	assertNotNullish(whitespace, "whitespace")
 
 	if (newRelease.checks.includes("sequential")) {
 		const existingVersion = extractSemanticVersionString(version)
