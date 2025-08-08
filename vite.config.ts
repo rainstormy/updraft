@@ -38,12 +38,6 @@ export default defineConfig(() => {
 			alias: [{ find: /^#(.+)/, replacement: path("src/$1") }],
 		},
 		test: {
-			coverage: {
-				include: ["src/**/*.ts"],
-				exclude: ["src/**/*.tests.ts"],
-				provider: "v8" as const,
-				reportsDirectory: path("node_modules/.cache/vitest/coverage/"),
-			},
 			include: ["src/**/*.tests.ts"],
 			mockReset: true,
 		},
