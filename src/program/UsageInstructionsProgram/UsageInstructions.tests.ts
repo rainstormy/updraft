@@ -1,7 +1,7 @@
-import { getUsageInstructions } from "+program/UsageInstructionsProgram/UsageInstructionsProgram"
-import { dedent } from "+utilities/StringUtilities"
 import { bold, cyan, yellow } from "ansis"
 import { expect, it } from "vitest"
+import { getUsageInstructions } from "#program/UsageInstructionsProgram/UsageInstructionsProgram"
+import { dedent } from "#utilities/StringUtilities"
 
 it("is a list of program arguments and options", () => {
 	expect(getUsageInstructions()).toBe(dedent`

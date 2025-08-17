@@ -1,9 +1,9 @@
-import { assertNotNullish } from "+utilities/Assertions"
-import type { Release } from "+utilities/types/Release"
+import { assertNotNullish } from "#utilities/Assertions"
+import type { Release } from "#utilities/types/Release"
 import {
 	checkSequentialRelease,
 	extractSemanticVersionString,
-} from "+utilities/types/SemanticVersionString"
+} from "#utilities/types/SemanticVersionString"
 
 // Matches the `version` field.
 const versionFieldRegex = /"version":(?<whitespace>\s*)"(?<version>[^"]+)"/u

@@ -1,5 +1,5 @@
-import { isNonEmptyArray } from "+utilities/Arrays"
-import { isSequentialUpgrade } from "+utilities/types/ComparableSemanticVersionString"
+import { isNonEmptyArray } from "#utilities/Arrays"
+import { isSequentialUpgrade } from "#utilities/types/ComparableSemanticVersionString"
 
 export type SemanticVersionString =
 	| `${number}.${number}.${number}`

@@ -1,5 +1,5 @@
-import { printError } from "+adapters/Logger/Logger"
-import type { ExitCode } from "+utilities/ErrorUtilities"
+import { printError } from "#adapters/Logger/Logger"
+import type { ExitCode } from "#utilities/ErrorUtilities"
 
 export async function invalidConfigurationProgram(
 	errorMessage: string,

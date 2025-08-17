@@ -1,9 +1,9 @@
+import { describe, expect, it } from "vitest"
 import {
 	type SemanticVersionString,
 	extractSemanticVersionString,
 	isPrerelease,
-} from "+utilities/types/SemanticVersionString"
-import { describe, expect, it } from "vitest"
+} from "#utilities/types/SemanticVersionString"
 
 describe.each`
 	input                               | expectedSemanticVersionString

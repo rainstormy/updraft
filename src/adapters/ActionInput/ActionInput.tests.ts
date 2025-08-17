@@ -1,5 +1,5 @@
-import { getArgsFromActionInput } from "+adapters/ActionInput/ActionInput"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { getArgsFromActionInput } from "#adapters/ActionInput/ActionInput"
 
 describe.each`
 	checkSequentialRelease | files                                                            | prereleaseFiles                                     | releaseFiles                                        | releaseVersion              | expectedArgs

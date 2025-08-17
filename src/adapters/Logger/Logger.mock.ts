@@ -1,7 +1,7 @@
-import type { ModuleMock } from "+utilities/ModuleMock"
 import { vi } from "vitest"
+import type { ModuleMock } from "#utilities/ModuleMock"
 
-export type LoggerMock = ModuleMock<typeof import("+adapters/Logger/Logger")>
+export type LoggerMock = ModuleMock<typeof import("#adapters/Logger/Logger")>
 
 export function injectLoggerMock(): LoggerMock {
 	const mock = vi.hoisted<LoggerMock>(() => ({
@@ -10,6 +10,6 @@ export function injectLoggerMock(): LoggerMock {
 		printError: vi.fn(),
 	}))
 
-	vi.mock("+adapters/Logger/Logger", () => mock)
+	vi.mock("#adapters/Logger/Logger", () => mock)
 	return mock
 }
