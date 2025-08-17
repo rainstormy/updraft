@@ -1,9 +1,9 @@
-import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
-import { dedent } from "+utilities/StringUtilities"
-import type { DateString } from "+utilities/types/DateString"
-import type { Release } from "+utilities/types/Release"
-import type { SemanticVersionString } from "+utilities/types/SemanticVersionString"
 import { describe, expect, it } from "vitest"
+import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
+import { dedent } from "#utilities/StringUtilities"
+import type { DateString } from "#utilities/types/DateString"
+import type { Release } from "#utilities/types/Release"
+import type { SemanticVersionString } from "#utilities/types/SemanticVersionString"
 
 describe.each`
 	releaseVersion      | releaseDate     | githubRepositoryUrl

@@ -1,4 +1,4 @@
-import { assertNotNullish } from "+utilities/Assertions"
+import { assertNotNullish } from "#utilities/Assertions"
 
 const leadingAndTrailingLinesRegex = /^\n+|\n+$/gu
 

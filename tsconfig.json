@@ -9,10 +9,10 @@
 		"incremental": true,
 		"libReplacement": false,
 		"paths": {
-			"+adapters/*": ["./src/adapters/*"],
-			"+promoters/*": ["./src/promoters/*"],
-			"+program/*": ["./src/program/*"],
-			"+utilities/*": ["./src/utilities/*"]
+			"#adapters/*": ["./src/adapters/*"],
+			"#promoters/*": ["./src/promoters/*"],
+			"#program/*": ["./src/program/*"],
+			"#utilities/*": ["./src/utilities/*"]
 		},
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo"
 	},

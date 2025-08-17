@@ -1,10 +1,10 @@
+import { beforeEach, describe, expect, it } from "vitest"
 import {
 	type ComparableSemanticVersionString,
 	isSequentialUpgrade,
 	toComparableSemanticVersionString,
-} from "+utilities/types/ComparableSemanticVersionString"
-import type { SemanticVersionString } from "+utilities/types/SemanticVersionString"
-import { beforeEach, describe, expect, it } from "vitest"
+} from "#utilities/types/ComparableSemanticVersionString"
+import type { SemanticVersionString } from "#utilities/types/SemanticVersionString"
 
 describe.each`
 	version                          | expectedMajor | expectedMinor | expectedPatch | expectedPrereleaseLabel | expectedPrereleaseDelimiter | expectedPrereleaseIncrement | expectedBuild

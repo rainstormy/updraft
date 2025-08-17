@@ -1,17 +1,17 @@
-import type { File } from "+adapters/FileSystem/File"
-import { readMatchingFiles, writeFiles } from "+adapters/FileSystem/FileSystem"
-import { printError, printMessage, printWarning } from "+adapters/Logger/Logger"
-import { today } from "+adapters/Today/Today"
-import { promoteAsciidocChangelog } from "+promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
-import { promoteMarkdownChangelog } from "+promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
-import { promotePackageJson } from "+promoters/PromotePackageJson/PromotePackageJson"
-import { type ExitCode, assertError } from "+utilities/ErrorUtilities"
-import { isFulfilled, isRejected } from "+utilities/PromiseUtilities"
-import type { Release, ReleaseCheck } from "+utilities/types/Release"
+import type { File } from "#adapters/FileSystem/File"
+import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem"
+import { printError, printMessage, printWarning } from "#adapters/Logger/Logger"
+import { today } from "#adapters/Today/Today"
+import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
+import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
+import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson"
+import { type ExitCode, assertError } from "#utilities/ErrorUtilities"
+import { isFulfilled, isRejected } from "#utilities/PromiseUtilities"
+import type { Release, ReleaseCheck } from "#utilities/types/Release"
 import {
 	type SemanticVersionString,
 	isPrerelease,
-} from "+utilities/types/SemanticVersionString"
+} from "#utilities/types/SemanticVersionString"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,

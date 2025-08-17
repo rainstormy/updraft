@@ -1,9 +1,10 @@
 // Mock injection imports must be at the top, separated from the regular imports by a blank line.
-import { injectFileSystemMock } from "+adapters/FileSystem/FileSystem.mock"
-import { injectLoggerMock } from "+adapters/Logger/Logger.mock"
-import { injectTodayMock } from "+adapters/Today/Today.mock"
+import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mock"
+import { injectLoggerMock } from "#adapters/Logger/Logger.mock"
+import { injectTodayMock } from "#adapters/Today/Today.mock"
 
-import type { Files } from "+adapters/FileSystem/File"
+import { beforeEach, describe, expect, it } from "vitest"
+import type { Files } from "#adapters/FileSystem/File"
 import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
@@ -37,11 +38,10 @@ import {
 	anEmptyPackageJson,
 	anUnsupportedFileA,
 	anUnsupportedFileB,
-} from "+program/PromotionProgram/PromotionProgram.testdata"
-import { updraftCliProgram } from "+program/UpdraftCliProgram"
-import type { ExitCode } from "+utilities/ErrorUtilities"
-import type { DateString } from "+utilities/types/DateString"
-import { beforeEach, describe, expect, it } from "vitest"
+} from "#program/PromotionProgram/PromotionProgram.testdata"
+import { updraftCliProgram } from "#program/UpdraftCliProgram"
+import type { ExitCode } from "#utilities/ErrorUtilities"
+import type { DateString } from "#utilities/types/DateString"
 
 const { today } = injectTodayMock()
 const { printMessage, printWarning, printError } = injectLoggerMock()

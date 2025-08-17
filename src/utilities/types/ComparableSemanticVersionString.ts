@@ -1,8 +1,8 @@
-import { assertNotNullish } from "+utilities/Assertions"
+import { assertNotNullish } from "#utilities/Assertions"
 import {
 	type SemanticVersionString,
 	semanticVersionRegex,
-} from "+utilities/types/SemanticVersionString"
+} from "#utilities/types/SemanticVersionString"
 
 export type ComparableSemanticVersionString = {
 	major: number

@@ -39,6 +39,16 @@
 					}
 				}
 			}
+		},
+		{
+			"include": ["vite.config.ts"],
+			"linter": {
+				"rules": {
+					"performance": {
+						"useTopLevelRegex": "off"
+					}
+				}
+			}
 		}
 	]
 }

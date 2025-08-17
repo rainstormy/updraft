@@ -1,8 +1,8 @@
-import type { ModuleMock } from "+utilities/ModuleMock"
 import { vi } from "vitest"
+import type { ModuleMock } from "#utilities/ModuleMock"
 
 export type FileSystemMock = ModuleMock<
-	typeof import("+adapters/FileSystem/FileSystem")
+	typeof import("#adapters/FileSystem/FileSystem")
 >
 
 export function injectFileSystemMock(): FileSystemMock {
@@ -11,6 +11,6 @@ export function injectFileSystemMock(): FileSystemMock {
 		writeFiles: vi.fn(),
 	}))
 
-	vi.mock("+adapters/FileSystem/FileSystem", () => mock)
+	vi.mock("#adapters/FileSystem/FileSystem", () => mock)
 	return mock
 }

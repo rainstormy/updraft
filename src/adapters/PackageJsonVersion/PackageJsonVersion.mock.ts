@@ -1,8 +1,8 @@
-import type { ModuleMock } from "+utilities/ModuleMock"
 import { vi } from "vitest"
+import type { ModuleMock } from "#utilities/ModuleMock"
 
 export type PackageJsonVersionMock = ModuleMock<
-	typeof import("+adapters/PackageJsonVersion/PackageJsonVersion")
+	typeof import("#adapters/PackageJsonVersion/PackageJsonVersion")
 >
 
 export function injectPackageJsonVersionMock(): PackageJsonVersionMock {
@@ -10,6 +10,6 @@ export function injectPackageJsonVersionMock(): PackageJsonVersionMock {
 		packageJsonVersion: vi.fn(),
 	}))
 
-	vi.mock("+adapters/PackageJsonVersion/PackageJsonVersion", () => mock)
+	vi.mock("#adapters/PackageJsonVersion/PackageJsonVersion", () => mock)
 	return mock
 }
