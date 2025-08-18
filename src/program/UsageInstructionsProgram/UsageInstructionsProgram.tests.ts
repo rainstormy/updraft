@@ -1,7 +1,5 @@
-// Mock injection imports must be at the top, separated from the regular imports by a blank line.
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mock"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mock"
-
+import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks"
+import { injectLoggerMock } from "#adapters/Logger/Logger.mocks"
 import { beforeEach, describe, expect, it } from "vitest"
 import { updraftCliProgram } from "#program/UpdraftCliProgram"
 import { getUsageInstructions } from "#program/UsageInstructionsProgram/UsageInstructionsProgram"

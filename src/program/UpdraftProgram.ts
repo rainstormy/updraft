@@ -1,7 +1,7 @@
 import { invalidConfigurationProgram } from "#program/InvalidConfigurationProgram/InvalidConfigurationProgram"
 import { promotionProgram } from "#program/PromotionProgram/PromotionProgram"
 import { defineOptions, parseArgs } from "#utilities/ArgsUtilities"
-import { type ExitCode, assertError } from "#utilities/ErrorUtilities"
+import { assertError, type ExitCode } from "#utilities/ErrorUtilities"
 import { notNullish } from "#utilities/IterableUtilities"
 import type { ReleaseCheck } from "#utilities/types/Release"
 import {
@@ -11,7 +11,7 @@ import {
 
 export async function updraftProgram(
 	args: Array<string>,
-	usageInstructionsReminder = "",
+	usageInstructionsReminder?: string,
 ): Promise<ExitCode> {
 	const schema = defineOptions({
 		"--check-sequential-release": { args: { min: 0, max: 0 } },

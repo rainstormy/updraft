@@ -2,5 +2,7 @@
 
 import process, { argv } from "node:process"
 import { updraftCliProgram } from "#program/UpdraftCliProgram"
+import type { ExitCode } from "#utilities/ErrorUtilities"
 
-updraftCliProgram(argv.slice(2)).then(process.exit)
+const exitCode: ExitCode = await updraftCliProgram(argv.slice(2))
+process.exit(exitCode)

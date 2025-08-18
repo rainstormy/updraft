@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import {
-	type SemanticVersionString,
 	extractSemanticVersionString,
 	isPrerelease,
+	type SemanticVersionString,
 } from "#utilities/types/SemanticVersionString"
 
 describe.each`

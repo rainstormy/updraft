@@ -1,9 +1,7 @@
 import { notNullish } from "#utilities/IterableUtilities"
+import { checkSequentialRelease } from "#utilities/types/ComparableSemanticVersionString"
 import type { Release } from "#utilities/types/Release"
-import {
-	checkSequentialRelease,
-	extractSemanticVersionString,
-} from "#utilities/types/SemanticVersionString"
+import { extractSemanticVersionString } from "#utilities/types/SemanticVersionString"
 
 // Matches an unreleased section, including the heading and the body, which
 // spans the characters after the heading until the next '##' heading or until

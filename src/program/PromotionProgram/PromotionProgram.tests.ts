@@ -1,14 +1,17 @@
-// Mock injection imports must be at the top, separated from the regular imports by a blank line.
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mock"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mock"
-import { injectTodayMock } from "#adapters/Today/Today.mock"
-
+import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks"
+import { injectLoggerMock } from "#adapters/Logger/Logger.mocks"
+import { injectTodayMock } from "#adapters/Today/Today.mocks"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { Files } from "#adapters/FileSystem/File"
 import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
 	aNonPromotablePackageJson,
+	anEmptyAsciidocChangelog,
+	anEmptyMarkdownChangelog,
+	anEmptyPackageJson,
+	anUnsupportedFileA,
+	anUnsupportedFileB,
 	aPromotableAsciidocChangelogA,
 	aPromotableAsciidocChangelogB,
 	aPromotableAsciidocChangelogC,
@@ -33,11 +36,6 @@ import {
 	aPromotedPackageJsonB,
 	aPromotedPackageJsonC,
 	aPromotedPackageJsonD,
-	anEmptyAsciidocChangelog,
-	anEmptyMarkdownChangelog,
-	anEmptyPackageJson,
-	anUnsupportedFileA,
-	anUnsupportedFileB,
 } from "#program/PromotionProgram/PromotionProgram.testdata"
 import { updraftCliProgram } from "#program/UpdraftCliProgram"
 import type { ExitCode } from "#utilities/ErrorUtilities"
@@ -59,11 +57,7 @@ describe.each`
 	${"2020-11-27"} | ${"--release-files CHANGELOG.md --release-version release/0.4.0-next+ad88e779 --release-files package.json"} | ${"No files set to be updated in release version 0.4.0-next+ad88e779, as it is a prerelease."}
 `(
 	"when there are no files set to be updated: $args",
-	(props: {
-		today: DateString
-		args: string
-		expectedMessage: string
-	}) => {
+	(props: { today: DateString; args: string; expectedMessage: string }) => {
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
@@ -116,11 +110,7 @@ describe.each`
 	${"2021-11-12"} | ${"--release-version 3.6.1+39609b2e --files packages/**/package.json --prerelease-files packages/**/CHANGELOG.adoc --release-files packages/**/CHANGELOG.md"}    | ${"packages/**/package.json, packages/**/CHANGELOG.adoc did not match any files."}
 `(
 	"when there are no matching files: $args",
-	(props: {
-		today: DateString
-		args: string
-		expectedWarning: string
-	}) => {
+	(props: { today: DateString; args: string; expectedWarning: string }) => {
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
@@ -327,10 +317,7 @@ describe.each`
 	${"--files packages/**/CHANGELOG.adoc packages/**/package.json --release-version 0.7.1-beta.1"} | ${"Failed to read packages/apples/package.json: File already in use"}
 `(
 	"when a file cannot be read: $args",
-	(props: {
-		args: string
-		expectedError: string
-	}) => {
+	(props: { args: string; expectedError: string }) => {
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
@@ -363,11 +350,7 @@ describe.each`
 	${"--files packages/**/CHANGELOG.adoc packages/**/package.json --release-version v0.7.1-beta.1"} | ${[aPromotableAsciidocChangelogA("packages/apples/CHANGELOG.adoc"), aPromotablePackageJsonB("packages/apples/package.json"), aPromotableAsciidocChangelogC("packages/oranges/CHANGELOG.adoc"), aPromotablePackageJsonD("packages/oranges/package.json")]} | ${"Failed to write changes to packages/apples/package.json: File already in use"}
 `(
 	"when changes to a file cannot be written: $args",
-	(props: {
-		args: string
-		files: Files
-		expectedError: string
-	}) => {
+	(props: { args: string; files: Files; expectedError: string }) => {
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {

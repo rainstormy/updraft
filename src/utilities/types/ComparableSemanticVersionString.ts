@@ -1,3 +1,4 @@
+import { isNonEmptyArray } from "#utilities/Arrays"
 import { assertNotNullish } from "#utilities/Assertions"
 import {
 	type SemanticVersionString,
@@ -40,9 +41,9 @@ export function toComparableSemanticVersionString(
 	const increment = incrementMatch?.groups?.increment ?? null
 
 	return {
-		major: Number.parseInt(major),
-		minor: Number.parseInt(minor),
-		patch: Number.parseInt(patch),
+		major: Number.parseInt(major, 10),
+		minor: Number.parseInt(minor, 10),
+		patch: Number.parseInt(patch, 10),
 		prerelease: {
 			label:
 				prerelease !== undefined
@@ -54,9 +55,25 @@ export function toComparableSemanticVersionString(
 				prerelease !== undefined && increment !== null
 					? prerelease.slice(-increment.length - 1, -increment.length)
 					: "",
-			increment: increment !== null ? Number.parseInt(increment) : null,
+			increment: increment !== null ? Number.parseInt(increment, 10) : null,
 		},
 		build: build ?? "",
+	}
+}
+
+export function checkSequentialRelease(
+	releaseVersion: SemanticVersionString,
+	previousReleaseVersions: Array<SemanticVersionString>,
+): void {
+	if (isNonEmptyArray(previousReleaseVersions)) {
+		if (previousReleaseVersions.includes(releaseVersion)) {
+			throw new Error(`already contains release version ${releaseVersion}`)
+		}
+		if (!isSequentialUpgrade(previousReleaseVersions[0], releaseVersion)) {
+			throw new Error(
+				`has latest release version ${previousReleaseVersions[0]}, but was set to update to ${releaseVersion}`,
+			)
+		}
 	}
 }
 

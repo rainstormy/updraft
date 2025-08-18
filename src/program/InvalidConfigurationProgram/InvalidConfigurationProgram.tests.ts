@@ -1,7 +1,5 @@
-// Mock injection imports must be at the top, separated from the regular imports by a blank line.
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mock"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mock"
-
+import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks"
+import { injectLoggerMock } from "#adapters/Logger/Logger.mocks"
 import { beforeEach, describe, expect, it } from "vitest"
 import { updraftCliProgram } from "#program/UpdraftCliProgram"
 import type { ExitCode } from "#utilities/ErrorUtilities"
@@ -28,10 +26,7 @@ describe.each`
 	${["--release-version", "1.0.1", "--files", "package.json", "CHANGELOG.md", "--release-files"]}                         | ${"--release-files requires at least 1 argument, but got 0."}
 `(
 	"when the args are $invalidArgs",
-	(props: {
-		invalidArgs: Array<string>
-		expectedError: string
-	}) => {
+	(props: { invalidArgs: Array<string>; expectedError: string }) => {
 		let actualExitCode: ExitCode | null = null
 
 		beforeEach(async () => {

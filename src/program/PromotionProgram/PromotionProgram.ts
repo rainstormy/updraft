@@ -5,12 +5,12 @@ import { today } from "#adapters/Today/Today"
 import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
 import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
 import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson"
-import { type ExitCode, assertError } from "#utilities/ErrorUtilities"
+import { assertError, type ExitCode } from "#utilities/ErrorUtilities"
 import { isFulfilled, isRejected } from "#utilities/PromiseUtilities"
 import type { Release, ReleaseCheck } from "#utilities/types/Release"
 import {
-	type SemanticVersionString,
 	isPrerelease,
+	type SemanticVersionString,
 } from "#utilities/types/SemanticVersionString"
 
 const promoters: Record<FileType, Promoter> = {
