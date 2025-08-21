@@ -166,9 +166,7 @@ describe.each`
 	${"9.0.5-rc.0+3a1c790f"}
 `(
 	"when the package.json file is set to update to an existing release of $currentVersion",
-	async (props: {
-		currentVersion: SemanticVersionString
-	}) => {
+	async (props: { currentVersion: SemanticVersionString }) => {
 		const originalContent = dedent`
 			{
 				"$schema": "https://json.schemastore.org/package.json",

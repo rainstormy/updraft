@@ -3,11 +3,11 @@ import { builtinModules } from "node:module"
 import { basename, join as joinPath, resolve as resolvePath } from "node:path"
 import { env } from "node:process"
 import { fileURLToPath } from "node:url"
-import type { Plugin } from "vite"
+import type { Plugin, ResolvedConfig } from "vite"
 import {
-	type ViteUserConfig as ViteConfig,
 	defineConfig,
 	mergeConfig,
+	type ViteUserConfig as ViteConfig,
 } from "vitest/config"
 import packageJson from "./package.json" with { type: "json" }
 
@@ -30,6 +30,7 @@ export default defineConfig(() => {
 					entryFileNames: "index.js",
 				},
 			},
+			target: "es2022",
 		},
 		cacheDir: path("node_modules/.cache/"),
 		plugins: [],
@@ -104,7 +105,7 @@ function copyFilePlugin(sourcePathname: string): Plugin {
 
 	return {
 		name: "copy-file",
-		configResolved: (configuration): void => {
+		configResolved: (configuration: ResolvedConfig): void => {
 			outputDirectory = configuration.build.outDir
 		},
 		closeBundle: async (): Promise<void> => {

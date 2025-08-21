@@ -49,9 +49,9 @@ function extractIndent(line: string): string {
 export function pluralise(
 	subject: number,
 	singular: string,
-	plural = `${singular}s`,
+	plural?: string,
 ): string {
-	return subject === 1 ? singular : plural
+	return subject === 1 ? singular : (plural ?? `${singular}s`)
 }
 
 const byWhitespace = /\s+/

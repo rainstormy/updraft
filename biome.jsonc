@@ -1,16 +1,16 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
 	"extends": [
-		"@rainstormy/presets-biome/base",
-		"@rainstormy/presets-biome/vitest"
+		"@rainstormy/presets-biome/2.2",
+		"@rainstormy/presets-biome/2.2/vitest"
 	],
 	"files": {
-		"ignore": ["dist/", "node_modules/"]
+		"includes": [".github/**", ".vscode/**", "src/**", "*.{json,jsonc,ts}"]
 	},
 	"overrides": [
 		{
-			"include": [
-				"src/adapters/*.ts",
+			"includes": [
+				"src/adapters/**/*.ts",
 				"src/CommandLineInterface.ts",
 				"src/GitHubActions.ts"
 			],
@@ -23,7 +23,7 @@
 			}
 		},
 		{
-			"include": ["src/index.ts", "src/index.d.ts"],
+			"includes": ["src/index.ts", "src/index.d.ts"],
 			"linter": {
 				"rules": {
 					"performance": {
@@ -36,16 +36,6 @@
 								"filenameCases": ["kebab-case"]
 							}
 						}
-					}
-				}
-			}
-		},
-		{
-			"include": ["vite.config.ts"],
-			"linter": {
-				"rules": {
-					"performance": {
-						"useTopLevelRegex": "off"
 					}
 				}
 			}

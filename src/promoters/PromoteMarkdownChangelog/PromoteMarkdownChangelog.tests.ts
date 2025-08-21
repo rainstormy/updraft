@@ -1259,9 +1259,7 @@ describe.each`
 			${"5.0.0-beta.1"}
 		`(
 			`and the changelog is set to update to a non-sequential release of ${release.version} from $latestReleaseVersion`,
-			(props: {
-				latestReleaseVersion: SemanticVersionString
-			}) => {
+			(props: { latestReleaseVersion: SemanticVersionString }) => {
 				const originalContent = dedent`
 					# Releases
 
