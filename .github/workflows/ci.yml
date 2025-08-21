@@ -128,7 +128,7 @@ jobs:
       pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
     steps:
       - name: Verify that the commit messages are standardised
-        uses: rainstormy/github-action-validate-commit-messages@913fbb1837e4cdc796cf44cd69c4e8237025ee8b # v1.1.8
+        uses: rainstormy/github-action-validate-commit-messages@84da2861892ba8268c8be58a0f5dd8b18292132f # v1.1.9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rules: |
