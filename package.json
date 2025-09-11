@@ -51,7 +51,7 @@
 		"yolo": "lefthook uninstall"
 	},
 	"dependencies": {
-		"ansis": "3.17.0",
+		"ansis": "4.1.0",
 		"fast-glob": "3.3.3",
 		"tslib": "2.8.1"
 	},
