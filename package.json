@@ -62,7 +62,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.4",
-		"@rainstormy/presets-biome": "2.0.0",
+		"@rainstormy/presets-biome": "2.0.3",
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "20.19.9",
 		"@vitest/coverage-v8": "3.2.1",
