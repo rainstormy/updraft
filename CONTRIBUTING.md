@@ -1,20 +1,24 @@
 # Contribution Guidelines
 
-### Quick Start
+## Quick Start
 - [Get started on 🍏 macOS](docs/quick-start/get-started-on-macos.md)
 - [Get started on 🟦 Windows + 🐧 WSL](docs/quick-start/get-started-on-wsl.md)
 
-| Task in pnpm  | Description                                    |
-|---------------|------------------------------------------------|
-| `build`       | Generate production-grade build artifacts.     |
-| `check`       | Run `check.fmt` and `check.types`.             |
-| `check.fmt`   | Verify that the source code is well-formatted. |
-| `check.types` | Verify that the source code is type-safe.      |
-| `fmt`         | Reformat the source code with Biome.           |
-| `install`     | Install dependencies and Git hooks.            |
-| `test`        | Run all unit tests.                            |
-| `vi`          | Start a continuous test server in Vitest.      |
-| `yolo`        | Disable Git hooks.                             |
+## Tasks
+| Name        | Description                                                                                                             |
+|-------------|-------------------------------------------------------------------------------------------------------------------------|
+| `build`     | Generates production-grade build artefacts with [Vite](https://vite.dev).                                               |
+| `build_cli` | Generates production-grade build artefacts of the command-line entrypoint with [Vite](https://vite.dev).                |
+| `build_gha` | Generates production-grade build artefacts of the GitHub Actions entrypoint with [Vite](https://vite.dev).              |
+| `build_lib` | Generates production-grade build artefacts of the core library with [Vite](https://vite.dev).                           |
+| `check`     | Runs `check_fmt` and `check_ts`.                                                                                        |
+| `check_fmt` | Verifies the code style of the source code with [Biome](https://biomejs.dev).                                           |
+| `check_ts`  | Verifies the type safety of the source code with [TypeScript](https://www.typescriptlang.org).                          |
+| `fmt`       | Reformats the source code with [Biome](https://biomejs.dev).                                                            |
+| `init`      | Installs Node.js packages with [pnpm](https://pnpm.io) and enables the Git hooks with [Lefthook](https://lefthook.dev). |
+| `test`      | Runs the entire unit test suite once with [Vitest](https://vitest.dev).                                                 |
+| `vitest`    | Starts the [Vitest UI](https://vitest.dev/guide/ui.html#vitest-ui) test explorer for continuous unit testing.           |
+| `yolo`      | Disables the Git hooks with [Lefthook](https://lefthook.dev).                                                           |
 
-### Developer Guides
+## Developer Guides
 - [Manage third-party dependencies](docs/guides/manage-third-party-dependencies.md)

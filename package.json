@@ -32,24 +32,6 @@
 		"dist/cli/",
 		"dist/lib/"
 	],
-	"packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
-	"engines": {
-		"node": ">=20.0.0"
-	},
-	"scripts": {
-		"build": "pnpm /^build\\..*/",
-		"build.cli": "MODULE=cli vite build --outDir dist/cli/ --minify",
-		"build.gha": "MODULE=gha vite build --outDir dist/gha/ --minify",
-		"build.lib": "MODULE=lib vite build --outDir dist/lib/",
-		"check": "pnpm check.fmt && pnpm check.types",
-		"check.fmt": "biome check --error-on-warnings",
-		"check.types": "tsc",
-		"fmt": "biome check --write",
-		"postinstall": "lefthook install",
-		"test": "CI=1 vitest run",
-		"vi": "CI=1 vitest watch --ui",
-		"yolo": "lefthook uninstall"
-	},
 	"dependencies": {
 		"ansis": "3.17.0",
 		"fast-glob": "3.3.3",
