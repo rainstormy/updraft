@@ -55,7 +55,7 @@ alias = ["cf"]
 [tasks.check_ts]
 # language=sh
 run = """
-	tsc
+	tsgo
 """
 description = "Verifies the type safety of the source code with TypeScript."
 alias = ["ct"]
