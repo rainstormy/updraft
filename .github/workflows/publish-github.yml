@@ -1,0 +1,59 @@
+# This workflow implements one of the final stages of the release pipeline.
+# It creates a draft GitHub release from a full semantic version tag in Git.
+#
+# It is triggered automatically by pushing a Git tag on the form `v<major.minor.patch[-prerelease][+buildinfo]>` as done by `.github/workflows/publish-tags.yml`.
+#
+# It can be triggered manually via the GitHub CLI:
+#
+#   gh workflow run publish-github.yml --ref <tag-name>
+#   gh run watch
+#
+# It can also be triggered manually via the GitHub web interface:
+# https://github.com/rainstormy/updraft/actions/workflows/publish-github.yml
+
+name: Publish / GitHub
+
+on:
+  push:
+    tags:
+      # Single quotes make YAML interpret strings with special characters correctly.
+      # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+  workflow_dispatch:
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: publish-github-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+jobs:
+  integrity:
+    name: Integrity
+    permissions:
+      # To call reusable workflows in the same repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+      # https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#example-caller-workflow
+      contents: read
+    uses: ./.github/workflows/integrity.yml
+
+  github-release:
+    name: GitHub release
+    needs: integrity
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 1
+    permissions:
+      # To check out the repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+      contents: read
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        #
+      - name: Create a draft GitHub release
+        uses: rainstormy/release/github@eb87dc4ba5e9e89451adce4a3c62538e5ecef809 # v1.1.1
+        with:
+          gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+          version: ${{ github.ref_name }}

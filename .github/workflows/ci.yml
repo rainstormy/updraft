@@ -1,15 +1,7 @@
 # This workflow implements the continuous integration (CI) pipeline.
-# It validates the software quality and produces build artifacts that can be deployed at a later stage.
+# It verifies that pull requests meet certain standards in software quality and coding conventions.
 #
 # It is triggered automatically by pull requests opened towards the `main` branch.
-#
-# It can be triggered manually on any branch via the GitHub CLI:
-#
-#   gh workflow run ci.yml [--ref <branch-name>]
-#   gh run watch
-#
-# It can be triggered manually on any branch via the GitHub web interface:
-#   https://github.com/rainstormy/updraft/actions/workflows/ci.yml
 
 name: CI
 
@@ -17,120 +9,46 @@ on:
   pull_request:
     branches:
       - main
-  workflow_call:
-  workflow_dispatch:
+    types:
+      - opened
+      - ready_for_review
+      - reopened
+      - synchronize
 
 # Cancel all previous runs of this workflow that are still in progress on the same branch.
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
 concurrency:
-  # For `workflow_call` events, `github.workflow` is the caller workflow instead of this workflow.
-  # The `ci-` prefix makes GitHub Actions distinguish this job from other jobs in the caller workflow.
-  # https://docs.github.com/en/actions/using-workflows/reusing-workflows
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
-  can-build-project:
-    name: Can build the project
-    runs-on: ubuntu-24.04
-    timeout-minutes: 1
+  integrity:
+    name: Integrity
+    if: github.event.pull_request.draft == false
     permissions:
-      contents: read # Allow the job to check out the repository.
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        #
-      - name: Skip if already built
-        id: skip-if-already-built
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          # If an exact cache hit occurs, another workflow run on this branch has already built the project in the current configuration, and we can skip the rest of the job.
-          # This is especially useful upon rebasing interactively.
-          #
-          # CAUTION: The cache key is repeated in `.github/workflows/release.yml` to restore the build artifacts.
-          key: can-build-project-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '!src/**/*.testdata.*', '!src/**/*.tests.*', '*.ts', '.nvmrc', 'pnpm-lock.yaml', 'tsconfig.json') }}
-          path: dist/
-        #
-      - name: Install pnpm and third-party dependencies
-        if: steps.skip-if-already-built.outputs.cache-hit != 'true'
-        uses: ./.github/actions/pnpm
-        #
-      - name: Build the project
-        if: steps.skip-if-already-built.outputs.cache-hit != 'true'
-        run: pnpm build
+      # To call reusable workflows in the same repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+      # https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#example-caller-workflow
+      contents: read
+    uses: ./.github/workflows/integrity.yml
 
-  has-clean-code:
-    name: Has clean code
-    runs-on: ubuntu-24.04
+  commit-messages:
+    name: Commit messages
+    if: github.event.pull_request.draft == false
+    needs: integrity
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
-      contents: read # Allow the job to check out the repository.
+      # To review the commit messages in the pull request.
+      # https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-commits-on-a-pull-request
+      pull-requests: read
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        #
-      - name: Skip if already verified
-        id: skip-if-already-verified
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code is clean in the current configuration, and we can skip the rest of the job.
-          # This is especially useful upon rebasing interactively.
-          key: has-clean-code-${{ runner.os }}-sha256:${{ hashFiles('.github/**/*', '.vscode/*.json', 'src/**/*', 'docs/**/*.md', '*.json', '*.ts', '.nvmrc', 'pnpm-lock.yaml') }}
-          path: node_modules/.cache/typescript/
-        #
-      - name: Install pnpm and third-party dependencies
-        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        uses: ./.github/actions/pnpm
-        #
-      - name: Verify that the source code is type-safe
-        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm check.types
-        #
-      - name: Verify that the source code is well-formatted
-        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm check.fmt
-
-  satisfies-unit-tests:
-    name: Satisfies unit tests
-    runs-on: ubuntu-24.04
-    timeout-minutes: 1
-    permissions:
-      contents: read # Allow the job to check out the repository.
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        #
-      - name: Skip if already verified
-        id: skip-if-already-verified
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code satisfies the unit tests in the current configuration, and we can skip the rest of the job.
-          # This is especially useful upon rebasing interactively.
-          key: satisfies-unit-tests-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '*.ts', '.nvmrc', 'pnpm-lock.yaml', 'tsconfig.json') }}
-          path: node_modules/.cache/vitest/
-        #
-      - name: Install pnpm and third-party dependencies
-        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        uses: ./.github/actions/pnpm
-        #
-      - name: Verify that the source code satisfies the unit tests
-        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm test
-
-  has-standardised-commit-messages:
-    name: Has standardised commit messages
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 1
-    permissions:
-      pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
-    steps:
-      - name: Verify that the commit messages are standardised
+      - name: Verify the commit messages
         uses: rainstormy/github-action-validate-commit-messages@84da2861892ba8268c8be58a0f5dd8b18292132f # v1.1.9
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ github.token }}
           rules: |
             acknowledged-author-email-addresses,
             acknowledged-author-names,

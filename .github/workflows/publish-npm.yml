@@ -1,0 +1,77 @@
+# This workflow implements one of the final stages of the release pipeline.
+# It publishes the package to the npm registry.
+#
+# It is triggered automatically by pushing a Git tag on the form `v<major.minor.patch[-prerelease][+buildinfo]>` as done by `.github/workflows/publish-tags.yml`.
+#
+# It can be triggered manually via the GitHub CLI:
+#
+#   gh workflow run publish-npm.yml --ref <tag-name>
+#   gh run watch
+#
+# It can also be triggered manually via the GitHub web interface:
+# https://github.com/rainstormy/updraft/actions/workflows/publish-npm.yml
+
+name: Publish / npm
+
+on:
+  push:
+    tags:
+      # Single quotes make YAML interpret strings with special characters correctly.
+      # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+  workflow_dispatch:
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: publish-npm-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+jobs:
+  integrity:
+    name: Integrity
+    permissions:
+      # To call reusable workflows in the same repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+      # https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#example-caller-workflow
+      contents: read
+    uses: ./.github/workflows/integrity.yml
+
+  npm-package:
+    name: npm package
+    needs: integrity
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 1
+    permissions:
+      # To check out the repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+      contents: read
+      #
+      # To publish the npm package with provenance.
+      # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
+      id-token: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        #
+      - name: Restore the build artefacts to be distributed in the npm package
+        uses: ./.github/actions/build-artefacts
+        #
+      - name: Install dependencies
+        uses: ./.github/actions/dependencies
+        #
+      - name: Set the target npm registry and prepare an auth token
+        # language=sh
+        run: echo -e "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}\nregistry=https://registry.npmjs.org/" > .npmrc
+        shell: bash
+        #
+      - name: Publish the package to npm
+        uses: rainstormy/release/npm@eb87dc4ba5e9e89451adce4a3c62538e5ecef809 # v1.1.1
+        with:
+          access-level: public
+          npm-auth-token: ${{ secrets.BOT_NIMBUS_NPM_TOKEN }}
+          packagejson-excluded-fields: |
+            // dependencies
+            // devDependencies
