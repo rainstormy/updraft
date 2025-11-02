@@ -1,36 +1,40 @@
-# This workflow creates a Git tag for the release commit on the `main` branch.
+# This workflow implements the second stage of the release pipeline.
+# It creates version tags in Git on the merge commit from the release branch.
 #
-# It is triggered automatically by merging a pull request from a branch with a `release/` prefix, as created by the `release.yml` workflow.
+# It is triggered automatically by merging the pull request from `.github/workflows/release.yml`.
 
-name: Release / Tag
+name: Publish / Tags
 
 on:
   pull_request:
     branches:
       - main
+    paths:
+      # Limit the workflow to pull requests that modify `package.json` to reduce clutter in the 'Workflow runs' overview in GitHub Actions.
+      - package.json
     types:
       - closed
 
 # Cancel all previous runs of this workflow that are still in progress on the same branch.
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
 concurrency:
-  group: release-tag-${{ github.workflow }}-${{ github.ref }}
+  group: publish-tags-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
-  tag:
-    name: Tag
+  tags:
+    name: Tags
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions: { }
     steps:
       - name: Check out the repository
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          # Use a separate access token to allow the push tag event in this workflow to trigger the subsequent `release-github.yml` and `release-npm.yml` workflows.
+          # Use a separate access token to allow the push tag event in this workflow to trigger `.github/workflows/publish-github.yml` and `.github/workflows/publish-npm.yml`.
           # https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
           token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
         #
@@ -41,7 +45,12 @@ jobs:
           __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
-      - name: Create a semantic version tag in Git
+      - name: Create a full semantic version tag in Git
         uses: rainstormy/release/tag@eb87dc4ba5e9e89451adce4a3c62538e5ecef809 # v1.1.1
+        with:
+          version: ${{ github.head_ref }}
+        #
+      - name: Create a major-only version tag in Git
+        uses: rainstormy/release/major-tag@eb87dc4ba5e9e89451adce4a3c62538e5ecef809 # v1.1.1
         with:
           version: ${{ github.head_ref }}

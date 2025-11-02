@@ -36,7 +36,7 @@ import {
 	aPromotedPackageJsonB,
 	aPromotedPackageJsonC,
 	aPromotedPackageJsonD,
-} from "#program/PromotionProgram/PromotionProgram.testdata"
+} from "#program/PromotionProgram/PromotionProgram.fixtures"
 import { updraftCliProgram } from "#program/UpdraftCliProgram"
 import type { ExitCode } from "#utilities/ErrorUtilities"
 import type { DateString } from "#utilities/types/DateString"

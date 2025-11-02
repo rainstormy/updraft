@@ -1,76 +1,159 @@
 {
+	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "npm",
-			"script": "build",
-			"problemMatcher": [],
-			"label": "build"
+			"label": "build",
+			"command": "mise run build",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "build.cli",
-			"problemMatcher": [],
-			"label": "build.cli"
+			"label": "build_cli",
+			"command": "mise run build_cli",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "build.gha",
-			"problemMatcher": [],
-			"label": "build.gha"
+			"label": "build_gha",
+			"command": "mise run build_gha",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "build.lib",
-			"problemMatcher": [],
-			"label": "build.lib"
+			"label": "build_lib",
+			"command": "mise run build_lib",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "check",
-			"problemMatcher": [],
-			"label": "check"
+			"label": "check",
+			"command": "mise run check",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "check.fmt",
-			"problemMatcher": [],
-			"label": "check.fmt"
+			"label": "check_actions",
+			"command": "mise run check_actions",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "check.types",
-			"problemMatcher": [],
-			"label": "check.types"
+			"label": "check_fmt",
+			"command": "mise run check_fmt",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "fmt",
-			"problemMatcher": [],
-			"label": "fmt"
+			"label": "check_renovate",
+			"command": "mise run check_renovate",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "install",
-			"problemMatcher": [],
-			"label": "install"
+			"label": "check_ts",
+			"command": "mise run check_ts",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "test",
-			"problemMatcher": [],
-			"label": "test"
+			"label": "fmt",
+			"command": "mise run fmt",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "silent"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "vi",
-			"problemMatcher": [],
-			"label": "vi"
+			"label": "init",
+			"command": "mise run init",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "yolo",
-			"problemMatcher": [],
-			"label": "yolo"
+			"label": "test",
+			"command": "mise run test",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "vitest",
+			"command": "mise run vitest",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "silent"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "yolo",
+			"command": "mise run yolo",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		}
 	]
 }

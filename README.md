@@ -65,7 +65,7 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
         #
-      - name: Update release artifacts
+      - name: Update release artefacts
         uses: rainstormy/updraft@v1
         with:
           files: package.json
@@ -82,7 +82,7 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
         #
-      - name: Update release artifacts
+      - name: Update release artefacts
         uses: rainstormy/updraft@v1
         with:
           check-sequential-release: true

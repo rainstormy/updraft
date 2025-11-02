@@ -38,12 +38,6 @@ export default defineConfig(() => {
 			alias: [{ find: /^#(.+)/, replacement: path("src/$1") }],
 		},
 		test: {
-			coverage: {
-				include: ["src/**/*.ts"],
-				exclude: ["src/**/*.tests.ts"],
-				provider: "v8" as const,
-				reportsDirectory: path("node_modules/.cache/vitest/coverage/"),
-			},
 			include: ["src/**/*.tests.ts"],
 			mockReset: true,
 		},
@@ -79,7 +73,7 @@ export default defineConfig(() => {
 			return mergeConfig(baseConfiguration, {
 				build: {
 					rollupOptions: {
-						external: allDependencies, // Prevents inlining the dependencies into the build artifacts.
+						external: allDependencies, // Prevents inlining the dependencies into the build artefacts.
 						input: path("src/index.ts"),
 						preserveEntrySignatures: "allow-extension" as const, // Preserves the exports of `index.ts`.
 					},
