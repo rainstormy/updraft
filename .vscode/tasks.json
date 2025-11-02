@@ -57,6 +57,17 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "check_actions",
+			"command": "mise run check_actions",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
 			"label": "check_fmt",
 			"command": "mise run check_fmt",
 			"type": "shell",
