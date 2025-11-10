@@ -33,7 +33,7 @@
 		"dist/lib/"
 	],
 	"dependencies": {
-		"ansis": "3.17.0",
+		"ansis": "4.2.0",
 		"fast-glob": "3.3.3",
 		"tslib": "2.8.1"
 	},
