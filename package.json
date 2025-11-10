@@ -50,7 +50,7 @@
 		"@typescript/native-preview": "7.0.0-dev.20251101.1",
 		"@vitest/ui": "3.2.4",
 		"lefthook": "1.13.6",
-		"typescript": "5.8.3",
+		"typescript": "5.9.3",
 		"vite": "6.4.1",
 		"vitest": "3.2.4"
 	},
