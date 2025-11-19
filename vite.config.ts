@@ -9,15 +9,13 @@ import {
 	mergeConfig,
 	type ViteUserConfig as ViteConfig,
 } from "vitest/config"
-import packageJson from "./package.json" with { type: "json" }
 
 export default defineConfig(() => {
-	const npmDependencies = Object.keys(packageJson.dependencies)
 	const nodeDependencies = [
 		...builtinModules,
 		...builtinModules.map((moduleName) => `node:${moduleName}`),
 	]
-	const allDependencies = [...nodeDependencies, ...npmDependencies]
+	const allDependencies = [...nodeDependencies, "ansis", "fast-glob", "tslib"]
 
 	const baseConfiguration: ViteConfig = {
 		build: {
