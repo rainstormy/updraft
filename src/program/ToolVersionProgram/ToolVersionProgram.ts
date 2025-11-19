@@ -1,8 +1,10 @@
 import { printMessage } from "#adapters/Logger/Logger.ts"
-import { packageJsonVersion } from "#adapters/PackageJsonVersion/PackageJsonVersion.ts"
 import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import type { UpdraftVersion } from "#utilities/version/UpdraftVersion.ts"
 
 export async function toolVersionProgram(): Promise<ExitCode> {
-	printMessage(packageJsonVersion())
+	const version: UpdraftVersion = import.meta.env.UPDRAFT_VERSION
+
+	printMessage(version)
 	return 0
 }

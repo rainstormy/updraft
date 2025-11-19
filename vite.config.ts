@@ -33,6 +33,7 @@ export default defineConfig(() => {
 			target: "es2022",
 		},
 		cacheDir: path("node_modules/.cache/"),
+		envPrefix: "UPDRAFT_",
 		plugins: [],
 		resolve: {
 			alias: [{ find: /^#(.+)/, replacement: path("src/$1") }],
@@ -40,6 +41,8 @@ export default defineConfig(() => {
 		test: {
 			include: ["src/**/*.tests.ts"],
 			mockReset: true,
+			unstubEnvs: true,
+			unstubGlobals: true,
 		},
 	}
 

@@ -131,5 +131,8 @@ _.file = [".env", ".env.local"]
 # https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
 _.path = ["node_modules/.bin"]
 
+# Grab the current Updraft version from the `version` field in `package.json`.
+UPDRAFT_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.json\") }}" }
+
 [settings]
 task_output = "quiet"

@@ -1,12 +1,11 @@
 import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks.ts"
 import { injectLoggerMock } from "#adapters/Logger/Logger.mocks.ts"
-import { injectPackageJsonVersionMock } from "#adapters/PackageJsonVersion/PackageJsonVersion.mocks.ts"
+import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
 import type { ExitCode } from "#utilities/ErrorUtilities.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
-const { packageJsonVersion } = injectPackageJsonVersionMock()
 const { printMessage } = injectLoggerMock()
 const { readMatchingFiles, writeFiles } = injectFileSystemMock()
 
@@ -24,7 +23,7 @@ describe.each`
 		let actualExitCode: ExitCode | null = null
 
 		beforeEach(async () => {
-			packageJsonVersion.mockImplementation(() => props.toolVersion)
+			mockUpdraftVersion(props.toolVersion)
 			actualExitCode = await updraftCliProgram(props.toolVersionArgs)
 		})
 
