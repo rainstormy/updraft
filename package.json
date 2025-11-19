@@ -43,8 +43,8 @@
 		"tslib": "This library optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.2.4",
-		"@rainstormy/presets-biome": "2.0.3",
+		"@biomejs/biome": "2.3.6",
+		"@rainstormy/presets-biome": "2.1.1",
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "20.19.9",
 		"@typescript/native-preview": "7.0.0-dev.20251101.1",

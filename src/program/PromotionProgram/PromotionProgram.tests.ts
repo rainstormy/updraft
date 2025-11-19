@@ -1,8 +1,8 @@
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mocks"
-import { injectTodayMock } from "#adapters/Today/Today.mocks"
+import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks.ts"
+import { injectLoggerMock } from "#adapters/Logger/Logger.mocks.ts"
+import { injectTodayMock } from "#adapters/Today/Today.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import type { Files } from "#adapters/FileSystem/File"
+import type { Files } from "#adapters/FileSystem/File.ts"
 import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
@@ -36,10 +36,10 @@ import {
 	aPromotedPackageJsonB,
 	aPromotedPackageJsonC,
 	aPromotedPackageJsonD,
-} from "#program/PromotionProgram/PromotionProgram.fixtures"
-import { updraftCliProgram } from "#program/UpdraftCliProgram"
-import type { ExitCode } from "#utilities/ErrorUtilities"
-import type { DateString } from "#utilities/types/DateString"
+} from "#program/PromotionProgram/PromotionProgram.fixtures.ts"
+import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
+import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import type { DateString } from "#utilities/types/DateString.ts"
 
 const { today } = injectTodayMock()
 const { printMessage, printWarning, printError } = injectLoggerMock()

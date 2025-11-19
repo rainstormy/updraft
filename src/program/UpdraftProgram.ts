@@ -1,13 +1,13 @@
-import { invalidConfigurationProgram } from "#program/InvalidConfigurationProgram/InvalidConfigurationProgram"
-import { promotionProgram } from "#program/PromotionProgram/PromotionProgram"
-import { defineOptions, parseArgs } from "#utilities/ArgsUtilities"
-import { assertError, type ExitCode } from "#utilities/ErrorUtilities"
-import { notNullish } from "#utilities/IterableUtilities"
-import type { ReleaseCheck } from "#utilities/types/Release"
+import { invalidConfigurationProgram } from "#program/InvalidConfigurationProgram/InvalidConfigurationProgram.ts"
+import { promotionProgram } from "#program/PromotionProgram/PromotionProgram.ts"
+import { defineOptions, parseArgs } from "#utilities/ArgsUtilities.ts"
+import { assertError, type ExitCode } from "#utilities/ErrorUtilities.ts"
+import { notNullish } from "#utilities/IterableUtilities.ts"
+import type { ReleaseCheck } from "#utilities/types/Release.ts"
 import {
 	extractSemanticVersionString,
 	isPrerelease,
-} from "#utilities/types/SemanticVersionString"
+} from "#utilities/types/SemanticVersionString.ts"
 
 export async function updraftProgram(
 	args: Array<string>,

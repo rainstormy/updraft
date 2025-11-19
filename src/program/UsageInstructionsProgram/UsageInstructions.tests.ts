@@ -1,7 +1,7 @@
 import { bold, cyan, yellow } from "ansis"
 import { expect, it } from "vitest"
-import { getUsageInstructions } from "#program/UsageInstructionsProgram/UsageInstructionsProgram"
-import { dedent } from "#utilities/StringUtilities"
+import { getUsageInstructions } from "#program/UsageInstructionsProgram/UsageInstructionsProgram.ts"
+import { dedent } from "#utilities/StringUtilities.ts"
 
 it("is a list of program arguments and options", () => {
 	expect(getUsageInstructions()).toBe(dedent`

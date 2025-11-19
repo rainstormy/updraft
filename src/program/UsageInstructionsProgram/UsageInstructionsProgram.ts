@@ -1,6 +1,6 @@
 import { bold, cyan, yellow } from "ansis"
-import { printMessage } from "#adapters/Logger/Logger"
-import type { ExitCode } from "#utilities/ErrorUtilities"
+import { printMessage } from "#adapters/Logger/Logger.ts"
+import type { ExitCode } from "#utilities/ErrorUtilities.ts"
 
 export async function usageInstructionsProgram(): Promise<ExitCode> {
 	printMessage(getUsageInstructions())

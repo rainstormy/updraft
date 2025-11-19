@@ -1,7 +1,7 @@
-import { toolVersionProgram } from "#program/ToolVersionProgram/ToolVersionProgram"
-import { updraftProgram } from "#program/UpdraftProgram"
-import { usageInstructionsProgram } from "#program/UsageInstructionsProgram/UsageInstructionsProgram"
-import type { ExitCode } from "#utilities/ErrorUtilities"
+import { toolVersionProgram } from "#program/ToolVersionProgram/ToolVersionProgram.ts"
+import { updraftProgram } from "#program/UpdraftProgram.ts"
+import { usageInstructionsProgram } from "#program/UsageInstructionsProgram/UsageInstructionsProgram.ts"
+import type { ExitCode } from "#utilities/ErrorUtilities.ts"
 
 export async function updraftCliProgram(
 	args: Array<string>,

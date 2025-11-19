@@ -1,4 +1,4 @@
-import { pluralise } from "#utilities/StringUtilities"
+import { pluralise } from "#utilities/StringUtilities.ts"
 
 export function parseArgs<Option extends string>(
 	schema: OptionSchema<Option>,
@@ -62,17 +62,15 @@ function assertExactNumberOfOptionArguments<Option extends string>(
 	for (const [option, { args }] of constraints) {
 		const optionArgs = parsedArgs[option]
 
-		if (optionArgs === undefined) {
-			continue
-		}
+		if (optionArgs !== undefined) {
+			const min = args.min ?? null
+			const max = args.max ?? null
+			const count = optionArgs.length
 
-		const min = args.min ?? null
-		const max = args.max ?? null
-		const count = optionArgs.length
-
-		if (min !== null && min === max && count !== min) {
-			const constraint = `${min} ${pluralise(min, "argument")}`
-			throw new Error(`${option} requires ${constraint}, but got ${count}.`)
+			if (min !== null && min === max && count !== min) {
+				const constraint = `${min} ${pluralise(min, "argument")}`
+				throw new Error(`${option} requires ${constraint}, but got ${count}.`)
+			}
 		}
 	}
 }
@@ -88,16 +86,14 @@ function assertMinimumNumberOfOptionArguments<Option extends string>(
 	for (const [option, { args }] of constraints) {
 		const optionArgs = parsedArgs[option]
 
-		if (optionArgs === undefined) {
-			continue
-		}
+		if (optionArgs !== undefined) {
+			const min = args.min ?? null
+			const count = optionArgs.length
 
-		const min = args.min ?? null
-		const count = optionArgs.length
-
-		if (min !== null && count < min) {
-			const constraint = `at least ${min} ${pluralise(min, "argument")}`
-			throw new Error(`${option} requires ${constraint}, but got ${count}.`)
+			if (min !== null && count < min) {
+				const constraint = `at least ${min} ${pluralise(min, "argument")}`
+				throw new Error(`${option} requires ${constraint}, but got ${count}.`)
+			}
 		}
 	}
 }
@@ -113,16 +109,14 @@ function assertMaximumNumberOfOptionArguments<Option extends string>(
 	for (const [option, { args }] of constraints) {
 		const optionArgs = parsedArgs[option]
 
-		if (optionArgs === undefined) {
-			continue
-		}
+		if (optionArgs !== undefined) {
+			const max = args.max ?? null
+			const count = optionArgs.length
 
-		const max = args.max ?? null
-		const count = optionArgs.length
-
-		if (max !== null && count > max) {
-			const constraint = `at most ${max} ${pluralise(max, "argument")}`
-			throw new Error(`${option} requires ${constraint}, but got ${count}.`)
+			if (max !== null && count > max) {
+				const constraint = `at most ${max} ${pluralise(max, "argument")}`
+				throw new Error(`${option} requires ${constraint}, but got ${count}.`)
+			}
 		}
 	}
 }

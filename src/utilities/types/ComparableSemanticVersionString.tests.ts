@@ -3,8 +3,8 @@ import {
 	type ComparableSemanticVersionString,
 	isSequentialUpgrade,
 	toComparableSemanticVersionString,
-} from "#utilities/types/ComparableSemanticVersionString"
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString"
+} from "#utilities/types/ComparableSemanticVersionString.ts"
+import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 describe.each`
 	version                          | expectedMajor | expectedMinor | expectedPatch | expectedPrereleaseLabel | expectedPrereleaseDelimiter | expectedPrereleaseIncrement | expectedBuild

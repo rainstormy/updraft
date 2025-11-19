@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { dedent } from "#utilities/StringUtilities"
+import { dedent } from "#utilities/StringUtilities.ts"
 
 describe("dedenting an empty string", () => {
 	const result = dedent``

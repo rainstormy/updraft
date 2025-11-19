@@ -1,5 +1,5 @@
-import type { DateString } from "#utilities/types/DateString"
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString"
+import type { DateString } from "#utilities/types/DateString.ts"
+import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 export type Release = {
 	checks: Array<ReleaseCheck>
