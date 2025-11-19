@@ -1,10 +1,10 @@
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mocks"
-import { injectPackageJsonVersionMock } from "#adapters/PackageJsonVersion/PackageJsonVersion.mocks"
+import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks.ts"
+import { injectLoggerMock } from "#adapters/Logger/Logger.mocks.ts"
+import { injectPackageJsonVersionMock } from "#adapters/PackageJsonVersion/PackageJsonVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import { updraftCliProgram } from "#program/UpdraftCliProgram"
-import type { ExitCode } from "#utilities/ErrorUtilities"
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString"
+import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
+import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 const { packageJsonVersion } = injectPackageJsonVersionMock()
 const { printMessage } = injectLoggerMock()

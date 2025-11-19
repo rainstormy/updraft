@@ -1,6 +1,6 @@
 import process from "node:process"
-import { notFalse } from "#utilities/IterableUtilities"
-import { toStringArray } from "#utilities/StringUtilities"
+import { notFalse } from "#utilities/IterableUtilities.ts"
+import { toStringArray } from "#utilities/StringUtilities.ts"
 
 export function getArgsFromActionInput(): Array<string> {
 	const checkSequentialRelease = getBooleanInput("check-sequential-release")

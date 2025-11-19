@@ -1,4 +1,4 @@
-import { pluralise } from "#utilities/StringUtilities"
+import { pluralise } from "#utilities/StringUtilities.ts"
 
 export function parseArgs<Option extends string>(
 	schema: OptionSchema<Option>,

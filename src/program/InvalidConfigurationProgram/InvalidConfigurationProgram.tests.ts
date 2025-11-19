@@ -1,9 +1,9 @@
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mocks"
+import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks.ts"
+import { injectLoggerMock } from "#adapters/Logger/Logger.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import { updraftCliProgram } from "#program/UpdraftCliProgram"
-import type { ExitCode } from "#utilities/ErrorUtilities"
-import { dedent } from "#utilities/StringUtilities"
+import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
+import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import { dedent } from "#utilities/StringUtilities.ts"
 
 const { printMessage, printWarning, printError } = injectLoggerMock()
 const { readMatchingFiles, writeFiles } = injectFileSystemMock()

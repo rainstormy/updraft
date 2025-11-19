@@ -1,17 +1,24 @@
-import type { File } from "#adapters/FileSystem/File"
-import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem"
-import { printError, printMessage, printWarning } from "#adapters/Logger/Logger"
-import { today } from "#adapters/Today/Today"
-import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog"
-import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog"
-import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson"
-import { assertError, type ExitCode } from "#utilities/ErrorUtilities"
-import { isFulfilled, isRejected } from "#utilities/PromiseUtilities"
-import type { Release, ReleaseCheck } from "#utilities/types/Release"
+import type { File } from "#adapters/FileSystem/File.ts"
+import {
+	readMatchingFiles,
+	writeFiles,
+} from "#adapters/FileSystem/FileSystem.ts"
+import {
+	printError,
+	printMessage,
+	printWarning,
+} from "#adapters/Logger/Logger.ts"
+import { today } from "#adapters/Today/Today.ts"
+import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog.ts"
+import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog.ts"
+import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson.ts"
+import { assertError, type ExitCode } from "#utilities/ErrorUtilities.ts"
+import { isFulfilled, isRejected } from "#utilities/PromiseUtilities.ts"
+import type { Release, ReleaseCheck } from "#utilities/types/Release.ts"
 import {
 	isPrerelease,
 	type SemanticVersionString,
-} from "#utilities/types/SemanticVersionString"
+} from "#utilities/types/SemanticVersionString.ts"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,
