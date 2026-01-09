@@ -48,11 +48,11 @@
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "20.19.27",
 		"@typescript/native-preview": "7.0.0-dev.20260101.1",
-		"@vitest/ui": "4.0.8",
+		"@vitest/ui": "4.0.16",
 		"lefthook": "1.13.6",
 		"typescript": "5.9.3",
 		"vite": "7.3.0",
-		"vitest": "4.0.8"
+		"vitest": "4.0.16"
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
