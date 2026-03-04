@@ -6,14 +6,14 @@ post-checkout:
     mise:
       # Re-installs third-party dependencies after checking out a branch or a commit.
       # language=sh
-      run: mise run init
+      run: mise install
 
 post-rewrite:
   commands:
     mise:
       # Re-installs third-party dependencies after rebasing onto another branch or commit.
       # language=sh
-      run: mise run init
+      run: mise install
   only:
     - rebase
 

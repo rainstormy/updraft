@@ -85,13 +85,12 @@ run = """
 description = "Reformats the source code with Biome."
 alias = ["f"]
 
-[tasks.init]
+[tasks.install]
 # language=sh
 run = """
-	pnpm install --ignore-scripts && \
-	lefthook install
+	mise install
 """
-description = "Installs Node.js packages with pnpm and enables the Git hooks with Lefthook."
+description = "Installs all third-party dependencies with mise-en-place and pnpm and enables the Git hooks with Lefthook."
 alias = ["i"]
 
 [tasks.test]
@@ -122,6 +121,18 @@ run = """
 """
 description = "Disables the Git hooks with Lefthook."
 
+[hooks]
+# language=sh
+postinstall = """
+  if [ -z "$CI" ]; then
+    pnpm install --frozen-lockfile --ignore-scripts
+
+    if [ -z "$LEFTHOOK" ] || [ "$LEFTHOOK" = '1' ] || [ "$LEFTHOOK" = 'true' ]; then
+      lefthook install
+    fi
+  fi
+"""
+
 [env]
 # Load environment variables from the `.env` and `.env.local` files.
 # https://mise.jdx.dev/environments/#env-file
@@ -135,4 +146,6 @@ _.path = ["node_modules/.bin"]
 UPDRAFT_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.json\") }}" }
 
 [settings]
+# Enable mise hooks.
+experimental = true
 task_output = "quiet"
