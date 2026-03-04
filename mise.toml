@@ -148,4 +148,6 @@ UPDRAFT_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.
 [settings]
 # Enable mise hooks.
 experimental = true
-task_output = "quiet"
+
+# Suppress printing the `run` input command in the console when running a mise task.
+quiet = true
