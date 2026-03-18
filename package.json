@@ -50,6 +50,7 @@
 		"@typescript/native-preview": "7.0.0-dev.20260131.1",
 		"@vitest/ui": "4.0.18",
 		"lefthook": "2.1.1",
+		"oxfmt": "0.40.0",
 		"typescript": "5.9.3",
 		"vite": "7.3.1",
 		"vitest": "4.0.18"
@@ -62,6 +63,7 @@
 		"@typescript/native-preview": "This TypeScript port provides a preview of the upcoming native TypeScript compiler.",
 		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",
 		"lefthook": "Lefthook is a Git hooks manager.",
+		"oxfmt": "Oxfmt is an opinionated code formatter.",
 		"typescript": "TypeScript is a statically typed programming language on top of JavaScript.",
 		"vite": "Vite is a development server and a bundler.",
 		"vitest": "Vitest is a unit testing framework."
