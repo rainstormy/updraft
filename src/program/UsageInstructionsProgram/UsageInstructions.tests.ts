@@ -47,7 +47,7 @@ it("is a list of program arguments and options", () => {
 
 it("fits within 80 columns", () => {
 	// oxlint-disable-next-line no-control-regex: Use control characters to detect ANSI colour codes.
-	const usageInstructionsWithoutColorCodes = getUsageInstructions().replaceAll(/\u001b\[.*?m/g, "")
+	const usageInstructionsWithoutColorCodes = getUsageInstructions().replaceAll(/\u001B\[.*?m/g, "")
 	const lines = usageInstructionsWithoutColorCodes.split("\n")
 
 	for (const line of lines) {

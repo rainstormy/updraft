@@ -12,7 +12,7 @@ export async function readMatchingFiles(filePatterns: Array<string>): Promise<Fi
 				return { content, path }
 			} catch (error) {
 				assertError(error)
-				throw new Error(`Failed to read ${path}: ${error.message}.`)
+				throw new Error(`Failed to read ${path}: ${error.message}.`, { cause: error })
 			}
 		}),
 	)
@@ -25,7 +25,7 @@ export async function writeFiles(files: Files): Promise<void> {
 				await writeFile(path, content, "utf8")
 			} catch (error) {
 				assertError(error)
-				throw new Error(`Failed to write changes to ${path}: ${error.message}.`)
+				throw new Error(`Failed to write changes to ${path}: ${error.message}.`, { cause: error })
 			}
 		}),
 	)
