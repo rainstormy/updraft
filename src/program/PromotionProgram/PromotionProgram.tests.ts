@@ -7,11 +7,6 @@ import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
 	aNonPromotablePackageJson,
-	anEmptyAsciidocChangelog,
-	anEmptyMarkdownChangelog,
-	anEmptyPackageJson,
-	anUnsupportedFileA,
-	anUnsupportedFileB,
 	aPromotableAsciidocChangelogA,
 	aPromotableAsciidocChangelogB,
 	aPromotableAsciidocChangelogC,
@@ -36,6 +31,11 @@ import {
 	aPromotedPackageJsonB,
 	aPromotedPackageJsonC,
 	aPromotedPackageJsonD,
+	anEmptyAsciidocChangelog,
+	anEmptyMarkdownChangelog,
+	anEmptyPackageJson,
+	anUnsupportedFileA,
+	anUnsupportedFileB,
 } from "#program/PromotionProgram/PromotionProgram.fixtures.ts"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
 import type { ExitCode } from "#utilities/ErrorUtilities.ts"

@@ -5,10 +5,10 @@ import { today } from "#adapters/Today/Today.ts"
 import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog.ts"
 import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog.ts"
 import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson.ts"
-import { assertError, type ExitCode } from "#utilities/ErrorUtilities.ts"
+import { type ExitCode, assertError } from "#utilities/ErrorUtilities.ts"
 import { isFulfilled, isRejected } from "#utilities/PromiseUtilities.ts"
 import type { Release, ReleaseCheck } from "#utilities/types/Release.ts"
-import { isPrerelease, type SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
+import { type SemanticVersionString, isPrerelease } from "#utilities/types/SemanticVersionString.ts"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,

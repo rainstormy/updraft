@@ -1,7 +1,7 @@
 import { invalidConfigurationProgram } from "#program/InvalidConfigurationProgram/InvalidConfigurationProgram.ts"
 import { promotionProgram } from "#program/PromotionProgram/PromotionProgram.ts"
 import { defineOptions, parseArgs } from "#utilities/ArgsUtilities.ts"
-import { assertError, type ExitCode } from "#utilities/ErrorUtilities.ts"
+import { type ExitCode, assertError } from "#utilities/ErrorUtilities.ts"
 import { notNullish } from "#utilities/IterableUtilities.ts"
 import type { ReleaseCheck } from "#utilities/types/Release.ts"
 import {
