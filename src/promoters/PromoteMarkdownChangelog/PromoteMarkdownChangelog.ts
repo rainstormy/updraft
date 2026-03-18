@@ -89,19 +89,19 @@ export async function promoteMarkdownChangelog(
 			.replace(unreleasedTrailingLinkRegex, newTrailingLinks)
 
 			// Remove consecutive blank lines.
-			.replace(/\n\n\n+/gu, "\n\n")
+			.replaceAll(/\n\n\n+/gu, "\n\n")
 
 			// Insert exactly one blank line before '##' and '###' headings.
-			.replace(/\n+(?=###? )/gu, "\n\n")
+			.replaceAll(/\n+(?=###? )/gu, "\n\n")
 
 			// Remove blank lines between a '##' heading and a '###' heading.
-			.replace(/(?<=\n## .+)\n+(?=\n### )/gu, "")
+			.replaceAll(/(?<=\n## .+)\n+(?=\n### )/gu, "")
 
 			// Insert exactly one blank line before each trailing link.
-			.replace(/\n+(?=\[\S+\]: )/gu, "\n\n")
+			.replaceAll(/\n+(?=\[\S+\]: )/gu, "\n\n")
 
 			// Remove blank lines between two trailing links.
-			.replace(/(?<=\[\S+\]: .+)\n+(?=\[\S+\]: )/gu, "\n")
+			.replaceAll(/(?<=\[\S+\]: .+)\n+(?=\[\S+\]: )/gu, "\n")
 
 			// Insert exactly one trailing newline character.
 			.replace(trailingNewlinesRegex, "\n")

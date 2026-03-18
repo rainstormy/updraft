@@ -71,13 +71,13 @@ export async function promoteAsciidocChangelog(
 			.replace(unreleasedSectionRegex, newReleaseSection)
 
 			// Remove consecutive blank lines.
-			.replace(/\n\n\n+/gu, "\n\n")
+			.replaceAll(/\n\n\n+/gu, "\n\n")
 
 			// Insert exactly one blank line before '==' and '===' headings.
-			.replace(/\n+(?====? )/gu, "\n\n")
+			.replaceAll(/\n+(?====? )/gu, "\n\n")
 
 			// Remove blank lines between a '==' heading and a '===' heading.
-			.replace(/(?<=\n== .+)\n+(?=\n=== )/gu, "")
+			.replaceAll(/(?<=\n== .+)\n+(?=\n=== )/gu, "")
 
 			// Insert exactly one trailing newline character.
 			.replace(trailingNewlinesRegex, "\n")
