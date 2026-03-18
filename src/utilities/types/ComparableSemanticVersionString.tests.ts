@@ -66,15 +66,11 @@ describe.each`
 		})
 
 		it(`has a prerelease delimiter of '${props.expectedPrereleaseDelimiter}'`, () => {
-			expect(result.prerelease.delimiter).toEqual(
-				props.expectedPrereleaseDelimiter,
-			)
+			expect(result.prerelease.delimiter).toEqual(props.expectedPrereleaseDelimiter)
 		})
 
 		it(`has a prerelease increment of '${props.expectedPrereleaseIncrement}'`, () => {
-			expect(result.prerelease.increment).toEqual(
-				props.expectedPrereleaseIncrement,
-			)
+			expect(result.prerelease.increment).toEqual(props.expectedPrereleaseIncrement)
 		})
 
 		it(`has a build of '${props.expectedBuild}'`, () => {
@@ -103,10 +99,7 @@ describe.each`
 	${"7.2.6"}                       | ${["7.2.7-rc.0+dc1c8148", "7.2.7-rc.0", "7.2.7-rc-0+dc1c8148", "7.2.7-rc-0", "7.2.7-next.0+290e59bd", "7.2.7-next.0", "7.2.7-next-0+290e59bd", "7.2.7-next-0", "7.2.7-insiders+6b4998cf", "7.2.7-insiders", "7.2.7-latest+31e50b6a", "7.2.7-latest", "7.2.7", "7.3.0-rc.0+40528259", "7.3.0-rc.0", "7.3.0-rc-0+40528259", "7.3.0-rc-0", "7.3.0-next.0+32562b75", "7.3.0-next.0", "7.3.0-next-0+32562b75", "7.3.0-next-0", "7.3.0-insiders+23cee931", "7.3.0-insiders", "7.3.0-latest+5f990a24", "7.3.0-latest", "7.3.0", "8.0.0-rc.0+61a1abf1", "8.0.0-rc.0", "8.0.0-rc-0+61a1abf1", "8.0.0-rc-0", "8.0.0-next.0+1fe44165", "8.0.0-next.0", "8.0.0-next-0+1fe44165", "8.0.0-next-0", "8.0.0-insiders+e0baff7a", "8.0.0-insiders", "8.0.0-latest+99c3e77b", "8.0.0-latest", "8.0.0"]}
 `(
 	"when the current version is $current",
-	(props: {
-		current: SemanticVersionString
-		validNextVersions: Array<SemanticVersionString>
-	}) => {
+	(props: { current: SemanticVersionString; validNextVersions: Array<SemanticVersionString> }) => {
 		it("accepts a valid subsequent version", () => {
 			expect(
 				props.validNextVersions.filter((nextVersion) =>

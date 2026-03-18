@@ -26,25 +26,20 @@ export async function promoteAsciidocChangelog(
 		throw new Error("must have an 'Unreleased' section")
 	}
 
-	const trimmedUnreleasedBody =
-		unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? null
+	const trimmedUnreleasedBody = unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? null
 
 	if (!trimmedUnreleasedBody) {
 		throw new Error("must have at least one item in the 'Unreleased' section")
 	}
 
-	const unreleasedRepositoryLink =
-		unreleasedSectionMatch.groups?.unreleasedRepositoryLink ?? null
+	const unreleasedRepositoryLink = unreleasedSectionMatch.groups?.unreleasedRepositoryLink ?? null
 
 	if (unreleasedRepositoryLink === null) {
-		throw new Error(
-			"must have a link to the GitHub repository in the 'Unreleased' section",
-		)
+		throw new Error("must have a link to the GitHub repository in the 'Unreleased' section")
 	}
 
 	if (newRelease.checks.includes("sequential")) {
-		const previousReleaseVersionRegex =
-			/\[(?<version>\d+\.\d+\.\d+.*)\] - \d{4}-\d{2}-\d{2}\n/giu
+		const previousReleaseVersionRegex = /\[(?<version>\d+\.\d+\.\d+.*)\] - \d{4}-\d{2}-\d{2}\n/giu
 
 		const previousReleaseVersions = Array.from(
 			originalContent.matchAll(previousReleaseVersionRegex),
@@ -57,13 +52,9 @@ export async function promoteAsciidocChangelog(
 		checkSequentialRelease(newRelease.version, previousReleaseVersions)
 	}
 
-	const latestReleaseVersion =
-		unreleasedSectionMatch.groups?.latestReleaseVersion ?? null
+	const latestReleaseVersion = unreleasedSectionMatch.groups?.latestReleaseVersion ?? null
 
-	const repositoryLink = unreleasedRepositoryLink.replace(
-		repositoryLinkPathRegex,
-		"",
-	)
+	const repositoryLink = unreleasedRepositoryLink.replace(repositoryLinkPathRegex, "")
 	const newUnreleasedLink = `${repositoryLink}/compare/v${newRelease.version}\\...HEAD`
 	const newReleaseLink = `${repositoryLink}${
 		latestReleaseVersion !== null

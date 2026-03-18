@@ -28,9 +28,9 @@ describe.each`
 			const originalContent = ""
 
 			it("raises an error", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).rejects.toThrow("must have an 'Unreleased' section")
+				await expect(promoteAsciidocChangelog(originalContent, release)).rejects.toThrow(
+					"must have an 'Unreleased' section",
+				)
 			})
 		})
 
@@ -46,9 +46,9 @@ describe.each`
 			`
 
 			it("raises an error", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).rejects.toThrow("must have an 'Unreleased' section")
+				await expect(promoteAsciidocChangelog(originalContent, release)).rejects.toThrow(
+					"must have an 'Unreleased' section",
+				)
 			})
 		})
 
@@ -62,9 +62,7 @@ describe.each`
 			`
 
 			it("raises an error", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).rejects.toThrow(
+				await expect(promoteAsciidocChangelog(originalContent, release)).rejects.toThrow(
 					"must have at least one item in the 'Unreleased' section",
 				)
 			})
@@ -88,9 +86,7 @@ describe.each`
 			`
 
 			it("raises an error", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).rejects.toThrow(
+				await expect(promoteAsciidocChangelog(originalContent, release)).rejects.toThrow(
 					"must have at least one item in the 'Unreleased' section",
 				)
 			})
@@ -108,9 +104,7 @@ describe.each`
 			`
 
 			it("raises an error", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).rejects.toThrow(
+				await expect(promoteAsciidocChangelog(originalContent, release)).rejects.toThrow(
 					"must have a link to the GitHub repository in the 'Unreleased' section",
 				)
 			})
@@ -139,9 +133,9 @@ describe.each`
 			`}\n`
 
 			it("promotes the unreleased section and inserts a new empty unreleased section", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -198,9 +192,9 @@ describe.each`
 			`}\n`
 
 			it("promotes the unreleased section and inserts a new empty unreleased section", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -345,9 +339,9 @@ describe.each`
 			`}\n`
 
 			it("promotes the unreleased section and inserts a new empty unreleased section", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -388,9 +382,9 @@ describe.each`
 			`}\n`
 
 			it("preserves the empty releases", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -417,9 +411,9 @@ describe.each`
 			`}\n`
 
 			it("normalises the case in the new unreleased section", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -531,9 +525,9 @@ describe.each`
 			`}\n`
 
 			it("preserves at most one blank line between sections", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -572,9 +566,9 @@ describe.each`
 			`}\n`
 
 			it("inserts a blank line before each section", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -617,9 +611,9 @@ describe.each`
 			`}\n`
 
 			it("preserves one trailing newline", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, release),
-				).resolves.toBe(expectedPromotedContent)
+				await expect(promoteAsciidocChangelog(originalContent, release)).resolves.toBe(
+					expectedPromotedContent,
+				)
 			})
 		})
 
@@ -654,9 +648,7 @@ describe.each`
 				}
 
 				it("raises an error", async () => {
-					await expect(
-						promoteAsciidocChangelog(originalContent, checkedRelease),
-					).rejects.toThrow(
+					await expect(promoteAsciidocChangelog(originalContent, checkedRelease)).rejects.toThrow(
 						`has latest release version ${props.latestReleaseVersion}, but was set to update to ${checkedRelease.version}`,
 					)
 				})
@@ -690,9 +682,7 @@ describe.each`
 			}
 
 			it("raises an error", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, checkedRelease),
-				).rejects.toThrow(
+				await expect(promoteAsciidocChangelog(originalContent, checkedRelease)).rejects.toThrow(
 					`already contains release version ${checkedRelease.version}`,
 				)
 			})
@@ -725,9 +715,7 @@ describe.each`
 			}
 
 			it("raises an error", async () => {
-				await expect(
-					promoteAsciidocChangelog(originalContent, checkedRelease),
-				).rejects.toThrow(
+				await expect(promoteAsciidocChangelog(originalContent, checkedRelease)).rejects.toThrow(
 					`already contains release version ${checkedRelease.version}`,
 				)
 			})

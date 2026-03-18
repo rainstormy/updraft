@@ -3,15 +3,11 @@ import { dedent } from "#utilities/StringUtilities.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
-export function anEmptyAsciidocChangelog(
-	path: AsciidocChangelogFilepath,
-): File {
+export function anEmptyAsciidocChangelog(path: AsciidocChangelogFilepath): File {
 	return { path, content: "" }
 }
 
-export function aNonPromotableAsciidocChangelog(
-	path: AsciidocChangelogFilepath,
-): File {
+export function aNonPromotableAsciidocChangelog(path: AsciidocChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -27,9 +23,7 @@ export function aNonPromotableAsciidocChangelog(
 	}
 }
 
-export function aPromotableAsciidocChangelogA(
-	path: AsciidocChangelogFilepath,
-): File {
+export function aPromotableAsciidocChangelogA(path: AsciidocChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -79,9 +73,7 @@ export function aPromotedAsciidocChangelogA(
 	}
 }
 
-export function aPromotableAsciidocChangelogB(
-	path: AsciidocChangelogFilepath,
-): File {
+export function aPromotableAsciidocChangelogB(path: AsciidocChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -115,9 +107,7 @@ export function aPromotedAsciidocChangelogB(
 	}
 }
 
-export function aPromotableAsciidocChangelogC(
-	path: AsciidocChangelogFilepath,
-): File {
+export function aPromotableAsciidocChangelogC(path: AsciidocChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -173,9 +163,7 @@ export function aPromotedAsciidocChangelogC(
 	}
 }
 
-export function aPromotableAsciidocChangelogD(
-	path: AsciidocChangelogFilepath,
-): File {
+export function aPromotableAsciidocChangelogD(path: AsciidocChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -215,15 +203,11 @@ export function aPromotedAsciidocChangelogD(
 	}
 }
 
-export function anEmptyMarkdownChangelog(
-	path: MarkdownChangelogFilepath,
-): File {
+export function anEmptyMarkdownChangelog(path: MarkdownChangelogFilepath): File {
 	return { path, content: "" }
 }
 
-export function aNonPromotableMarkdownChangelog(
-	path: MarkdownChangelogFilepath,
-): File {
+export function aNonPromotableMarkdownChangelog(path: MarkdownChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -239,9 +223,7 @@ export function aNonPromotableMarkdownChangelog(
 	}
 }
 
-export function aPromotableMarkdownChangelogA(
-	path: MarkdownChangelogFilepath,
-): File {
+export function aPromotableMarkdownChangelogA(path: MarkdownChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -291,9 +273,7 @@ export function aPromotedMarkdownChangelogA(
 	}
 }
 
-export function aPromotableMarkdownChangelogB(
-	path: MarkdownChangelogFilepath,
-): File {
+export function aPromotableMarkdownChangelogB(path: MarkdownChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -327,9 +307,7 @@ export function aPromotedMarkdownChangelogB(
 	}
 }
 
-export function aPromotableMarkdownChangelogC(
-	path: MarkdownChangelogFilepath,
-): File {
+export function aPromotableMarkdownChangelogC(path: MarkdownChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -385,9 +363,7 @@ export function aPromotedMarkdownChangelogC(
 	}
 }
 
-export function aPromotableMarkdownChangelogD(
-	path: MarkdownChangelogFilepath,
-): File {
+export function aPromotableMarkdownChangelogD(path: MarkdownChangelogFilepath): File {
 	return {
 		path,
 		content: dedent`
@@ -573,18 +549,14 @@ export function aPromotedPackageJsonD(
 	}
 }
 
-export function anUnsupportedFileA<Path extends string>(
-	path: UnsupportedFilepath<Path>,
-): File {
+export function anUnsupportedFileA<Path extends string>(path: UnsupportedFilepath<Path>): File {
 	return {
 		path,
 		content: "Changelog",
 	}
 }
 
-export function anUnsupportedFileB<Path extends string>(
-	path: UnsupportedFilepath<Path>,
-): File {
+export function anUnsupportedFileB<Path extends string>(path: UnsupportedFilepath<Path>): File {
 	return {
 		path,
 		content: "This document lists all notable changes made to the project.",
@@ -595,7 +567,7 @@ export type AsciidocChangelogFilepath = `${string}.adoc`
 export type MarkdownChangelogFilepath = `${string}.md`
 export type PackageJsonFilepath = `${string}package.json`
 
-// biome-ignore format: This type is easier to read and maintain linearly.
+// oxfmt-ignore
 export type UnsupportedFilepath<Path> =
 	| Path extends AsciidocChangelogFilepath ? never
 	: Path extends MarkdownChangelogFilepath ? never

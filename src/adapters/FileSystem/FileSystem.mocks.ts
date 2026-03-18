@@ -1,9 +1,7 @@
 import { vi } from "vitest"
 import type { ModuleMock } from "#utilities/ModuleMock.ts"
 
-export type FileSystemMock = ModuleMock<
-	typeof import("#adapters/FileSystem/FileSystem")
->
+export type FileSystemMock = ModuleMock<typeof import("#adapters/FileSystem/FileSystem")>
 
 export function injectFileSystemMock(): FileSystemMock {
 	const mock = vi.hoisted<FileSystemMock>(() => ({

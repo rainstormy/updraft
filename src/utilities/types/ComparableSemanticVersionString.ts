@@ -25,9 +25,7 @@ export function toComparableSemanticVersionString(
 	const versionMatch = semanticVersionRegex.exec(version)
 
 	if (!versionMatch?.groups) {
-		throw new Error(
-			`Expected a semantic version string, but it was '${version}'`,
-		)
+		throw new Error(`Expected a semantic version string, but it was '${version}'`)
 	}
 
 	const { major, minor, patch, prerelease, build } = versionMatch.groups
@@ -35,8 +33,7 @@ export function toComparableSemanticVersionString(
 	assertNotNullish(minor, "minor")
 	assertNotNullish(patch, "patch")
 
-	const incrementMatch =
-		prerelease !== undefined ? incrementRegex.exec(prerelease) : null
+	const incrementMatch = prerelease !== undefined ? incrementRegex.exec(prerelease) : null
 
 	const increment = incrementMatch?.groups?.increment ?? null
 
@@ -113,9 +110,7 @@ function isSequentialPatch(
 	next: ComparableSemanticVersionString,
 ): boolean {
 	return (
-		(next.patch === current.patch + 1 &&
-			!isPrerelease(current) &&
-			isInitialPrerelease(next)) ||
+		(next.patch === current.patch + 1 && !isPrerelease(current) && isInitialPrerelease(next)) ||
 		(next.patch === current.patch && isSequentialPrerelease(current, next))
 	)
 }
@@ -124,12 +119,8 @@ function isPrerelease(version: ComparableSemanticVersionString): boolean {
 	return version.prerelease.label !== "" || version.build !== ""
 }
 
-function isInitialPrerelease(
-	version: ComparableSemanticVersionString,
-): boolean {
-	return (
-		version.prerelease.increment === null || version.prerelease.increment === 0
-	)
+function isInitialPrerelease(version: ComparableSemanticVersionString): boolean {
+	return version.prerelease.increment === null || version.prerelease.increment === 0
 }
 
 function isSequentialPrerelease(

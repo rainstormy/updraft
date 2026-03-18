@@ -4,11 +4,7 @@ import { basename, join as joinPath, resolve as resolvePath } from "node:path"
 import { env } from "node:process"
 import { fileURLToPath } from "node:url"
 import type { Plugin, ResolvedConfig } from "vite"
-import {
-	defineConfig,
-	mergeConfig,
-	type ViteUserConfig as ViteConfig,
-} from "vitest/config"
+import { defineConfig, mergeConfig, type ViteUserConfig as ViteConfig } from "vitest/config"
 
 export default defineConfig(() => {
 	const nodeDependencies = [

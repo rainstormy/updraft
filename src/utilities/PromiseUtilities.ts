@@ -4,8 +4,6 @@ export function isFulfilled<Value>(
 	return result.status === "fulfilled"
 }
 
-export function isRejected(
-	result: PromiseSettledResult<unknown>,
-): result is PromiseRejectedResult {
+export function isRejected(result: PromiseSettledResult<unknown>): result is PromiseRejectedResult {
 	return result.status === "rejected"
 }

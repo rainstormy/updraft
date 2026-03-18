@@ -57,10 +57,7 @@ describe.each`
 	${"[11.0.2-beta.2+7b93b61c]"}       | ${"11.0.2-beta.2+7b93b61c"}
 `(
 	"when the input contains a semantic version string: $input",
-	(props: {
-		input: string
-		expectedSemanticVersionString: SemanticVersionString
-	}) => {
+	(props: { input: string; expectedSemanticVersionString: SemanticVersionString }) => {
 		it("returns the semantic version string", () => {
 			const result = extractSemanticVersionString(props.input)
 			expect(result).toBe(props.expectedSemanticVersionString)
@@ -80,10 +77,7 @@ describe.each`
 	${"[]"}
 `(
 	"when the input does not contain a semantic version string: $input",
-	(props: {
-		input: string
-		expectedSemanticVersionString: SemanticVersionString
-	}) => {
+	(props: { input: string; expectedSemanticVersionString: SemanticVersionString }) => {
 		it("returns null", () => {
 			const result = extractSemanticVersionString(props.input)
 			expect(result).toBeNull()
@@ -99,14 +93,11 @@ describe.each`
 	${"2.3.4-alpha.0+e58c6301"}
 	${"10.4.1-rc.0"}
 	${"11.0.2-beta.2+7b93b61c"}
-`(
-	"when the version string is $version",
-	(props: { version: SemanticVersionString }) => {
-		it("is a prerelease", () => {
-			expect(isPrerelease(props.version)).toBe(true)
-		})
-	},
-)
+`("when the version string is $version", (props: { version: SemanticVersionString }) => {
+	it("is a prerelease", () => {
+		expect(isPrerelease(props.version)).toBe(true)
+	})
+})
 
 describe.each`
 	version
@@ -116,11 +107,8 @@ describe.each`
 	${"2.3.4"}
 	${"10.4.1"}
 	${"11.0.2"}
-`(
-	"when the version string is $version",
-	(props: { version: SemanticVersionString }) => {
-		it("is a not prerelease", () => {
-			expect(isPrerelease(props.version)).toBe(false)
-		})
-	},
-)
+`("when the version string is $version", (props: { version: SemanticVersionString }) => {
+	it("is a not prerelease", () => {
+		expect(isPrerelease(props.version)).toBe(false)
+	})
+})

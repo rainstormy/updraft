@@ -50,10 +50,10 @@ alias = ["bl"]
 
 [tasks.check]
 depends = [
-	"check-actions",
-	"check-format",
-	# "check-renovate", # Skipped because it is often quite slow.
-	"check-types",
+  "check-actions",
+  "check-format",
+  # "check-renovate", # Skipped because it is often quite slow.
+  "check-types",
 ]
 description = "Runs `check-actions`, `check-format`, and `check-types`."
 alias = ["c"]

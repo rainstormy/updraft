@@ -32,10 +32,7 @@ export async function promotePackageJson(
 
 	return (
 		originalContent
-			.replace(
-				versionFieldRegex,
-				`"version":${whitespace}"${newRelease.version}"`,
-			)
+			.replace(versionFieldRegex, `"version":${whitespace}"${newRelease.version}"`)
 
 			// Insert exactly one trailing newline character.
 			.replace(trailingNewlinesRegex, "\n")

@@ -16,10 +16,7 @@ describe.each`
 	${["--files", "--version", "CHANGELOG.adoc"]} | ${"3.2.0-beta.1"}
 `(
 	"when the args are $toolVersionArgs and the tool version is $toolVersion",
-	(props: {
-		toolVersionArgs: Array<string>
-		toolVersion: SemanticVersionString
-	}) => {
+	(props: { toolVersionArgs: Array<string>; toolVersion: SemanticVersionString }) => {
 		let actualExitCode: ExitCode | null = null
 
 		beforeEach(async () => {

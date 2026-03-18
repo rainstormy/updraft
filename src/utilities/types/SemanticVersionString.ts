@@ -7,9 +7,7 @@ export type SemanticVersionString =
 export const semanticVersionRegex =
 	/(?<fullVersion>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?<prerelease>-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?<build>\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)/
 
-export function extractSemanticVersionString(
-	input: string,
-): SemanticVersionString | null {
+export function extractSemanticVersionString(input: string): SemanticVersionString | null {
 	const versionMatch = semanticVersionRegex.exec(input)
 	return (versionMatch?.groups?.fullVersion as SemanticVersionString) ?? null
 }

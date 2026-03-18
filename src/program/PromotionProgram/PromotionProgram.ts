@@ -1,13 +1,6 @@
 import type { File } from "#adapters/FileSystem/File.ts"
-import {
-	readMatchingFiles,
-	writeFiles,
-} from "#adapters/FileSystem/FileSystem.ts"
-import {
-	printError,
-	printMessage,
-	printWarning,
-} from "#adapters/Logger/Logger.ts"
+import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
+import { printError, printMessage, printWarning } from "#adapters/Logger/Logger.ts"
 import { today } from "#adapters/Today/Today.ts"
 import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog.ts"
 import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog.ts"
@@ -15,10 +8,7 @@ import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackage
 import { assertError, type ExitCode } from "#utilities/ErrorUtilities.ts"
 import { isFulfilled, isRejected } from "#utilities/PromiseUtilities.ts"
 import type { Release, ReleaseCheck } from "#utilities/types/Release.ts"
-import {
-	isPrerelease,
-	type SemanticVersionString,
-} from "#utilities/types/SemanticVersionString.ts"
+import { isPrerelease, type SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 const promoters: Record<FileType, Promoter> = {
 	"asciidoc-changelog": promoteAsciidocChangelog,
@@ -38,9 +28,7 @@ export async function promotionProgram(
 ): Promise<ExitCode> {
 	if (filePatterns.length === 0) {
 		printMessage(
-			`No files set to be updated in release version ${
-				release.version
-			}, as it is ${
+			`No files set to be updated in release version ${release.version}, as it is ${
 				isPrerelease(release.version) ? "a prerelease" : "not a prerelease"
 			}.`,
 		)
@@ -70,9 +58,7 @@ export async function promotionProgram(
 			return 1
 		}
 
-		const outputFiles = promotionResults
-			.filter(isFulfilled)
-			.map(({ value }) => value)
+		const outputFiles = promotionResults.filter(isFulfilled).map(({ value }) => value)
 
 		await writeFiles(outputFiles)
 		return 0
@@ -111,18 +97,14 @@ function detectFileType(path: string): FileType {
 	}
 
 	if (filename.endsWith(".adoc")) {
-		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.adoc"].join(
-			"/",
-		)
+		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.adoc"].join("/")
 		printWarning(
 			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
 		)
 		return "asciidoc-changelog"
 	}
 	if (filename.endsWith(".md")) {
-		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.md"].join(
-			"/",
-		)
+		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.md"].join("/")
 		printWarning(
 			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
 		)

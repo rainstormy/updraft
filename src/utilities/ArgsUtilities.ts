@@ -40,9 +40,7 @@ function assertRequiredOptions<Option extends string>(
 	schema: OptionSchema<Option>,
 	parsedArgs: Record<Option, Array<string> | undefined>,
 ): void {
-	const constraints = Object.entries(schema) as Array<
-		[Option, OptionConstraints]
-	>
+	const constraints = Object.entries(schema) as Array<[Option, OptionConstraints]>
 
 	for (const [option, { required }] of constraints) {
 		if (required && !(option in parsedArgs)) {
@@ -55,9 +53,7 @@ function assertExactNumberOfOptionArguments<Option extends string>(
 	schema: OptionSchema<Option>,
 	parsedArgs: Record<Option, Array<string> | undefined>,
 ): void {
-	const constraints = Object.entries(schema) as Array<
-		[Option, OptionConstraints]
-	>
+	const constraints = Object.entries(schema) as Array<[Option, OptionConstraints]>
 
 	for (const [option, { args }] of constraints) {
 		const optionArgs = parsedArgs[option]
@@ -79,9 +75,7 @@ function assertMinimumNumberOfOptionArguments<Option extends string>(
 	schema: OptionSchema<Option>,
 	parsedArgs: Record<Option, Array<string> | undefined>,
 ): void {
-	const constraints = Object.entries(schema) as Array<
-		[Option, OptionConstraints]
-	>
+	const constraints = Object.entries(schema) as Array<[Option, OptionConstraints]>
 
 	for (const [option, { args }] of constraints) {
 		const optionArgs = parsedArgs[option]
@@ -102,9 +96,7 @@ function assertMaximumNumberOfOptionArguments<Option extends string>(
 	schema: OptionSchema<Option>,
 	parsedArgs: Record<Option, Array<string> | undefined>,
 ): void {
-	const constraints = Object.entries(schema) as Array<
-		[Option, OptionConstraints]
-	>
+	const constraints = Object.entries(schema) as Array<[Option, OptionConstraints]>
 
 	for (const [option, { args }] of constraints) {
 		const optionArgs = parsedArgs[option]
@@ -127,10 +119,7 @@ export function defineOptions<Option extends string>(
 	return optionSchema
 }
 
-export type OptionSchema<Option extends string> = Record<
-	Option,
-	OptionConstraints
->
+export type OptionSchema<Option extends string> = Record<Option, OptionConstraints>
 
 type OptionConstraints = {
 	args: {

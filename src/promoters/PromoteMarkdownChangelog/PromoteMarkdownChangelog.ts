@@ -30,8 +30,7 @@ export async function promoteMarkdownChangelog(
 		throw new Error("must have an 'Unreleased' section")
 	}
 
-	const trimmedUnreleasedBody =
-		unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? null
+	const trimmedUnreleasedBody = unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? null
 
 	if (!trimmedUnreleasedBody) {
 		throw new Error("must have at least one item in the 'Unreleased' section")
@@ -44,14 +43,11 @@ export async function promoteMarkdownChangelog(
 		null
 
 	if (unreleasedRepositoryLink === null) {
-		throw new Error(
-			"must have a link to the GitHub repository in the 'Unreleased' section",
-		)
+		throw new Error("must have a link to the GitHub repository in the 'Unreleased' section")
 	}
 
 	if (newRelease.checks.includes("sequential")) {
-		const previousReleaseVersionRegex =
-			/\n## \[(?<version>\d+\.\d+\.\d+.*)\]\(/giu
+		const previousReleaseVersionRegex = /\n## \[(?<version>\d+\.\d+\.\d+.*)\]\(/giu
 
 		const previousReleaseVersions = Array.from(
 			originalContent.matchAll(previousReleaseVersionRegex),
@@ -64,13 +60,9 @@ export async function promoteMarkdownChangelog(
 		checkSequentialRelease(newRelease.version, previousReleaseVersions)
 	}
 
-	const latestReleaseVersion =
-		unreleasedSectionMatch.groups?.latestReleaseVersion ?? null
+	const latestReleaseVersion = unreleasedSectionMatch.groups?.latestReleaseVersion ?? null
 
-	const repositoryLink = unreleasedRepositoryLink.replace(
-		repositoryLinkPathRegex,
-		"",
-	)
+	const repositoryLink = unreleasedRepositoryLink.replace(repositoryLinkPathRegex, "")
 	const newUnreleasedLink = `${repositoryLink}/compare/v${newRelease.version}...HEAD`
 	const newReleaseLink = `${repositoryLink}${
 		latestReleaseVersion !== null
@@ -79,9 +71,7 @@ export async function promoteMarkdownChangelog(
 	}`
 
 	const newUnreleasedHeading =
-		trailingLinks !== null
-			? "## [Unreleased]"
-			: `## [Unreleased](${newUnreleasedLink})`
+		trailingLinks !== null ? "## [Unreleased]" : `## [Unreleased](${newUnreleasedLink})`
 	const newReleaseHeading =
 		trailingLinks !== null
 			? `## [${newRelease.version}] - ${newRelease.date}`

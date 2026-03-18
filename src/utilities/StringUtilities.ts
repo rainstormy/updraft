@@ -46,11 +46,7 @@ function extractIndent(line: string): string {
 	return indentRegex.exec(line)?.[0] ?? ""
 }
 
-export function pluralise(
-	subject: number,
-	singular: string,
-	plural?: string,
-): string {
+export function pluralise(subject: number, singular: string, plural?: string): string {
 	return subject === 1 ? singular : (plural ?? `${singular}s`)
 }
 
