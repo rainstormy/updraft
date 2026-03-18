@@ -46,11 +46,8 @@ it("is a list of program arguments and options", () => {
 })
 
 it("fits within 80 columns", () => {
-	const usageInstructionsWithoutColorCodes = getUsageInstructions().replace(
-		// biome-ignore lint/suspicious/noControlCharactersInRegex: We use control characters to detect ANSI colour codes.
-		/\u001b\[.*?m/g,
-		"",
-	)
+	// oxlint-disable-next-line no-control-regex: Use control characters to detect ANSI colour codes.
+	const usageInstructionsWithoutColorCodes = getUsageInstructions().replace(/\u001b\[.*?m/g, "")
 	const lines = usageInstructionsWithoutColorCodes.split("\n")
 
 	for (const line of lines) {
