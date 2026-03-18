@@ -1,13 +1,10 @@
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks.ts"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mocks.ts"
 import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
+import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
+import { printMessage } from "#adapters/Logger/Logger.ts"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
 import type { ExitCode } from "#utilities/ErrorUtilities.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
-
-const { printMessage } = injectLoggerMock()
-const { readMatchingFiles, writeFiles } = injectFileSystemMock()
 
 describe.each`
 	toolVersionArgs                               | toolVersion

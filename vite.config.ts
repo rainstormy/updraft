@@ -34,6 +34,7 @@ export default defineConfig(() => {
 		},
 		test: {
 			include: ["src/**/*.tests.ts"],
+			setupFiles: ["src/utilities/vitest/VitestSetup.mocks.ts"],
 			mockReset: true,
 			unstubEnvs: true,
 			unstubGlobals: true,

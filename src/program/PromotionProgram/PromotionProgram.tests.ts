@@ -1,8 +1,13 @@
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks.ts"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mocks.ts"
-import { injectTodayMock } from "#adapters/Today/Today.mocks.ts"
+import {
+	mockMatchingFiles,
+	mockSabotagedMatchingFiles,
+	mockSabotagedWriteFiles,
+} from "#adapters/FileSystem/FileSystem.mocks.ts"
+import { mockToday } from "#adapters/Today/Today.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { Files } from "#adapters/FileSystem/File.ts"
+import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
+import { printError, printMessage, printWarning } from "#adapters/Logger/Logger.ts"
 import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
@@ -41,10 +46,6 @@ import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
 import type { ExitCode } from "#utilities/ErrorUtilities.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
 
-const { today } = injectTodayMock()
-const { printMessage, printWarning, printError } = injectLoggerMock()
-const { readMatchingFiles, writeFiles } = injectFileSystemMock()
-
 describe.each`
 	today           | args                                                                                                         | expectedMessage
 	${"2017-08-15"} | ${"--prerelease-files CHANGELOG.adoc --release-version 3.3.4"}                                               | ${"No files set to be updated in release version 3.3.4, as it is not a prerelease."}
@@ -61,7 +62,7 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
+			mockToday(props.today)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -114,8 +115,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => []) // No matched files.
+			mockToday(props.today)
+			mockMatchingFiles([]) // No matched files.
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -188,8 +189,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => props.files)
+			mockToday(props.today)
+			mockMatchingFiles(props.files)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -235,8 +236,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => props.files)
+			mockToday(props.today)
+			mockMatchingFiles(props.files)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -276,8 +277,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => props.files)
+			mockToday(props.today)
+			mockMatchingFiles(props.files)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -309,9 +310,7 @@ describe.each`
 	let actualExitCode: ExitCode
 
 	beforeEach(async () => {
-		readMatchingFiles.mockImplementation(async () => {
-			throw new Error(props.expectedError)
-		})
+		mockSabotagedMatchingFiles(props.expectedError)
 		actualExitCode = await updraftCliProgram(props.args.split(" "))
 	})
 
@@ -341,10 +340,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			readMatchingFiles.mockImplementation(async () => props.files)
-			writeFiles.mockImplementation(async () => {
-				throw new Error(props.expectedError)
-			})
+			mockMatchingFiles(props.files)
+			mockSabotagedWriteFiles(props.expectedError)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 

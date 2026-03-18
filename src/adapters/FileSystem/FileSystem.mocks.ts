@@ -1,14 +1,40 @@
-import { vi } from "vitest"
-import type { ModuleMock } from "#utilities/ModuleMock.ts"
+import { beforeEach, vi } from "vitest"
+import type { Files } from "#adapters/FileSystem/File.ts"
 
-export type FileSystemMock = ModuleMock<typeof import("#adapters/FileSystem/FileSystem")>
+vi.mock(import("#adapters/FileSystem/FileSystem.ts"), () => ({
+	readMatchingFiles: vi.fn(async (): Promise<Files> => {
+		if (mockedReadErrorMessage) {
+			throw new Error(mockedReadErrorMessage)
+		}
+		return mockedFiles
+	}),
+	writeFiles: vi.fn(async (): Promise<void> => {
+		if (mockedWriteErrorMessage) {
+			throw new Error(mockedWriteErrorMessage)
+		}
+	}),
+}))
 
-export function injectFileSystemMock(): FileSystemMock {
-	const mock = vi.hoisted<FileSystemMock>(() => ({
-		readMatchingFiles: vi.fn(),
-		writeFiles: vi.fn(),
-	}))
+let mockedFiles: Files
+let mockedReadErrorMessage: string | null
+let mockedWriteErrorMessage: string | null
 
-	vi.mock("#adapters/FileSystem/FileSystem", () => mock)
-	return mock
+export function mockFileSystem(): void {
+	beforeEach(() => {
+		mockedFiles = []
+		mockedReadErrorMessage = null
+		mockedWriteErrorMessage = null
+	})
+}
+
+export function mockMatchingFiles(files: Files): void {
+	mockedFiles = files
+}
+
+export function mockSabotagedMatchingFiles(errorMessage: string): void {
+	mockedReadErrorMessage = errorMessage
+}
+
+export function mockSabotagedWriteFiles(errorMessage: string): void {
+	mockedWriteErrorMessage = errorMessage
 }

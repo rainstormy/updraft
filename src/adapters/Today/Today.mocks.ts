@@ -1,13 +1,12 @@
 import { vi } from "vitest"
-import type { ModuleMock } from "#utilities/ModuleMock.ts"
+import type { DateString } from "#utilities/types/DateString.ts"
 
-export type TodayMock = ModuleMock<typeof import("#adapters/Today/Today")>
+vi.mock(import("#adapters/Today/Today.ts"), () => ({
+	today: vi.fn(() => mockedToday),
+}))
 
-export function injectTodayMock(): TodayMock {
-	const mock = vi.hoisted<TodayMock>(() => ({
-		today: vi.fn(),
-	}))
+let mockedToday: DateString
 
-	vi.mock("#adapters/Today/Today", () => mock)
-	return mock
+export function mockToday(today: DateString): void {
+	mockedToday = today
 }
