@@ -32,7 +32,7 @@ pre-commit:
     # Reformats files before committing changes.
     mise:
       # language=sh
-      run: mise run fmt
+      run: mise run format
       stage_fixed: true
   skip:
     - merge
