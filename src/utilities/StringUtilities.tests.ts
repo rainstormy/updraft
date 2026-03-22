@@ -116,9 +116,7 @@ describe("dedenting a multi-line string with an indented trailing newline with a
 	`
 
 	it("removes 3 leading tabs from every line and discards the indent of the trailing newline", () => {
-		expect(result).toBe(
-			"function doStuff() {\n\tconsole.log('Hello, world!')\n}",
-		)
+		expect(result).toBe("function doStuff() {\n\tconsole.log('Hello, world!')\n}")
 	})
 })
 

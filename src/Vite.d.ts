@@ -1,5 +1,4 @@
-/// <reference types="vite/client" />
-/// <reference path="utilities/version/UpdraftVersion" />
+import type { UpdraftVersion } from "utilities/version/UpdraftVersion.ts"
 
 interface ViteTypeOptions {
 	strictImportMetaEnv: unknown

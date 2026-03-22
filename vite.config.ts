@@ -4,11 +4,7 @@ import { basename, join as joinPath, resolve as resolvePath } from "node:path"
 import { env } from "node:process"
 import { fileURLToPath } from "node:url"
 import type { Plugin, ResolvedConfig } from "vite"
-import {
-	defineConfig,
-	mergeConfig,
-	type ViteUserConfig as ViteConfig,
-} from "vitest/config"
+import { type ViteUserConfig as ViteConfig, defineConfig, mergeConfig } from "vitest/config"
 
 export default defineConfig(() => {
 	const nodeDependencies = [
@@ -38,6 +34,7 @@ export default defineConfig(() => {
 		},
 		test: {
 			include: ["src/**/*.tests.ts"],
+			setupFiles: ["src/utilities/vitest/VitestSetup.mocks.ts"],
 			mockReset: true,
 			unstubEnvs: true,
 			unstubGlobals: true,

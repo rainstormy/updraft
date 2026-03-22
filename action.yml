@@ -5,7 +5,6 @@ description: >
   Actions runner in the current workflow run, but it does not make any Git
   commits or GitHub releases.
 author: Steffen Diswal
-
 inputs:
   check-sequential-release:
     description: >

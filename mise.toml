@@ -50,10 +50,10 @@ alias = ["bl"]
 
 [tasks.check]
 depends = [
-	"check-actions",
-	"check-format",
-	# "check-renovate", # Skipped because it is often quite slow.
-	"check-types",
+  "check-actions",
+  "check-format",
+  # "check-renovate", # Skipped because it is often quite slow.
+  "check-types",
 ]
 description = "Runs `check-actions`, `check-format`, and `check-types`."
 alias = ["c"]
@@ -63,15 +63,15 @@ alias = ["c"]
 run = """
 	actionlint
 """
-description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
+description = "Verifies that the GitHub Actions workflows are valid with actionlint."
 alias = ["ca"]
 
 [tasks.check-format]
 # language=sh
 run = """
-	biome check --error-on-warnings
+	oxlint --deny-warnings && oxfmt --check
 """
-description = "Verifies the code style of the source code with Biome."
+description = "Verifies that the source code is clean and well-formatted with Oxlint and Oxfmt."
 alias = ["cf"]
 
 [tasks.check-renovate]
@@ -79,7 +79,7 @@ alias = ["cf"]
 run = """
 	pnpm dlx --package renovate renovate-config-validator
 """
-description = "Verifies the syntax of the Renovate configuration."
+description = "Verifies that the Renovate configuration file (`.github/renovate.json`) is valid."
 alias = ["cr"]
 
 [tasks.check-types]
@@ -87,15 +87,15 @@ alias = ["cr"]
 run = """
 	tsgo
 """
-description = "Verifies the type safety of the source code with TypeScript."
+description = "Verifies that the source code is type-safe with TypeScript."
 alias = ["ct"]
 
 [tasks.format]
 # language=sh
 run = """
-	biome check --skip-parse-errors --write
+	oxlint --fix-dangerously && oxfmt
 """
-description = "Reformats the source code with Biome."
+description = "Applies linting suggestions with Oxlint and reformats the source code with Oxfmt."
 alias = ["f"]
 
 [tasks.install]
@@ -103,7 +103,7 @@ alias = ["f"]
 run = """
 	mise install
 """
-description = "Installs all third-party dependencies with mise-en-place and pnpm and enables the Git hooks with Lefthook."
+description = "Installs all third-party dependencies with mise-en-place and pnpm and (unless opted out) enables the Git hooks with Lefthook."
 alias = ["i"]
 
 [tasks.test]
@@ -132,7 +132,7 @@ alias = ["v"]
 run = """
 	lefthook uninstall
 """
-description = "Disables the Git hooks with Lefthook."
+description = "Disables the Git hooks temporarily with Lefthook."
 
 [hooks]
 # language=sh

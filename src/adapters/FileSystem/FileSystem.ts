@@ -3,9 +3,7 @@ import fg from "fast-glob"
 import type { File, Files } from "#adapters/FileSystem/File.ts"
 import { assertError } from "#utilities/ErrorUtilities.ts"
 
-export async function readMatchingFiles(
-	filePatterns: Array<string>,
-): Promise<Files> {
+export async function readMatchingFiles(filePatterns: Array<string>): Promise<Files> {
 	const paths = await fg.glob([...filePatterns], { dot: true })
 	return Promise.all(
 		paths.map(async (path): Promise<File> => {
@@ -14,7 +12,7 @@ export async function readMatchingFiles(
 				return { content, path }
 			} catch (error) {
 				assertError(error)
-				throw new Error(`Failed to read ${path}: ${error.message}.`)
+				throw new Error(`Failed to read ${path}: ${error.message}.`, { cause: error })
 			}
 		}),
 	)
@@ -27,7 +25,7 @@ export async function writeFiles(files: Files): Promise<void> {
 				await writeFile(path, content, "utf8")
 			} catch (error) {
 				assertError(error)
-				throw new Error(`Failed to write changes to ${path}: ${error.message}.`)
+				throw new Error(`Failed to write changes to ${path}: ${error.message}.`, { cause: error })
 			}
 		}),
 	)

@@ -1,15 +1,11 @@
 import { vi } from "vitest"
-import type { ModuleMock } from "#utilities/ModuleMock.ts"
 
-export type LoggerMock = ModuleMock<typeof import("#adapters/Logger/Logger")>
+vi.mock(import("#adapters/Logger/Logger.ts"), () => ({
+	printMessage: vi.fn(),
+	printWarning: vi.fn(),
+	printError: vi.fn(),
+}))
 
-export function injectLoggerMock(): LoggerMock {
-	const mock = vi.hoisted<LoggerMock>(() => ({
-		printMessage: vi.fn(),
-		printWarning: vi.fn(),
-		printError: vi.fn(),
-	}))
-
-	vi.mock("#adapters/Logger/Logger", () => mock)
-	return mock
+export function mockLogger(): void {
+	// Do nothing, but importing this file triggers `vi.mock()` above as a side effect.
 }

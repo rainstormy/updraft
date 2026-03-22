@@ -1,17 +1,17 @@
-import { injectFileSystemMock } from "#adapters/FileSystem/FileSystem.mocks.ts"
-import { injectLoggerMock } from "#adapters/Logger/Logger.mocks.ts"
-import { injectTodayMock } from "#adapters/Today/Today.mocks.ts"
+import {
+	mockMatchingFiles,
+	mockSabotagedMatchingFiles,
+	mockSabotagedWriteFiles,
+} from "#adapters/FileSystem/FileSystem.mocks.ts"
+import { mockToday } from "#adapters/Today/Today.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { Files } from "#adapters/FileSystem/File.ts"
+import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
+import { printError, printMessage, printWarning } from "#adapters/Logger/Logger.ts"
 import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
 	aNonPromotablePackageJson,
-	anEmptyAsciidocChangelog,
-	anEmptyMarkdownChangelog,
-	anEmptyPackageJson,
-	anUnsupportedFileA,
-	anUnsupportedFileB,
 	aPromotableAsciidocChangelogA,
 	aPromotableAsciidocChangelogB,
 	aPromotableAsciidocChangelogC,
@@ -36,14 +36,15 @@ import {
 	aPromotedPackageJsonB,
 	aPromotedPackageJsonC,
 	aPromotedPackageJsonD,
+	anEmptyAsciidocChangelog,
+	anEmptyMarkdownChangelog,
+	anEmptyPackageJson,
+	anUnsupportedFileA,
+	anUnsupportedFileB,
 } from "#program/PromotionProgram/PromotionProgram.fixtures.ts"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
 import type { ExitCode } from "#utilities/ErrorUtilities.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
-
-const { today } = injectTodayMock()
-const { printMessage, printWarning, printError } = injectLoggerMock()
-const { readMatchingFiles, writeFiles } = injectFileSystemMock()
 
 describe.each`
 	today           | args                                                                                                         | expectedMessage
@@ -61,7 +62,7 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
+			mockToday(props.today)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -114,8 +115,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => []) // No matched files.
+			mockToday(props.today)
+			mockMatchingFiles([]) // No matched files.
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -184,17 +185,12 @@ describe.each`
 	${"2023-04-09"} | ${"--check-sequential-release --release-files CHANGELOG.md --release-version 1.8.6"}                                                   | ${[aPromotableMarkdownChangelogA("CHANGELOG.md")]}                                                                                                                                                                                                      | ${["CHANGELOG.md has latest release version 2.0.0-rc.1, but was set to update to 1.8.6."]}
 `(
 	"when at least one matching file cannot be promoted: $args",
-	(props: {
-		today: DateString
-		args: string
-		files: Files
-		expectedErrors: Array<string>
-	}) => {
+	(props: { today: DateString; args: string; files: Files; expectedErrors: Array<string> }) => {
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => props.files)
+			mockToday(props.today)
+			mockMatchingFiles(props.files)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -236,17 +232,12 @@ describe.each`
 	${"2017-12-27"} | ${"--files **/CHANGELOG.md **/package.json --release-version 9.1.0"}                                   | ${[aPromotableMarkdownChangelogB("packages/apples/CHANGELOG.md"), aPromotableMarkdownChangelogD("packages/oranges/CHANGELOG.md"), aPromotablePackageJsonB("packages/oranges/package.json"), aPromotablePackageJsonD("packages/peaches/package.json")]} | ${[aPromotedMarkdownChangelogB("packages/apples/CHANGELOG.md", "9.1.0", "2017-12-27"), aPromotedMarkdownChangelogD("packages/oranges/CHANGELOG.md", "9.1.0", "2017-12-27"), aPromotedPackageJsonB("packages/oranges/package.json", "9.1.0"), aPromotedPackageJsonD("packages/peaches/package.json", "9.1.0")]}
 `(
 	"when all matching files can be promoted: $args",
-	(props: {
-		today: DateString
-		args: string
-		files: Files
-		expectedSavedFiles: Files
-	}) => {
+	(props: { today: DateString; args: string; files: Files; expectedSavedFiles: Files }) => {
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => props.files)
+			mockToday(props.today)
+			mockMatchingFiles(props.files)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -286,8 +277,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			today.mockImplementation(() => props.today)
-			readMatchingFiles.mockImplementation(async () => props.files)
+			mockToday(props.today)
+			mockMatchingFiles(props.files)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
@@ -315,34 +306,29 @@ describe.each`
 	args                                                                                            | expectedError
 	${"--files CHANGELOG.md package.json --release-version v4.3.0"}                                 | ${"Failed to read CHANGELOG.md: Permission denied"}
 	${"--files packages/**/CHANGELOG.adoc packages/**/package.json --release-version 0.7.1-beta.1"} | ${"Failed to read packages/apples/package.json: File already in use"}
-`(
-	"when a file cannot be read: $args",
-	(props: { args: string; expectedError: string }) => {
-		let actualExitCode: ExitCode
+`("when a file cannot be read: $args", (props: { args: string; expectedError: string }) => {
+	let actualExitCode: ExitCode
 
-		beforeEach(async () => {
-			readMatchingFiles.mockImplementation(async () => {
-				throw new Error(props.expectedError)
-			})
-			actualExitCode = await updraftCliProgram(props.args.split(" "))
-		})
+	beforeEach(async () => {
+		mockSabotagedMatchingFiles(props.expectedError)
+		actualExitCode = await updraftCliProgram(props.args.split(" "))
+	})
 
-		it("returns an exit code of 1", () => {
-			expect(actualExitCode).toBe(1)
-		})
+	it("returns an exit code of 1", () => {
+		expect(actualExitCode).toBe(1)
+	})
 
-		it("displays an error", () => {
-			expect(printMessage).not.toHaveBeenCalled()
-			expect(printWarning).not.toHaveBeenCalled()
-			expect(printError).toHaveBeenCalledWith(props.expectedError)
-			expect(printError).toHaveBeenCalledTimes(1)
-		})
+	it("displays an error", () => {
+		expect(printMessage).not.toHaveBeenCalled()
+		expect(printWarning).not.toHaveBeenCalled()
+		expect(printError).toHaveBeenCalledWith(props.expectedError)
+		expect(printError).toHaveBeenCalledTimes(1)
+	})
 
-		it("does not write changes to any file", () => {
-			expect(writeFiles).not.toHaveBeenCalled()
-		})
-	},
-)
+	it("does not write changes to any file", () => {
+		expect(writeFiles).not.toHaveBeenCalled()
+	})
+})
 
 describe.each`
 	args                                                                                             | files                                                                                                                                                                                                                                                     | expectedError
@@ -354,10 +340,8 @@ describe.each`
 		let actualExitCode: ExitCode
 
 		beforeEach(async () => {
-			readMatchingFiles.mockImplementation(async () => props.files)
-			writeFiles.mockImplementation(async () => {
-				throw new Error(props.expectedError)
-			})
+			mockMatchingFiles(props.files)
+			mockSabotagedWriteFiles(props.expectedError)
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 

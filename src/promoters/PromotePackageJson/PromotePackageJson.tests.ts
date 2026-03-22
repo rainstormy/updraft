@@ -19,11 +19,10 @@ describe("when the package.json file does not have a 'version' field", () => {
 		version: "1.0.0",
 	}
 
-	const throwingAction = (): Promise<string> =>
-		promotePackageJson(originalContent, newRelease)
-
 	it("raises an error", async () => {
-		await expect(throwingAction).rejects.toThrow("must have a 'version' field")
+		await expect(promotePackageJson(originalContent, newRelease)).rejects.toThrow(
+			"must have a 'version' field",
+		)
 	})
 })
 
@@ -34,10 +33,7 @@ describe.each`
 	${"9.0.5-rc.0+3a1c790f"} | ${"9.0.5"}
 `(
 	"when the package.json file has a 'version' field of $currentVersion",
-	async (props: {
-		currentVersion: SemanticVersionString
-		nextVersion: SemanticVersionString
-	}) => {
+	(props: { currentVersion: SemanticVersionString; nextVersion: SemanticVersionString }) => {
 		const originalContent = dedent`
 			{
 				"$schema": "https://json.schemastore.org/package.json",
@@ -68,12 +64,9 @@ describe.each`
 			date: "2023-10-01",
 			version: props.nextVersion,
 		}
-		const actualPromotedContent = await promotePackageJson(
-			originalContent,
-			newRelease,
-		)
 
-		it(`updates the 'version' field to ${props.nextVersion}`, () => {
+		it(`updates the 'version' field to ${props.nextVersion}`, async () => {
+			const actualPromotedContent = await promotePackageJson(originalContent, newRelease)
 			expect(actualPromotedContent).toBe(expectedPromotedContent)
 		})
 	},
@@ -85,10 +78,7 @@ describe.each`
 	${"5.7.1-rc.0+93f9b843"} | ${"5.7.1-rc.0"}
 `(
 	"when the package.json file has a 'version' field of $currentVersion preceded by extra whitespace",
-	async (props: {
-		currentVersion: SemanticVersionString
-		nextVersion: SemanticVersionString
-	}) => {
+	(props: { currentVersion: SemanticVersionString; nextVersion: SemanticVersionString }) => {
 		const originalContent = dedent`
 			{
 				"$schema": "https://json.schemastore.org/package.json",
@@ -111,12 +101,9 @@ describe.each`
 			date: "2024-04-15",
 			version: props.nextVersion,
 		}
-		const actualPromotedContent = await promotePackageJson(
-			originalContent,
-			newRelease,
-		)
 
-		it(`updates the 'version' field to ${props.nextVersion} and preserves the preceding whitespace`, () => {
+		it(`updates the 'version' field to ${props.nextVersion} and preserves the preceding whitespace`, async () => {
+			const actualPromotedContent = await promotePackageJson(originalContent, newRelease)
 			expect(actualPromotedContent).toBe(expectedPromotedContent)
 		})
 	},
@@ -129,10 +116,7 @@ describe.each`
 	${"9.0.5-rc.0+3a1c790f"} | ${"9.0.4"}
 `(
 	"when the package.json file is set to update to a non-sequential release of $nextVersion from $currentVersion",
-	async (props: {
-		currentVersion: SemanticVersionString
-		nextVersion: SemanticVersionString
-	}) => {
+	(props: { currentVersion: SemanticVersionString; nextVersion: SemanticVersionString }) => {
 		const originalContent = dedent`
 			{
 				"$schema": "https://json.schemastore.org/package.json",
@@ -148,11 +132,8 @@ describe.each`
 			version: props.nextVersion,
 		}
 
-		const throwingAction = (): Promise<string> =>
-			promotePackageJson(originalContent, newRelease)
-
 		it("raises an error", async () => {
-			await expect(throwingAction).rejects.toThrow(
+			await expect(promotePackageJson(originalContent, newRelease)).rejects.toThrow(
 				`has latest release version ${props.currentVersion}, but was set to update to ${props.nextVersion}`,
 			)
 		})
@@ -166,7 +147,7 @@ describe.each`
 	${"9.0.5-rc.0+3a1c790f"}
 `(
 	"when the package.json file is set to update to an existing release of $currentVersion",
-	async (props: { currentVersion: SemanticVersionString }) => {
+	(props: { currentVersion: SemanticVersionString }) => {
 		const originalContent = dedent`
 			{
 				"$schema": "https://json.schemastore.org/package.json",
@@ -182,8 +163,7 @@ describe.each`
 			version: props.currentVersion,
 		}
 
-		const throwingAction = (): Promise<string> =>
-			promotePackageJson(originalContent, newRelease)
+		const throwingAction = (): Promise<string> => promotePackageJson(originalContent, newRelease)
 
 		it("raises an error", async () => {
 			await expect(throwingAction).rejects.toThrow(

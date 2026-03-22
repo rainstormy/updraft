@@ -1,7 +1,7 @@
 import { invalidConfigurationProgram } from "#program/InvalidConfigurationProgram/InvalidConfigurationProgram.ts"
 import { promotionProgram } from "#program/PromotionProgram/PromotionProgram.ts"
 import { defineOptions, parseArgs } from "#utilities/ArgsUtilities.ts"
-import { assertError, type ExitCode } from "#utilities/ErrorUtilities.ts"
+import { type ExitCode, assertError } from "#utilities/ErrorUtilities.ts"
 import { notNullish } from "#utilities/IterableUtilities.ts"
 import type { ReleaseCheck } from "#utilities/types/Release.ts"
 import {
@@ -30,8 +30,7 @@ export async function updraftProgram(
 		return invalidConfigurationProgram(error.message, usageInstructionsReminder)
 	}
 
-	const checkSequentialRelease =
-		parsedArgs["--check-sequential-release"] !== undefined
+	const checkSequentialRelease = parsedArgs["--check-sequential-release"] !== undefined
 	const files = parsedArgs["--files"] ?? []
 	const prereleaseFiles = parsedArgs["--prerelease-files"] ?? []
 	const releaseFiles = parsedArgs["--release-files"] ?? []
@@ -58,9 +57,7 @@ export async function updraftProgram(
 		: [...files, ...releaseFiles]
 
 	const checks = (
-		[
-			checkSequentialRelease ? "sequential" : null,
-		] satisfies Array<ReleaseCheck | null>
+		[checkSequentialRelease ? "sequential" : null] satisfies Array<ReleaseCheck | null>
 	).filter(notNullish)
 
 	return promotionProgram(filePatterns, {
