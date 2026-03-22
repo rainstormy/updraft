@@ -1,6 +1,46 @@
-remotes:
-  - git_url: https://github.com/rainstormy/presets-lefthook
-    ref: v1.1.2
-    configs:
-      - dependencies.yml
-      - quality-assurance.yml
+# Define Git hooks.
+# https://lefthook.dev/configuration
+
+post-checkout:
+  commands:
+    # Re-installs third-party dependencies after checking out a branch or a commit.
+    # Only runs if `mise.toml` or `pnpm-lock.yaml` has changed during the checkout.
+    mise:
+      # language=sh
+      run: |
+        if ! git diff --quiet HEAD@\{1\} HEAD -- 'mise.toml' 'pnpm-lock.yaml'; then
+          mise install
+        fi
+
+post-rewrite:
+  commands:
+    # Re-installs third-party dependencies after rebasing onto another branch or commit.
+    # Only runs if `mise.toml` or `pnpm-lock.yaml` has changed during the rebase.
+    mise:
+      use_stdin: true
+      # language=sh
+      run: |
+        read -r BASE_SHA _
+        if ! git diff --quiet "$BASE_SHA~1" HEAD -- 'mise.toml' 'pnpm-lock.yaml'; then
+          mise install
+        fi
+  only:
+    - rebase
+
+pre-commit:
+  commands:
+    # Reformats files before committing changes.
+    mise:
+      # language=sh
+      run: mise run format
+      stage_fixed: true
+  skip:
+    - merge
+    - rebase
+
+pre-push:
+  commands:
+    # Runs `check` and `test` before allowing commits to be pushed.
+    mise:
+      # language=sh
+      run: mise run check && mise run test
