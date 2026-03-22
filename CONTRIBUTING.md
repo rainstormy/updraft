@@ -1,9 +1,5 @@
 # Contribution Guidelines
 
-## Quick Start
-- [Get started on 🍏 macOS](docs/quick-start/get-started-on-macos.md)
-- [Get started on 🟦 Windows + 🐧 WSL](docs/quick-start/get-started-on-wsl.md)
-
 ## Tasks
 ```shell
 mise run name_of_task
@@ -25,6 +21,3 @@ mise run name_of_task
 | `test`           | `t`   | Runs the entire unit test suite once with [Vitest](https://vitest.dev).                                                                                                                          |
 | `vitest`         | `v`   | Starts the [Vitest UI](https://vitest.dev/guide/ui.html#vitest-ui) test explorer for continuous unit testing.                                                                                    |
 | `yolo`           |       | Disables the Git hooks temporarily with [Lefthook](https://lefthook.dev).                                                                                                                        |                                                                                                              |
-
-## Developer Guides
-- [Manage third-party dependencies](docs/guides/manage-third-party-dependencies.md)
