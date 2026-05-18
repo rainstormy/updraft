@@ -26,11 +26,8 @@
 	"bin": {
 		"updraft": "dist/cli/index.js"
 	},
-	"main": "dist/lib/index.js",
-	"types": "dist/lib/index.d.ts",
 	"files": [
-		"dist/cli/",
-		"dist/lib/"
+		"dist/cli/"
 	],
 	"imports": {
 		"#adapters/*": "./src/adapters/*",

@@ -7,10 +7,7 @@ mise run name_of_task
 
 | Task name        | Alias | Description                                                                                                                                                                                      |
 |------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `build`          | `b`   | Runs `build-cli`, `build-gha`, and `build-lib`.                                                                                                                                                  |
-| `build-cli`      | `bc`  | Generates production-grade build artefacts of the command-line entrypoint with [Vite](https://vite.dev).                                                                                         |
-| `build-gha`      | `bg`  | Generates production-grade build artefacts of the GitHub Actions entrypoint with [Vite](https://vite.dev).                                                                                       |
-| `build-lib`      | `bl`  | Generates production-grade build artefacts of the core library with [Vite](https://vite.dev).                                                                                                    |
+| `build`          | `b`   | Generates production-grade build artefacts of all entrypoints with [Vite](https://vite.dev).                                                                                                     |
 | `check`          | `c`   | Runs `check-actions`, `check-format`, and `check-types`.                                                                                                                                         |
 | `check-actions`  | `ca`  | Verifies that the GitHub Actions workflows are valid with [actionlint](https://github.com/rhysd/actionlint).                                                                                     |
 | `check-format`   | `cf`  | Verifies that the source code is clean and well-formatted with [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html).                |

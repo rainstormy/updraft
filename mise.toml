@@ -17,36 +17,13 @@ node = "24.15.0"
 pnpm = "10.33.0"
 
 [tasks.build]
-depends = ["build-cli", "build-gha", "build-lib"]
-description = "Runs `build-cli`, `build-gha`, and `build-lib`."
+# language=sh
+run = """
+  UPDRAFT_PLATFORM='cli' vite build --ssr src/main-cli.ts --outDir dist/cli/ && \
+  UPDRAFT_PLATFORM='gha' vite build --ssr src/main-gha.ts --outDir dist/gha/
+"""
+description = "Generates production-grade build artefacts of all entrypoints with Vite."
 alias = ["b"]
-
-[tasks.build-cli]
-# language=sh
-run = """
-	vite build --outDir dist/cli/ --minify
-"""
-env = { MODULE = "cli" }
-description = "Generates production-grade build artefacts of the command-line entrypoint with Vite."
-alias = ["bc"]
-
-[tasks.build-gha]
-# language=sh
-run = """
-	vite build --outDir dist/gha/ --minify
-"""
-env = { MODULE = "gha" }
-description = "Generates production-grade build artefacts of the GitHub Actions entrypoint with Vite."
-alias = ["bg"]
-
-[tasks.build-lib]
-# language=sh
-run = """
-	vite build --outDir dist/lib/
-"""
-env = { MODULE = "lib" }
-description = "Generates production-grade build artefacts of the core library with Vite."
-alias = ["bl"]
 
 [tasks.check]
 depends = [

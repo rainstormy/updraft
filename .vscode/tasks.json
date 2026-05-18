@@ -13,39 +13,6 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "build-cli",
-			"command": "mise run build-cli",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "build-gha",
-			"command": "mise run build-gha",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "build-lib",
-			"command": "mise run build-lib",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
 			"label": "check",
 			"command": "mise run check",
 			"type": "shell",
