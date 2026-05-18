@@ -29,9 +29,6 @@ export default defineConfig(() => {
 		cacheDir: path("node_modules/.cache/"),
 		envPrefix: "UPDRAFT_",
 		plugins: [],
-		resolve: {
-			alias: [{ find: /^#(.+)/, replacement: path("src/$1") }],
-		},
 		test: {
 			include: ["src/**/*.tests.ts"],
 			setupFiles: ["src/utilities/vitest/VitestSetup.mocks.ts"],

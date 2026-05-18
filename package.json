@@ -32,6 +32,12 @@
 		"dist/cli/",
 		"dist/lib/"
 	],
+	"imports": {
+		"#adapters/*": "./src/adapters/*",
+		"#promoters/*": "./src/promoters/*",
+		"#program/*": "./src/program/*",
+		"#utilities/*": "./src/utilities/*"
+	},
 	"dependencies": {
 		"ansis": "4.2.0",
 		"fast-glob": "3.3.3",
