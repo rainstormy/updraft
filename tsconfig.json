@@ -4,6 +4,7 @@
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
 		"erasableSyntaxOnly": true,
+		"importHelpers": false,
 		"incremental": true,
 		"libReplacement": false,
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
