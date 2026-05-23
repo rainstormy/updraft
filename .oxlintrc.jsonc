@@ -512,8 +512,9 @@
 		},
 		{
 			// Entrypoints.
-			"files": ["src/CommandLineInterface.ts", "src/GitHubActions.ts"],
+			"files": ["src/main-*.ts"],
 			"rules": {
+				"unicorn/filename-case": ["warn", { "case": "kebabCase" }],
 				"unicorn/no-process-exit": "off"
 			}
 		}

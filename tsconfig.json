@@ -4,14 +4,9 @@
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
 		"erasableSyntaxOnly": true,
+		"importHelpers": false,
 		"incremental": true,
 		"libReplacement": false,
-		"paths": {
-			"#adapters/*": ["./src/adapters/*"],
-			"#promoters/*": ["./src/promoters/*"],
-			"#program/*": ["./src/program/*"],
-			"#utilities/*": ["./src/utilities/*"]
-		},
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
 		"types": ["node", "vite/client"]
 	},

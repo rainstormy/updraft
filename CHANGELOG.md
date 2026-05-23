@@ -10,6 +10,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - **BREAKING:** Upgrade Node.js to 24.
 
+### Removed
+- **BREAKING:** Remove the public ESM exports of all program entrypoints
+  (`updraftProgram()` and `updraftCliProgram()`).
+
 ## [1.2.0] - 2024-10-25
 ### Added
 - A Node.js-based GitHub action: `rainstormy/updraft`.
