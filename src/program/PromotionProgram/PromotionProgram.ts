@@ -45,7 +45,7 @@ export async function promotionProgram(
 
 		const newRelease: Release = { ...release, date: today() }
 		const promotionResults = await Promise.allSettled(
-			files.map((file) => promoteFile(file, newRelease)),
+			files.map(async (file) => promoteFile(file, newRelease)),
 		)
 
 		const errors = promotionResults.filter(isRejected).map(({ reason }) => {

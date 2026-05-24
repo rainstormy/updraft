@@ -163,7 +163,8 @@ describe.each`
 			version: props.currentVersion,
 		}
 
-		const throwingAction = (): Promise<string> => promotePackageJson(originalContent, newRelease)
+		const throwingAction = async (): Promise<string> =>
+			promotePackageJson(originalContent, newRelease)
 
 		it("raises an error", async () => {
 			await expect(throwingAction).rejects.toThrow(

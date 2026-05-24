@@ -9,7 +9,8 @@ export const semanticVersionRegex =
 
 export function extractSemanticVersionString(input: string): SemanticVersionString | null {
 	const versionMatch = semanticVersionRegex.exec(input)
-	return (versionMatch?.groups?.fullVersion as SemanticVersionString) ?? null
+	const fullVersion = versionMatch?.groups?.fullVersion ?? null
+	return fullVersion as SemanticVersionString | null
 }
 
 export function isPrerelease(version: SemanticVersionString): boolean {
