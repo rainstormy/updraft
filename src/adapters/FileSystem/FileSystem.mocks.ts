@@ -3,13 +3,13 @@ import type { Files } from "#adapters/FileSystem/File.ts"
 
 vi.mock(import("#adapters/FileSystem/FileSystem.ts"), () => ({
 	readMatchingFiles: vi.fn(async (): Promise<Files> => {
-		if (mockedReadErrorMessage) {
+		if (mockedReadErrorMessage !== null) {
 			throw new Error(mockedReadErrorMessage)
 		}
 		return mockedFiles
 	}),
 	writeFiles: vi.fn(async (): Promise<void> => {
-		if (mockedWriteErrorMessage) {
+		if (mockedWriteErrorMessage !== null) {
 			throw new Error(mockedWriteErrorMessage)
 		}
 	}),

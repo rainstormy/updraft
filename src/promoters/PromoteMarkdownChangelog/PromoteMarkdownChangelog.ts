@@ -30,9 +30,9 @@ export async function promoteMarkdownChangelog(
 		throw new Error("must have an 'Unreleased' section")
 	}
 
-	const trimmedUnreleasedBody = unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? null
+	const trimmedUnreleasedBody = unreleasedSectionMatch.groups?.unreleasedBody?.trim() ?? ""
 
-	if (!trimmedUnreleasedBody) {
+	if (trimmedUnreleasedBody === "") {
 		throw new Error("must have at least one item in the 'Unreleased' section")
 	}
 
@@ -52,8 +52,8 @@ export async function promoteMarkdownChangelog(
 		const previousReleaseVersions = Array.from(
 			originalContent.matchAll(previousReleaseVersionRegex),
 			(match) => {
-				const version = match.groups?.version
-				return version ? extractSemanticVersionString(version) : null
+				const version = match.groups?.version ?? ""
+				return version !== "" ? extractSemanticVersionString(version) : null
 			},
 		).filter(notNullish)
 

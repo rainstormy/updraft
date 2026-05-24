@@ -1,6 +1,6 @@
-export function assertNotNullish<Value>(
+export function assertNotNullish<Value extends NonNullable<unknown>>(
 	value: Value | null | undefined,
-	name?: string,
+	name = "",
 ): asserts value is Value {
 	if (value === null || value === undefined) {
 		throw new Error(

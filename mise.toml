@@ -46,7 +46,7 @@ alias = ["ca"]
 [tasks.check-format]
 # language=sh
 run = """
-	oxlint --deny-warnings && oxfmt --check
+	oxlint --type-aware --deny-warnings && oxfmt --check
 """
 description = "Verifies that the source code is clean and well-formatted with Oxlint and Oxfmt."
 alias = ["cf"]

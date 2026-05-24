@@ -1,9 +1,15 @@
 import { vi } from "vitest"
 
 vi.mock(import("#adapters/Logger/Logger.ts"), () => ({
-	printMessage: vi.fn(),
-	printWarning: vi.fn(),
-	printError: vi.fn(),
+	printMessage: vi.fn(() => {
+		// Do nothing.
+	}),
+	printWarning: vi.fn(() => {
+		// Do nothing.
+	}),
+	printError: vi.fn(() => {
+		// Do nothing.
+	}),
 }))
 
 export function mockLogger(): void {
