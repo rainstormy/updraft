@@ -35,30 +35,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check-format",
-			"command": "mise run check-format",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
 			"label": "check-renovate",
 			"command": "mise run check-renovate",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "check-types",
-			"command": "mise run check-types",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
