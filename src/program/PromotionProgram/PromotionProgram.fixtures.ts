@@ -549,27 +549,27 @@ export function aPromotedPackageJsonD(
 	}
 }
 
-export function anUnsupportedFileA<Path extends string>(path: UnsupportedFilepath<Path>): File {
+export function anIgnorableFileA<Path extends string>(path: IgnorableFilepath<Path>): File {
 	return {
 		path,
 		content: "Changelog",
 	}
 }
 
-export function anUnsupportedFileB<Path extends string>(path: UnsupportedFilepath<Path>): File {
+export function anIgnorableFileB<Path extends string>(path: IgnorableFilepath<Path>): File {
 	return {
 		path,
 		content: "This document lists all notable changes made to the project.",
 	}
 }
 
-export type AsciidocChangelogFilepath = `${string}.adoc`
-export type MarkdownChangelogFilepath = `${string}.md`
-export type PackageJsonFilepath = `${string}package.json`
+type AsciidocChangelogFilepath = "CHANGELOG.adoc" | `${string}/CHANGELOG.adoc`
+type MarkdownChangelogFilepath = "CHANGELOG.md" | `${string}/CHANGELOG.md`
+type PackageJsonFilepath = "package.json" | `${string}/package.json`
 
-// oxfmt-ignore
-export type UnsupportedFilepath<Path> =
-	| Path extends AsciidocChangelogFilepath ? never
-	: Path extends MarkdownChangelogFilepath ? never
-	: Path extends PackageJsonFilepath ? never
+type IgnorableFilepath<Path> = Path extends
+	| AsciidocChangelogFilepath
+	| MarkdownChangelogFilepath
+	| PackageJsonFilepath
+	? never
 	: Path

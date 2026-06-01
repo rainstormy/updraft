@@ -1,5 +1,6 @@
 import type { File } from "#adapters/FileSystem/File.ts"
 import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
+import { type PromotableFile, filterPromotableFiles } from "#adapters/FileSystem/PromotableFile.ts"
 import { printError, printMessage, printWarning } from "#adapters/Logger/Logger.ts"
 import { today } from "#adapters/Today/Today.ts"
 import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog.ts"
@@ -9,15 +10,6 @@ import { type ExitCode, assertError } from "#utilities/ErrorUtilities.ts"
 import { isFulfilled, isRejected } from "#utilities/PromiseUtilities.ts"
 import type { Release, ReleaseCheck } from "#utilities/types/Release.ts"
 import { type SemanticVersionString, isPrerelease } from "#utilities/types/SemanticVersionString.ts"
-
-const promoters: Record<FileType, Promoter> = {
-	"asciidoc-changelog": promoteAsciidocChangelog,
-	"markdown-changelog": promoteMarkdownChangelog,
-	"package-json": promotePackageJson,
-}
-
-type FileType = "asciidoc-changelog" | "markdown-changelog" | "package-json"
-type Promoter = (content: string, release: Release) => Promise<string>
 
 export async function promotionProgram(
 	filePatterns: Array<string>,
@@ -37,15 +29,16 @@ export async function promotionProgram(
 
 	try {
 		const files = await readMatchingFiles(filePatterns)
+		const promotableFiles = filterPromotableFiles(files)
 
-		if (files.length === 0) {
-			printWarning(`${filePatterns.join(", ")} did not match any files.`)
+		if (promotableFiles.length === 0) {
+			printWarning(`${filePatterns.join(", ")} did not match any supported files.`)
 			return 0
 		}
 
 		const newRelease: Release = { ...release, date: today() }
 		const promotionResults = await Promise.allSettled(
-			files.map(async (file) => promoteFile(file, newRelease)),
+			promotableFiles.map(async (file) => promoteFile(file, newRelease)),
 		)
 
 		const errors = promotionResults.filter(isRejected).map(({ reason }) => {
@@ -71,49 +64,27 @@ export async function promotionProgram(
 	}
 }
 
-async function promoteFile(file: File, newRelease: Release): Promise<File> {
+async function promoteFile(file: PromotableFile, newRelease: Release): Promise<File> {
 	try {
-		const originalContent = file.content
-		const fileType = detectFileType(file.path)
-		const promoter = promoters[fileType]
-
-		const promotedContent = await promoter(originalContent, newRelease)
-		return { ...file, content: promotedContent }
+		return { content: await promoteFileContent(file, newRelease), path: file.path }
 	} catch (error) {
 		assertError(error)
 		throw new Error(`${file.path} ${error.message}.`, { cause: error })
 	}
 }
 
-function detectFileType(path: string): FileType {
-	const pathSegments = path.split("/")
-	const filename = pathSegments.at(-1) ?? ""
+async function promoteFileContent(file: PromotableFile, newRelease: Release): Promise<string> {
+	const originalContent = file.content
 
-	switch (filename) {
+	switch (file.type) {
 		case "CHANGELOG.adoc": {
-			return "asciidoc-changelog"
+			return promoteAsciidocChangelog(originalContent, newRelease)
 		}
 		case "CHANGELOG.md": {
-			return "markdown-changelog"
+			return promoteMarkdownChangelog(originalContent, newRelease)
 		}
 		case "package.json": {
-			return "package-json"
+			return promotePackageJson(originalContent, newRelease)
 		}
 	}
-
-	if (filename.endsWith(".adoc")) {
-		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.adoc"].join("/")
-		printWarning(
-			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
-		)
-		return "asciidoc-changelog"
-	}
-	if (filename.endsWith(".md")) {
-		const expectedPath = [...pathSegments.slice(0, -1), "CHANGELOG.md"].join("/")
-		printWarning(
-			`${path} is not a supported filename and must be renamed to ${expectedPath} in Updraft v2.0.0.`,
-		)
-		return "markdown-changelog"
-	}
-	throw new Error("is not a supported file format")
 }
