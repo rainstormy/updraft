@@ -9,6 +9,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 ### Changed
 - **BREAKING:** Upgrade Node.js to 24.
+- Ignore arbitrary `.adoc` and `.md` files, retaining support for
+  `CHANGELOG.adoc` and `CHANGELOG.md` only, as encouraged by
+  [Keep a Changelog](https://keepachangelog.com/en/1.1.0/#filename).
 
 ### Removed
 - **BREAKING:** Remove the public ESM exports of all program entrypoints
@@ -26,7 +29,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.1.0] - 2024-07-29
 ### Added
-- Support for Markdown changelogs
+- Support for Markdown (`.md`) changelogs
   in [Keep a Changelog](https://keepachangelog.com/en/1.1.0) format.
 - New option: `--check-sequential-release`.
 - New option: `--prerelease-files`.
@@ -57,9 +60,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - New option: `--help`.
 - New option: `--release-version`.
 - New option: `--version`.
-- Support for AsciiDoc changelogs
+- Support for AsciiDoc (`.adoc`) changelogs
   in [Keep a Changelog](https://keepachangelog.com/en/1.1.0) format.
-- Support for package.json files.
+- Support for `package.json` files.
 
 [unreleased]: https://github.com/rainstormy/updraft/compare/v1.2.0...HEAD
 [1.2.0]: https://github.com/rainstormy/updraft/compare/v1.1.0...v1.2.0
