@@ -4,9 +4,9 @@ import { defineConfig } from "vitest/config"
 export default defineConfig({
 	build: {
 		emptyOutDir: true,
-		minify: "esbuild",
+		minify: "oxc",
 		reportCompressedSize: false,
-		rollupOptions: {
+		rolldownOptions: {
 			output: { entryFileNames: "index.js" },
 		},
 		target: "es2022",
