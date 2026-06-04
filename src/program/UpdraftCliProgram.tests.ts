@@ -2,9 +2,42 @@ import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
 import { printMessage } from "#adapters/Logger/Logger.ts"
+import { usageInstructions } from "#program/cli/UsageInstructions.ts"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
+
+describe.each`
+	helpScreenArgs
+	${[]}
+	${["--help"]}
+	${["--help", "--version"]}
+	${["--release-version", "1.1", "--help"]}
+	${["--files", "--help", "package.json"]}
+`("when the args are $helpScreenArgs", (props: { helpScreenArgs: Array<string> }) => {
+	let actualExitCode: ExitCode | null = null
+
+	beforeEach(async () => {
+		actualExitCode = await updraftCliProgram(props.helpScreenArgs)
+	})
+
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(actualExitCode).toBe(EXIT_CODE_SUCCESS)
+	})
+
+	it("displays the usage instructions", () => {
+		expect(printMessage).toHaveBeenCalledWith(usageInstructions())
+		expect(printMessage).toHaveBeenCalledTimes(1)
+	})
+
+	it("does not read the content of any file", () => {
+		expect(readMatchingFiles).not.toHaveBeenCalled()
+	})
+
+	it("does not write changes to any file", () => {
+		expect(writeFiles).not.toHaveBeenCalled()
+	})
+})
 
 describe.each`
 	toolVersionArgs                               | toolVersion

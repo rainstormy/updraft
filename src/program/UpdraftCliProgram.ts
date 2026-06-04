@@ -1,14 +1,16 @@
-import { toolVersionProgram } from "#program/ToolVersionProgram/ToolVersionProgram.ts"
+import { printMessage } from "#adapters/Logger/Logger.ts"
+import { usageInstructions } from "#program/cli/UsageInstructions.ts"
 import { updraftProgram } from "#program/UpdraftProgram.ts"
-import { usageInstructionsProgram } from "#program/UsageInstructionsProgram/UsageInstructionsProgram.ts"
-import type { ExitCode } from "#utilities/ExitCode.ts"
+import { EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 
 export async function updraftCliProgram(args: Array<string>): Promise<ExitCode> {
 	if (args.length === 0 || args.includes("--help")) {
-		return usageInstructionsProgram()
+		printMessage(usageInstructions())
+		return EXIT_CODE_SUCCESS
 	}
 	if (args.includes("--version")) {
-		return toolVersionProgram()
+		printMessage(import.meta.env.UPDRAFT_VERSION)
+		return EXIT_CODE_SUCCESS
 	}
 	return updraftProgram(
 		args,

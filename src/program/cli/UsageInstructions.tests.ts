@@ -1,10 +1,10 @@
 import { bold, cyan, yellow } from "ansis"
 import { expect, it } from "vitest"
-import { getUsageInstructions } from "#program/UsageInstructionsProgram/UsageInstructionsProgram.ts"
+import { usageInstructions } from "#program/cli/UsageInstructions.ts"
 import { dedent } from "#utilities/StringUtilities.ts"
 
 it("is a list of program arguments and options", () => {
-	expect(getUsageInstructions()).toBe(dedent`
+	expect(usageInstructions()).toBe(dedent`
 		${bold`Usage:`} updraft [options]
 
 		This tool prepares a repository for an upcoming release by updating changelogs
@@ -47,7 +47,7 @@ it("is a list of program arguments and options", () => {
 
 it("fits within 80 columns", () => {
 	// oxlint-disable-next-line no-control-regex: Use control characters to detect ANSI colour codes.
-	const usageInstructionsWithoutColorCodes = getUsageInstructions().replaceAll(/\u001B\[.*?m/g, "")
+	const usageInstructionsWithoutColorCodes = usageInstructions().replaceAll(/\u001B\[.*?m/g, "")
 	const lines = usageInstructionsWithoutColorCodes.split("\n")
 
 	for (const line of lines) {

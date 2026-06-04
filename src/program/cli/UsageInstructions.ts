@@ -1,13 +1,6 @@
 import { bold, cyan, yellow } from "ansis"
-import { printMessage } from "#adapters/Logger/Logger.ts"
-import { EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 
-export async function usageInstructionsProgram(): Promise<ExitCode> {
-	printMessage(getUsageInstructions())
-	return EXIT_CODE_SUCCESS
-}
-
-export function getUsageInstructions(): string {
+export function usageInstructions(): string {
 	return `${bold`Usage:`} updraft [options]
 
 This tool prepares a repository for an upcoming release by updating changelogs
