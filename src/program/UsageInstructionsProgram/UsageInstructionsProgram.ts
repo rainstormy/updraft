@@ -1,10 +1,10 @@
 import { bold, cyan, yellow } from "ansis"
 import { printMessage } from "#adapters/Logger/Logger.ts"
-import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import { EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 
 export async function usageInstructionsProgram(): Promise<ExitCode> {
 	printMessage(getUsageInstructions())
-	return 0
+	return EXIT_CODE_SUCCESS
 }
 
 export function getUsageInstructions(): string {

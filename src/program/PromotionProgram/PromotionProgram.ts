@@ -6,7 +6,8 @@ import { today } from "#adapters/Today/Today.ts"
 import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog.ts"
 import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog.ts"
 import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson.ts"
-import { type ExitCode, assertError } from "#utilities/ErrorUtilities.ts"
+import { assertError } from "#utilities/ErrorUtilities.ts"
+import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 import { isFulfilled, isRejected } from "#utilities/PromiseUtilities.ts"
 import type { Release, ReleaseCheck } from "#utilities/types/Release.ts"
 import { type SemanticVersionString, isPrerelease } from "#utilities/types/SemanticVersionString.ts"
@@ -24,7 +25,7 @@ export async function promotionProgram(
 				isPrerelease(release.version) ? "a prerelease" : "not a prerelease"
 			}.`,
 		)
-		return 0
+		return EXIT_CODE_SUCCESS
 	}
 
 	try {
@@ -33,7 +34,7 @@ export async function promotionProgram(
 
 		if (promotableFiles.length === 0) {
 			printWarning(`${filePatterns.join(", ")} did not match any supported files.`)
-			return 0
+			return EXIT_CODE_SUCCESS
 		}
 
 		const newRelease: Release = { ...release, date: today() }
@@ -50,17 +51,17 @@ export async function promotionProgram(
 			for (const message of errors) {
 				printError(message)
 			}
-			return 1
+			return EXIT_CODE_GENERAL_ERROR
 		}
 
 		const outputFiles = promotionResults.filter(isFulfilled).map(({ value }) => value)
 
 		await writeFiles(outputFiles)
-		return 0
+		return EXIT_CODE_SUCCESS
 	} catch (error) {
 		assertError(error)
 		printError(error.message)
-		return 1
+		return EXIT_CODE_GENERAL_ERROR
 	}
 }
 

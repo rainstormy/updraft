@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
 import { printError, printMessage, printWarning } from "#adapters/Logger/Logger.ts"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
-import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import { EXIT_CODE_INVALID_INPUT, type ExitCode } from "#utilities/ExitCode.ts"
 import { dedent } from "#utilities/StringUtilities.ts"
 
 describe.each`
@@ -30,8 +30,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.invalidArgs)
 		})
 
-		it("returns an exit code of 2", () => {
-			expect(actualExitCode).toBe(2)
+		it(`exits with ${EXIT_CODE_INVALID_INPUT}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_INVALID_INPUT)
 		})
 
 		it("displays an error message and encourages the use of --help", () => {

@@ -43,7 +43,7 @@ import {
 	anIgnorableFileB,
 } from "#program/PromotionProgram/PromotionProgram.fixtures.ts"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
-import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
 
 describe.each`
@@ -66,8 +66,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
-		it("returns an exit code of 0", () => {
-			expect(actualExitCode).toBe(0)
+		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_SUCCESS)
 		})
 
 		it("displays a message", () => {
@@ -120,8 +120,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
-		it("returns an exit code of 0", () => {
-			expect(actualExitCode).toBe(0)
+		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_SUCCESS)
 		})
 
 		it("displays a warning", () => {
@@ -187,8 +187,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
-		it("returns an exit code of 1", () => {
-			expect(actualExitCode).toBe(1)
+		it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_GENERAL_ERROR)
 		})
 
 		it(`displays ${props.expectedErrors.length} error(s)`, () => {
@@ -238,8 +238,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
-		it("returns an exit code of 0", () => {
-			expect(actualExitCode).toBe(0)
+		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_SUCCESS)
 		})
 
 		it("remains silent", () => {
@@ -276,8 +276,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
-		it("returns an exit code of 0", () => {
-			expect(actualExitCode).toBe(0)
+		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_SUCCESS)
 		})
 
 		it("displays a warning", () => {
@@ -305,8 +305,8 @@ describe.each`
 		actualExitCode = await updraftCliProgram(props.args.split(" "))
 	})
 
-	it("returns an exit code of 1", () => {
-		expect(actualExitCode).toBe(1)
+	it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
+		expect(actualExitCode).toBe(EXIT_CODE_GENERAL_ERROR)
 	})
 
 	it("displays an error", () => {
@@ -336,8 +336,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.args.split(" "))
 		})
 
-		it("returns an exit code of 1", () => {
-			expect(actualExitCode).toBe(1)
+		it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_GENERAL_ERROR)
 		})
 
 		it("displays an error", () => {

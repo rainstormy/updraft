@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
 import { printMessage } from "#adapters/Logger/Logger.ts"
 import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
-import type { ExitCode } from "#utilities/ErrorUtilities.ts"
+import { EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 describe.each`
@@ -21,8 +21,8 @@ describe.each`
 			actualExitCode = await updraftCliProgram(props.toolVersionArgs)
 		})
 
-		it("returns an exit code of 0", () => {
-			expect(actualExitCode).toBe(0)
+		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_SUCCESS)
 		})
 
 		it("displays the tool version", () => {
