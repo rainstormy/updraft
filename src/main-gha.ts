@@ -1,5 +1,5 @@
 import process from "node:process"
-import { program } from "#program/Program.ts"
+import { program } from "#programs/Program.ts"
 import type { ExitCode } from "#types/ExitCode.ts"
 import { argsFromGithubActionInput } from "#utilities/github/GithubActionInput.ts"
 
