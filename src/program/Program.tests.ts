@@ -41,10 +41,61 @@ import {
 	anEmptyPackageJson,
 	anIgnorableFileA,
 	anIgnorableFileB,
-} from "#program/PromotionProgram/PromotionProgram.fixtures.ts"
-import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
-import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
+} from "#program/Program.fixtures.ts"
+import { program } from "#program/Program.ts"
+import {
+	EXIT_CODE_GENERAL_ERROR,
+	EXIT_CODE_INVALID_INPUT,
+	EXIT_CODE_SUCCESS,
+	type ExitCode,
+} from "#utilities/ExitCode.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
+
+describe.each`
+	invalidArgs                                                                                                             | expectedError
+	${["--file-patterns"]}                                                                                                  | ${"Unknown option '--file-patterns'."}
+	${["--release"]}                                                                                                        | ${"Unknown option '--release'."}
+	${["--check"]}                                                                                                          | ${"Unknown option '--check'."}
+	${["--files", "CHANGELOG.adoc"]}                                                                                        | ${"--release-version is required."}
+	${["--files", "CHANGELOG.md", "--release-version"]}                                                                     | ${"--release-version requires 1 argument, but got 0."}
+	${["--release-version", "1.1.0", "--release-version", "2.1.0"]}                                                         | ${"--release-version requires 1 argument, but got 2."}
+	${["--files", "CHANGELOG.adoc", "--release-version", "1.0.1", "v1.0.2"]}                                                | ${"--release-version requires 1 argument, but got 2."}
+	${["--files", "CHANGELOG.md", "--release-version", "1.1"]}                                                              | ${"--release-version has an invalid value '1.1'."}
+	${["--files", "CHANGELOG.adoc", "--release-version", "v2"]}                                                             | ${"--release-version has an invalid value 'v2'."}
+	${["--files", "CHANGELOG.md", "--release-version", "next"]}                                                             | ${"--release-version has an invalid value 'next'."}
+	${["--release-version", "1.0.1"]}                                                                                       | ${"--files, --release-files, or --prerelease-files is required."}
+	${["--files", "--release-version", "1.0.1", "--prerelease-files", "CHANGELOG.adoc", "--release-files", "CHANGELOG.md"]} | ${"--files requires at least 1 argument, but got 0."}
+	${["--release-version", "1.0.1", "--prerelease-files", "--files", "package.json", "CHANGELOG.adoc"]}                    | ${"--prerelease-files requires at least 1 argument, but got 0."}
+	${["--release-version", "1.0.1", "--files", "package.json", "CHANGELOG.md", "--release-files"]}                         | ${"--release-files requires at least 1 argument, but got 0."}
+`(
+	"when the args are $invalidArgs",
+	(props: { invalidArgs: Array<string>; expectedError: string }) => {
+		let actualExitCode: ExitCode | null = null
+
+		beforeEach(async () => {
+			actualExitCode = await program(props.invalidArgs)
+		})
+
+		it(`exits with ${EXIT_CODE_INVALID_INPUT}`, () => {
+			expect(actualExitCode).toBe(EXIT_CODE_INVALID_INPUT)
+		})
+
+		it("displays an error message and encourages the use of --help", () => {
+			expect(printMessage).not.toHaveBeenCalled()
+			expect(printWarning).not.toHaveBeenCalled()
+			expect(printError).toHaveBeenCalledWith(props.expectedError)
+			expect(printError).toHaveBeenCalledTimes(1)
+		})
+
+		it("does not read the content of any file", () => {
+			expect(readMatchingFiles).not.toHaveBeenCalled()
+		})
+
+		it("does not write changes to any file", () => {
+			expect(writeFiles).not.toHaveBeenCalled()
+		})
+	},
+)
 
 describe.each`
 	today           | args                                                                                                         | expectedMessage
@@ -63,7 +114,7 @@ describe.each`
 
 		beforeEach(async () => {
 			mockToday(props.today)
-			actualExitCode = await updraftCliProgram(props.args.split(" "))
+			actualExitCode = await program(props.args.split(" "))
 		})
 
 		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
@@ -117,7 +168,7 @@ describe.each`
 		beforeEach(async () => {
 			mockToday(props.today)
 			mockMatchingFiles([]) // No matched files.
-			actualExitCode = await updraftCliProgram(props.args.split(" "))
+			actualExitCode = await program(props.args.split(" "))
 		})
 
 		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
@@ -184,7 +235,7 @@ describe.each`
 		beforeEach(async () => {
 			mockToday(props.today)
 			mockMatchingFiles(props.files)
-			actualExitCode = await updraftCliProgram(props.args.split(" "))
+			actualExitCode = await program(props.args.split(" "))
 		})
 
 		it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
@@ -235,7 +286,7 @@ describe.each`
 		beforeEach(async () => {
 			mockToday(props.today)
 			mockMatchingFiles(props.files)
-			actualExitCode = await updraftCliProgram(props.args.split(" "))
+			actualExitCode = await program(props.args.split(" "))
 		})
 
 		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
@@ -273,7 +324,7 @@ describe.each`
 		beforeEach(async () => {
 			mockToday(props.today)
 			mockMatchingFiles(props.files)
-			actualExitCode = await updraftCliProgram(props.args.split(" "))
+			actualExitCode = await program(props.args.split(" "))
 		})
 
 		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
@@ -302,7 +353,7 @@ describe.each`
 
 	beforeEach(async () => {
 		mockSabotagedMatchingFiles(props.expectedError)
-		actualExitCode = await updraftCliProgram(props.args.split(" "))
+		actualExitCode = await program(props.args.split(" "))
 	})
 
 	it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
@@ -333,7 +384,7 @@ describe.each`
 		beforeEach(async () => {
 			mockMatchingFiles(props.files)
 			mockSabotagedWriteFiles(props.expectedError)
-			actualExitCode = await updraftCliProgram(props.args.split(" "))
+			actualExitCode = await program(props.args.split(" "))
 		})
 
 		it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {

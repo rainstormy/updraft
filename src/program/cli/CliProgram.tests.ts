@@ -2,8 +2,8 @@ import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
 import { printMessage } from "#adapters/Logger/Logger.ts"
+import { cliProgram } from "#program/cli/CliProgram.ts"
 import { usageInstructions } from "#program/cli/UsageInstructions.ts"
-import { updraftCliProgram } from "#program/UpdraftCliProgram.ts"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
@@ -18,7 +18,7 @@ describe.each`
 	let actualExitCode: ExitCode | null = null
 
 	beforeEach(async () => {
-		actualExitCode = await updraftCliProgram(props.helpScreenArgs)
+		actualExitCode = await cliProgram(props.helpScreenArgs)
 	})
 
 	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
@@ -51,7 +51,7 @@ describe.each`
 
 		beforeEach(async () => {
 			mockUpdraftVersion(props.toolVersion)
-			actualExitCode = await updraftCliProgram(props.toolVersionArgs)
+			actualExitCode = await cliProgram(props.toolVersionArgs)
 		})
 
 		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {

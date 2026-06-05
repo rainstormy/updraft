@@ -1,7 +1,7 @@
 import process from "node:process"
 import { getArgsFromActionInput } from "#adapters/ActionInput/ActionInput.ts"
-import { updraftProgram } from "#program/UpdraftProgram.ts"
+import { program } from "#program/Program.ts"
 import type { ExitCode } from "#utilities/ExitCode.ts"
 
-const exitCode: ExitCode = await updraftProgram(getArgsFromActionInput())
+const exitCode: ExitCode = await program(getArgsFromActionInput())
 process.exit(exitCode)
