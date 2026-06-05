@@ -1,7 +1,7 @@
+import type { DateString } from "#types/DateString.ts"
+import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import type { File } from "#utilities/files/File.ts"
 import { dedent } from "#utilities/Strings.ts"
-import type { DateString } from "#utilities/types/DateString.ts"
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 export function anEmptyAsciidocChangelog(path: AsciidocChangelogFilepath): File {
 	return { path, content: "" }

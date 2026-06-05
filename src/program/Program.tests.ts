@@ -40,16 +40,16 @@ import {
 	anIgnorableFileB,
 } from "#program/Program.fixtures.ts"
 import { program } from "#program/Program.ts"
+import type { DateString } from "#types/DateString.ts"
 import {
 	EXIT_CODE_GENERAL_ERROR,
 	EXIT_CODE_INVALID_INPUT,
 	EXIT_CODE_SUCCESS,
 	type ExitCode,
-} from "#utilities/ExitCode.ts"
+} from "#types/ExitCode.ts"
 import type { Files } from "#utilities/files/File.ts"
 import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
 import { printError, printMessage, printWarning } from "#utilities/logging/Logger.ts"
-import type { DateString } from "#utilities/types/DateString.ts"
 
 describe.each`
 	invalidArgs                                                                                                             | expectedError

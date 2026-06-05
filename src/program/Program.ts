@@ -1,27 +1,27 @@
 import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog.ts"
 import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog.ts"
 import { promotePackageJson } from "#promoters/PromotePackageJson.ts"
-import { defineOptions, parseArgs } from "#utilities/Args.ts"
-import { notNullish } from "#utilities/Arrays.ts"
-import { assertError } from "#utilities/Assertions.ts"
 import {
 	EXIT_CODE_GENERAL_ERROR,
 	EXIT_CODE_INVALID_INPUT,
 	EXIT_CODE_SUCCESS,
 	type ExitCode,
-} from "#utilities/ExitCode.ts"
+} from "#types/ExitCode.ts"
+import type { Release, ReleaseCheck } from "#types/Release.ts"
+import {
+	type SemanticVersionString,
+	extractSemanticVersionString,
+	isPrerelease,
+} from "#types/SemanticVersionString.ts"
+import { defineOptions, parseArgs } from "#utilities/Args.ts"
+import { notNullish } from "#utilities/Arrays.ts"
+import { assertError } from "#utilities/Assertions.ts"
 import type { File } from "#utilities/files/File.ts"
 import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
 import { type PromotableFile, filterPromotableFiles } from "#utilities/files/PromotableFile.ts"
 import { printError, printMessage, printWarning } from "#utilities/logging/Logger.ts"
 import { isFulfilled, isRejected } from "#utilities/Promises.ts"
 import { today } from "#utilities/today/Today.ts"
-import type { Release, ReleaseCheck } from "#utilities/types/Release.ts"
-import {
-	type SemanticVersionString,
-	extractSemanticVersionString,
-	isPrerelease,
-} from "#utilities/types/SemanticVersionString.ts"
 
 export async function program(
 	args: Array<string>,

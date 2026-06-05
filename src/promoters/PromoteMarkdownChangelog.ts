@@ -1,7 +1,7 @@
+import { checkSequentialRelease } from "#types/ComparableSemanticVersionString.ts"
+import type { Release } from "#types/Release.ts"
+import { extractSemanticVersionString } from "#types/SemanticVersionString.ts"
 import { notNullish } from "#utilities/Arrays.ts"
-import { checkSequentialRelease } from "#utilities/types/ComparableSemanticVersionString.ts"
-import type { Release } from "#utilities/types/Release.ts"
-import { extractSemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 // Matches an unreleased section, including the heading and the body, which
 // spans the characters after the heading until the next '##' heading or until

@@ -2,10 +2,10 @@ import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { cliProgram } from "#program/cli/CliProgram.ts"
 import { usageInstructions } from "#program/cli/UsageInstructions.ts"
-import { EXIT_CODE_SUCCESS, type ExitCode } from "#utilities/ExitCode.ts"
+import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
+import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
 import { printMessage } from "#utilities/logging/Logger.ts"
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 describe.each`
 	helpScreenArgs

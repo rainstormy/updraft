@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest"
 import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog.ts"
+import type { DateString } from "#types/DateString.ts"
+import type { Release } from "#types/Release.ts"
+import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { dedent } from "#utilities/Strings.ts"
-import type { DateString } from "#utilities/types/DateString.ts"
-import type { Release } from "#utilities/types/Release.ts"
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 describe.each`
 	releaseVersion      | releaseDate     | githubRepositoryUrl

@@ -3,7 +3,7 @@ import {
 	type SemanticVersionString,
 	extractSemanticVersionString,
 	isPrerelease,
-} from "#utilities/types/SemanticVersionString.ts"
+} from "#types/SemanticVersionString.ts"
 
 describe.each`
 	input                               | expectedSemanticVersionString

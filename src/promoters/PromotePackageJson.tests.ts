@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { promotePackageJson } from "#promoters/PromotePackageJson.ts"
+import type { Release } from "#types/Release.ts"
+import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { dedent } from "#utilities/Strings.ts"
-import type { Release } from "#utilities/types/Release.ts"
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 
 describe("when the package.json file does not have a 'version' field", () => {
 	const originalContent = dedent`

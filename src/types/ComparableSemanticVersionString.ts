@@ -1,9 +1,6 @@
+import { type SemanticVersionString, semanticVersionRegex } from "#types/SemanticVersionString.ts"
 import { isNonEmptyArray } from "#utilities/Arrays.ts"
 import { assertNotNullish } from "#utilities/Assertions.ts"
-import {
-	type SemanticVersionString,
-	semanticVersionRegex,
-} from "#utilities/types/SemanticVersionString.ts"
 
 export type ComparableSemanticVersionString = {
 	major: number
