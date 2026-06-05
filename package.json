@@ -31,7 +31,7 @@
 	],
 	"imports": {
 		"#promoters/*": "./src/promoters/*",
-		"#program/*": "./src/program/*",
+		"#programs/*": "./src/programs/*",
 		"#types/*": "./src/types/*",
 		"#utilities/*": "./src/utilities/*"
 	},

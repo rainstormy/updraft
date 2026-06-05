@@ -1,6 +1,6 @@
 import { bold, cyan, yellow } from "ansis"
 import { expect, it } from "vitest"
-import { usageInstructions } from "#program/cli/UsageInstructions.ts"
+import { usageInstructions } from "#programs/cli/UsageInstructions.ts"
 import { dedent } from "#utilities/Strings.ts"
 
 it("is a list of program arguments and options", () => {

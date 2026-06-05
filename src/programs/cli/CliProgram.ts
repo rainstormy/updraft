@@ -1,5 +1,5 @@
-import { usageInstructions } from "#program/cli/UsageInstructions.ts"
-import { program } from "#program/Program.ts"
+import { usageInstructions } from "#programs/cli/UsageInstructions.ts"
+import { program } from "#programs/Program.ts"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import { printMessage } from "#utilities/logging/Logger.ts"
 

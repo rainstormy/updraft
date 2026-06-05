@@ -38,8 +38,8 @@ import {
 	anEmptyPackageJson,
 	anIgnorableFileA,
 	anIgnorableFileB,
-} from "#program/Program.fixtures.ts"
-import { program } from "#program/Program.ts"
+} from "#programs/Program.fixtures.ts"
+import { program } from "#programs/Program.ts"
 import type { DateString } from "#types/DateString.ts"
 import {
 	EXIT_CODE_GENERAL_ERROR,
