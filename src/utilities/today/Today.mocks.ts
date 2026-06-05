@@ -1,7 +1,7 @@
 import { vi } from "vitest"
 import type { DateString } from "#utilities/types/DateString.ts"
 
-vi.mock(import("#adapters/Today/Today.ts"), () => ({
+vi.mock(import("#utilities/today/Today.ts"), () => ({
 	today: vi.fn(() => mockedToday),
 }))
 

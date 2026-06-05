@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises"
 import fg from "fast-glob"
-import type { File, Files } from "#adapters/FileSystem/File.ts"
-import { assertError } from "#utilities/ErrorUtilities.ts"
+import { assertError } from "#utilities/Assertions.ts"
+import type { File, Files } from "#utilities/files/File.ts"
 
 export async function readMatchingFiles(filePatterns: Array<string>): Promise<Files> {
 	const paths = await fg.glob([...filePatterns], { dot: true })

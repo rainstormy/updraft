@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog.ts"
-import { dedent } from "#utilities/StringUtilities.ts"
+import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog.ts"
+import { dedent } from "#utilities/Strings.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
 import type { Release } from "#utilities/types/Release.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"

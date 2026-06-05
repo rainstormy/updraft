@@ -1,5 +1,5 @@
-import type { File } from "#adapters/FileSystem/File.ts"
-import { dedent } from "#utilities/StringUtilities.ts"
+import type { File } from "#utilities/files/File.ts"
+import { dedent } from "#utilities/Strings.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 

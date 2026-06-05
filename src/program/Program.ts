@@ -1,21 +1,21 @@
-import type { File } from "#adapters/FileSystem/File.ts"
-import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
-import { type PromotableFile, filterPromotableFiles } from "#adapters/FileSystem/PromotableFile.ts"
-import { printError, printMessage, printWarning } from "#adapters/Logger/Logger.ts"
-import { today } from "#adapters/Today/Today.ts"
-import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog/PromoteAsciidocChangelog.ts"
-import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog/PromoteMarkdownChangelog.ts"
-import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson.ts"
-import { defineOptions, parseArgs } from "#utilities/ArgsUtilities.ts"
-import { assertError } from "#utilities/ErrorUtilities.ts"
+import { promoteAsciidocChangelog } from "#promoters/PromoteAsciidocChangelog.ts"
+import { promoteMarkdownChangelog } from "#promoters/PromoteMarkdownChangelog.ts"
+import { promotePackageJson } from "#promoters/PromotePackageJson.ts"
+import { defineOptions, parseArgs } from "#utilities/Args.ts"
+import { notNullish } from "#utilities/Arrays.ts"
+import { assertError } from "#utilities/Assertions.ts"
 import {
 	EXIT_CODE_GENERAL_ERROR,
 	EXIT_CODE_INVALID_INPUT,
 	EXIT_CODE_SUCCESS,
 	type ExitCode,
 } from "#utilities/ExitCode.ts"
-import { notNullish } from "#utilities/IterableUtilities.ts"
-import { isFulfilled, isRejected } from "#utilities/PromiseUtilities.ts"
+import type { File } from "#utilities/files/File.ts"
+import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
+import { type PromotableFile, filterPromotableFiles } from "#utilities/files/PromotableFile.ts"
+import { printError, printMessage, printWarning } from "#utilities/logging/Logger.ts"
+import { isFulfilled, isRejected } from "#utilities/Promises.ts"
+import { today } from "#utilities/today/Today.ts"
 import type { Release, ReleaseCheck } from "#utilities/types/Release.ts"
 import {
 	type SemanticVersionString,

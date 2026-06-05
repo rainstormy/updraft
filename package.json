@@ -30,7 +30,6 @@
 		"dist/cli/"
 	],
 	"imports": {
-		"#adapters/*": "./src/adapters/*",
 		"#promoters/*": "./src/promoters/*",
 		"#program/*": "./src/program/*",
 		"#utilities/*": "./src/utilities/*"

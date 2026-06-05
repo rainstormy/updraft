@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { promotePackageJson } from "#promoters/PromotePackageJson/PromotePackageJson.ts"
-import { dedent } from "#utilities/StringUtilities.ts"
+import { promotePackageJson } from "#promoters/PromotePackageJson.ts"
+import { dedent } from "#utilities/Strings.ts"
 import type { Release } from "#utilities/types/Release.ts"
 import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
 

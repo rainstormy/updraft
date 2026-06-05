@@ -1,5 +1,5 @@
-import type { File, Files } from "#adapters/FileSystem/File.ts"
-import { notNullish } from "#utilities/IterableUtilities.ts"
+import { notNullish } from "#utilities/Arrays.ts"
+import type { File, Files } from "#utilities/files/File.ts"
 
 export type PromotableFile = File & {
 	type: PromotableFilename

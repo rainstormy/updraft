@@ -1,8 +1,8 @@
 import process from "node:process"
-import { notFalse } from "#utilities/IterableUtilities.ts"
-import { toStringArray } from "#utilities/StringUtilities.ts"
+import { notFalse } from "#utilities/Arrays.ts"
+import { toStringArray } from "#utilities/Strings.ts"
 
-export function getArgsFromActionInput(): Array<string> {
+export function argsFromGithubActionInput(): Array<string> {
 	const checkSequentialRelease = getBooleanInput("check-sequential-release")
 	const files = getStringArrayInput("files")
 	const prereleaseFiles = getStringArrayInput("prerelease-files")

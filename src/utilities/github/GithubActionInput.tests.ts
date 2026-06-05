@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { getArgsFromActionInput } from "#adapters/ActionInput/ActionInput.ts"
+import { argsFromGithubActionInput } from "#utilities/github/GithubActionInput.ts"
 
 describe.each`
 	checkSequentialRelease | files                                                            | prereleaseFiles                                     | releaseFiles                                        | releaseVersion              | expectedArgs
@@ -37,7 +37,7 @@ describe.each`
 			vi.stubEnv("INPUT_RELEASE-FILES", props.releaseFiles)
 			vi.stubEnv("INPUT_RELEASE-VERSION", props.releaseVersion)
 
-			actualArgs = getArgsFromActionInput()
+			actualArgs = argsFromGithubActionInput()
 		})
 
 		it(`returns '${props.expectedArgs.join(" ")}'`, () => {

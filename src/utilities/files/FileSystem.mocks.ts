@@ -1,7 +1,7 @@
 import { beforeEach, vi } from "vitest"
-import type { Files } from "#adapters/FileSystem/File.ts"
+import type { Files } from "#utilities/files/File.ts"
 
-vi.mock(import("#adapters/FileSystem/FileSystem.ts"), () => ({
+vi.mock(import("#utilities/files/FileSystem.ts"), () => ({
 	readMatchingFiles: vi.fn(async (): Promise<Files> => {
 		if (mockedReadErrorMessage !== null) {
 			throw new Error(mockedReadErrorMessage)

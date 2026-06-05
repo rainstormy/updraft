@@ -2,12 +2,9 @@ import {
 	mockMatchingFiles,
 	mockSabotagedMatchingFiles,
 	mockSabotagedWriteFiles,
-} from "#adapters/FileSystem/FileSystem.mocks.ts"
-import { mockToday } from "#adapters/Today/Today.mocks.ts"
+} from "#utilities/files/FileSystem.mocks.ts"
+import { mockToday } from "#utilities/today/Today.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import type { Files } from "#adapters/FileSystem/File.ts"
-import { readMatchingFiles, writeFiles } from "#adapters/FileSystem/FileSystem.ts"
-import { printError, printMessage, printWarning } from "#adapters/Logger/Logger.ts"
 import {
 	aNonPromotableAsciidocChangelog,
 	aNonPromotableMarkdownChangelog,
@@ -49,6 +46,9 @@ import {
 	EXIT_CODE_SUCCESS,
 	type ExitCode,
 } from "#utilities/ExitCode.ts"
+import type { Files } from "#utilities/files/File.ts"
+import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
+import { printError, printMessage, printWarning } from "#utilities/logging/Logger.ts"
 import type { DateString } from "#utilities/types/DateString.ts"
 
 describe.each`

@@ -1,6 +1,6 @@
 import { vi } from "vitest"
 
-vi.mock(import("#adapters/Logger/Logger.ts"), () => ({
+vi.mock(import("#utilities/logging/Logger.ts"), () => ({
 	printMessage: vi.fn(() => {
 		// Do nothing.
 	}),
