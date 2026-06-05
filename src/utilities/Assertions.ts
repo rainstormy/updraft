@@ -1,3 +1,9 @@
+export function assertError(error: unknown): asserts error is Error {
+	if (!(error instanceof Error)) {
+		throw error
+	}
+}
+
 export function assertNotNullish<Value extends NonNullable<unknown>>(
 	value: Value | null | undefined,
 	name = "",

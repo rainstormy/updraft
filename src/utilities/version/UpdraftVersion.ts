@@ -1,3 +1,3 @@
-import type { SemanticVersionString } from "#utilities/types/SemanticVersionString.ts"
+import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 
 export type UpdraftVersion = SemanticVersionString
