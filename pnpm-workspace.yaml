@@ -15,7 +15,8 @@ minimumReleaseAge: 10080 # 7 * 1440 minutes
 minimumReleaseAgeExclude:
   # CVE-2026-39364.
   # https://github.com/vitejs/vite/security/advisories/GHSA-v2wj-q39q-566r
-  - 'vite@7.3.2'
+  # Renovate security update: vite@8.0.16
+  - 'vite@7.3.2 || 8.0.16'
 
 # Pin packages to exact versions to ensure that all developers use the same versions.
 savePrefix: ''
