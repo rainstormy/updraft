@@ -47,14 +47,14 @@
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "24.13.1",
 		"@typescript/native-preview": "7.0.0-dev.20260601.1",
-		"@vitest/ui": "4.1.5",
+		"@vitest/ui": "4.1.9",
 		"lefthook": "2.1.8",
 		"oxfmt": "0.40.0",
 		"oxlint": "1.55.0",
 		"oxlint-tsgolint": "0.22.1",
 		"typescript": "6.0.3",
 		"vite": "8.0.16",
-		"vitest": "4.1.5"
+		"vitest": "4.1.9"
 	},
 	"// devDependencies": {
 		"@rainstormy/presets-typescript": "This library provides predefined, opinionated TypeScript configurations.",
