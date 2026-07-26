@@ -1,4 +1,3 @@
-import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { cliProgram } from "#programs/cli/CliProgram.ts"
 import { usageInstructions } from "#programs/cli/UsageInstructions.ts"
@@ -6,6 +5,7 @@ import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
 import { printMessage } from "#utilities/logging/Logger.ts"
+import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
 
 describe.each`
 	helpScreenArgs
@@ -26,8 +26,7 @@ describe.each`
 	})
 
 	it("displays the usage instructions", () => {
-		expect(printMessage).toHaveBeenCalledWith(usageInstructions())
-		expect(printMessage).toHaveBeenCalledTimes(1)
+		expect(printMessage).toHaveBeenCalledExactlyOnceWith(usageInstructions())
 	})
 
 	it("does not read the content of any file", () => {
@@ -59,8 +58,7 @@ describe.each`
 		})
 
 		it("displays the tool version", () => {
-			expect(printMessage).toHaveBeenCalledWith(props.toolVersion)
-			expect(printMessage).toHaveBeenCalledTimes(1)
+			expect(printMessage).toHaveBeenCalledExactlyOnceWith(props.toolVersion)
 		})
 
 		it("does not read the content of any file", () => {

@@ -1,9 +1,3 @@
-import {
-	mockMatchingFiles,
-	mockSabotagedMatchingFiles,
-	mockSabotagedWriteFiles,
-} from "#utilities/files/FileSystem.mocks.ts"
-import { mockToday } from "#utilities/today/Today.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import {
 	aNonPromotableAsciidocChangelog,
@@ -48,8 +42,14 @@ import {
 	type ExitCode,
 } from "#types/ExitCode.ts"
 import type { Files } from "#utilities/files/File.ts"
+import {
+	mockMatchingFiles,
+	mockSabotagedMatchingFiles,
+	mockSabotagedWriteFiles,
+} from "#utilities/files/FileSystem.mocks.ts"
 import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
 import { printError, printMessage, printWarning } from "#utilities/logging/Logger.ts"
+import { mockToday } from "#utilities/today/Today.mocks.ts"
 
 describe.each`
 	invalidArgs                                                                                                             | expectedError
@@ -83,8 +83,7 @@ describe.each`
 		it("displays an error message and encourages the use of --help", () => {
 			expect(printMessage).not.toHaveBeenCalled()
 			expect(printWarning).not.toHaveBeenCalled()
-			expect(printError).toHaveBeenCalledWith(props.expectedError)
-			expect(printError).toHaveBeenCalledTimes(1)
+			expect(printError).toHaveBeenCalledExactlyOnceWith(props.expectedError)
 		})
 
 		it("does not read the content of any file", () => {
@@ -124,8 +123,7 @@ describe.each`
 		it("displays a message", () => {
 			expect(printWarning).not.toHaveBeenCalled()
 			expect(printError).not.toHaveBeenCalled()
-			expect(printMessage).toHaveBeenCalledWith(props.expectedMessage)
-			expect(printMessage).toHaveBeenCalledTimes(1)
+			expect(printMessage).toHaveBeenCalledExactlyOnceWith(props.expectedMessage)
 		})
 
 		it("does not read the content of any file", () => {
@@ -178,8 +176,7 @@ describe.each`
 		it("displays a warning", () => {
 			expect(printMessage).not.toHaveBeenCalled()
 			expect(printError).not.toHaveBeenCalled()
-			expect(printWarning).toHaveBeenCalledWith(props.expectedWarning)
-			expect(printWarning).toHaveBeenCalledTimes(1)
+			expect(printWarning).toHaveBeenCalledExactlyOnceWith(props.expectedWarning)
 		})
 
 		it("does not write changes to any file", () => {
@@ -300,8 +297,7 @@ describe.each`
 		})
 
 		it("saves the promoted files", () => {
-			expect(writeFiles).toHaveBeenCalledWith(props.expectedSavedFiles)
-			expect(writeFiles).toHaveBeenCalledTimes(1)
+			expect(writeFiles).toHaveBeenCalledExactlyOnceWith(props.expectedSavedFiles)
 		})
 	},
 )
@@ -334,8 +330,7 @@ describe.each`
 		it("displays a warning", () => {
 			expect(printMessage).not.toHaveBeenCalled()
 			expect(printError).not.toHaveBeenCalled()
-			expect(printWarning).toHaveBeenCalledWith(props.expectedWarning)
-			expect(printWarning).toHaveBeenCalledTimes(1)
+			expect(printWarning).toHaveBeenCalledExactlyOnceWith(props.expectedWarning)
 		})
 
 		it("does not write changes to any file", () => {
@@ -363,8 +358,7 @@ describe.each`
 	it("displays an error", () => {
 		expect(printMessage).not.toHaveBeenCalled()
 		expect(printWarning).not.toHaveBeenCalled()
-		expect(printError).toHaveBeenCalledWith(props.expectedError)
-		expect(printError).toHaveBeenCalledTimes(1)
+		expect(printError).toHaveBeenCalledExactlyOnceWith(props.expectedError)
 	})
 
 	it("does not write changes to any file", () => {
@@ -394,8 +388,7 @@ describe.each`
 		it("displays an error", () => {
 			expect(printMessage).not.toHaveBeenCalled()
 			expect(printWarning).not.toHaveBeenCalled()
-			expect(printError).toHaveBeenCalledWith(props.expectedError)
-			expect(printError).toHaveBeenCalledTimes(1)
+			expect(printError).toHaveBeenCalledExactlyOnceWith(props.expectedError)
 		})
 	},
 )

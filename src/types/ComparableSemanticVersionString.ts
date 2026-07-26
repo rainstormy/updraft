@@ -14,7 +14,7 @@ export type ComparableSemanticVersionString = {
 	build: string
 }
 
-const incrementRegex = /[-.](?<increment>\d+)$/
+const incrementRegex = /[-.](?<increment>\d+)$/u
 
 export function toComparableSemanticVersionString(
 	version: SemanticVersionString,
@@ -35,9 +35,9 @@ export function toComparableSemanticVersionString(
 	const increment = incrementMatch?.groups?.increment ?? null
 
 	return {
-		major: Number.parseInt(major, 10),
-		minor: Number.parseInt(minor, 10),
-		patch: Number.parseInt(patch, 10),
+		major: Math.trunc(Number(major)),
+		minor: Math.trunc(Number(minor)),
+		patch: Math.trunc(Number(patch)),
 		prerelease: {
 			label:
 				prerelease !== undefined
@@ -49,7 +49,7 @@ export function toComparableSemanticVersionString(
 				prerelease !== undefined && increment !== null
 					? prerelease.slice(-increment.length - 1, -increment.length)
 					: "",
-			increment: increment !== null ? Number.parseInt(increment, 10) : null,
+			increment: increment !== null ? Math.trunc(Number(increment)) : null,
 		},
 		build: build ?? "",
 	}

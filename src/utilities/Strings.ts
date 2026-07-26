@@ -50,7 +50,7 @@ export function pluralise(subject: number, singular: string, plural?: string): s
 	return subject === 1 ? singular : (plural ?? `${singular}s`)
 }
 
-const byWhitespace = /\s+/
+const byWhitespace = /\s+/u
 
 export function toStringArray(input: string): Array<string> {
 	return input
