@@ -32,7 +32,7 @@ import {
 	anEmptyPackageJson,
 	anIgnorableFileA,
 	anIgnorableFileB,
-} from "#programs/Program.fixtures.ts"
+} from "#programs/Program.fakes.ts"
 import { program } from "#programs/Program.ts"
 import type { DateString } from "#types/DateString.ts"
 import {
@@ -46,10 +46,10 @@ import {
 	mockMatchingFiles,
 	mockSabotagedMatchingFiles,
 	mockSabotagedWriteFiles,
-} from "#utilities/files/FileSystem.mocks.ts"
+} from "#utilities/files/FileSystem.fakes.ts"
 import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
 import { printError, printMessage, printWarning } from "#utilities/logging/Logger.ts"
-import { mockToday } from "#utilities/today/Today.mocks.ts"
+import { mockToday } from "#utilities/today/Today.fakes.ts"
 
 describe.each`
 	invalidArgs                                                                                                             | expectedError

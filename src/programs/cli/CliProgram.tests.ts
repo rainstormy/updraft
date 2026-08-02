@@ -5,7 +5,7 @@ import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { readMatchingFiles, writeFiles } from "#utilities/files/FileSystem.ts"
 import { printMessage } from "#utilities/logging/Logger.ts"
-import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.mocks.ts"
+import { mockUpdraftVersion } from "#utilities/version/UpdraftVersion.fakes.ts"
 
 describe.each`
 	helpScreenArgs

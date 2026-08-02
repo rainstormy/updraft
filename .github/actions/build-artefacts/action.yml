@@ -10,7 +10,7 @@ runs:
       uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         # CAUTION: The cache key originates from `.github/workflows/integrity.yml`.
-        key: build:${{ hashFiles('src/**/*', '!src/**/*.fixtures.*', '!src/**/*.mocks.*', '!src/**/*.tests.*', 'mise.toml', 'package.json', 'pnpm-lock.yaml', 'vite.config.ts') }}
+        key: build:${{ hashFiles('src/**/*', '!src/**/*.fakes.*', '!src/**/*.tests.*', 'mise.toml', 'package.json', 'pnpm-lock.yaml', 'vite.config.ts') }}
         path: dist/
         # The caller workflow must build the project prior to this step to avoid a cache miss.
         # NOTE: GitHub may sometimes evict the cache entry prematurely when approaching the cache storage limit.

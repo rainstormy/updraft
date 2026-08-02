@@ -61,7 +61,7 @@ jobs:
           # - Third-party dependencies (`pnpm-lock.yaml`).
           #
           # CAUTION: The cache key is repeated in `.github/actions/build-artefacts/action.yml` to restore the build artefacts.
-          cache-key: build:${{ hashFiles('src/**/*', '!src/**/*.fixtures.*', '!src/**/*.mocks.*', '!src/**/*.tests.*', 'mise.toml', 'package.json', 'pnpm-lock.yaml', 'vite.config.ts') }}
+          cache-key: build:${{ hashFiles('src/**/*', '!src/**/*.fakes.*', '!src/**/*.tests.*', 'mise.toml', 'package.json', 'pnpm-lock.yaml', 'vite.config.ts') }}
           cache-path: dist/
           # language=sh
           task: build
@@ -135,8 +135,7 @@ jobs:
         uses: ./.github/actions/task
         with:
           # The cache key includes:
-          # - Test fixtures (`src/**/*.fixtures.ts`).
-          # - Module mocks (`src/**/*.mocks.ts`).
+          # - Fakes (`src/**/*.fakes.ts`).
           # - Unit test suites (`src/**/*.tests.ts`).
           # - Files covered by unit tests (`src/**/*`).
           # - The Vite configuration file (`vite.config.ts`).
