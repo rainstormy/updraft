@@ -53,6 +53,9 @@ export default defineConfig({
 				// language=sh
 				command: "vp check --fix",
 			},
+			generate: {
+				command: "",
+			},
 			install: {
 				// language=sh
 				command: [
