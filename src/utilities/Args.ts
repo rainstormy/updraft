@@ -10,7 +10,7 @@ export function parseArgs<Option extends string>(
 	for (const arg of args) {
 		if (arg.startsWith("-")) {
 			currentOption = arg
-			parsedArgs[currentOption] = parsedArgs[currentOption] ?? []
+			parsedArgs[currentOption] ??= []
 		} else if (currentOption !== null) {
 			parsedArgs[currentOption]?.push(arg)
 		}

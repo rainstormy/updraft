@@ -56,11 +56,17 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         #
-      - name: Restore the build artefacts to be distributed in the npm package
-        uses: ./.github/actions/build-artefacts
-        #
       - name: Install dependencies
-        uses: ./.github/actions/dependencies
+        uses: voidzero-dev/setup-vp@1b32467adbe183473499fd9d5d372c3ed9641754 # v1.18.0
+        with:
+          node-version-file: package.json
+          version-file: pnpm-workspace.yaml
+          cache: true
+        #
+      - name: Generate build artefacts to be distributed in the release
+        # language=sh
+        run: vpr build
+        shell: bash
         #
       - name: Set the target npm registry and prepare an auth token
         # language=sh

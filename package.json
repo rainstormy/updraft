@@ -16,19 +16,19 @@
 		"version"
 	],
 	"bugs": "https://github.com/rainstormy/updraft/issues",
+	"license": "MIT",
+	"author": "Steffen Diswal",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/rainstormy/updraft.git"
 	},
-	"license": "MIT",
-	"author": "Steffen Diswal",
-	"type": "module",
 	"bin": {
 		"updraft": "dist/cli/index.js"
 	},
 	"files": [
 		"dist/cli/"
 	],
+	"type": "module",
 	"imports": {
 		"#promoters/*": "./src/promoters/*",
 		"#programs/*": "./src/programs/*",
@@ -36,36 +36,31 @@
 		"#utilities/*": "./src/utilities/*"
 	},
 	"dependencies": {
-		"ansis": "4.3.1",
-		"fast-glob": "3.3.3"
-	},
-	"// dependencies": {
-		"ansis": "This library formats console output.",
-		"fast-glob": "This library executes glob patterns in the file system."
+		"ansis": "catalog:",
+		"fast-glob": "catalog:"
 	},
 	"devDependencies": {
-		"@rainstormy/presets-typescript": "1.1.0",
-		"@types/node": "24.13.2",
-		"@typescript/native-preview": "7.0.0-dev.20260701.1",
-		"@vitest/ui": "4.1.10",
-		"lefthook": "2.1.8",
-		"oxfmt": "0.40.0",
-		"oxlint": "1.55.0",
-		"oxlint-tsgolint": "0.22.1",
-		"typescript": "6.0.3",
-		"vite": "8.1.4",
-		"vitest": "4.1.10"
+		"@rainstormy/presets-web": "catalog:",
+		"@types/node": "catalog:",
+		"@typescript/native-preview": "catalog:",
+		"lefthook": "catalog:",
+		"oxfmt": "catalog:",
+		"oxlint": "catalog:",
+		"typescript": "catalog:",
+		"vite": "catalog:",
+		"vite-plus": "catalog:",
+		"vitest": "catalog:"
 	},
-	"// devDependencies": {
-		"@rainstormy/presets-typescript": "This library provides predefined, opinionated TypeScript configurations.",
-		"@types/node": "These type definitions cover Node.js modules.",
-		"@typescript/native-preview": "This TypeScript port provides a preview of the upcoming native TypeScript compiler.",
-		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",
-		"lefthook": "Lefthook is a Git hooks manager.",
-		"oxfmt": "Oxfmt is an opinionated code formatter.",
-		"oxlint": "Oxlint is an opinionated JavaScript and TypeScript linter.",
-		"typescript": "TypeScript is a statically typed programming language on top of JavaScript.",
-		"vite": "Vite is a development server and a bundler.",
-		"vitest": "Vitest is a unit testing framework."
+	"devEngines": {
+		"packageManager": {
+			"name": "pnpm",
+			"version": "11.9.0",
+			"onFail": "download"
+		},
+		"runtime": {
+			"name": "node",
+			"version": "24.18.0",
+			"onFail": "download"
+		}
 	}
 }

@@ -8,7 +8,7 @@ import { notNullish } from "#utilities/Arrays.ts"
 // the end of the string (trailing newlines are allowed).
 // The heading may include an inline link to the GitHub repository.
 const unreleasedSectionRegex =
-	/\n== ((?<unreleasedRepositoryLink>\S+)\[unreleased\]|unreleased)(?<unreleasedBody>.*?)(?=\n== \S+\[(?<latestReleaseVersion>\S+)\]|\n*$)/isu
+	/\n== (?:(?<unreleasedRepositoryLink>\S+)\[unreleased\]|unreleased)(?<unreleasedBody>.*?)(?=\n== \S+\[(?<latestReleaseVersion>\S+)\]|\n*$)/isu
 
 // Matches the path segment of a link to the repository.
 const repositoryLinkPathRegex = /\/(?:compare|releases\/tag)\/v\S+/iu

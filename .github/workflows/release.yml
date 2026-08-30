@@ -55,11 +55,17 @@ jobs:
           # Use a separate access token with permission to commit and push.
           token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
         #
-      - name: Restore the build artefacts to be distributed in the release
-        uses: ./.github/actions/build-artefacts
-        #
       - name: Install dependencies
-        uses: ./.github/actions/dependencies
+        uses: voidzero-dev/setup-vp@1b32467adbe183473499fd9d5d372c3ed9641754 # v1.18.0
+        with:
+          node-version-file: package.json
+          version-file: pnpm-workspace.yaml
+          cache: true
+        #
+      - name: Generate build artefacts to be distributed in the release
+        # language=sh
+        run: vpr build
+        shell: bash
         #
       - name: Update the release artefacts
         # Run the newest version of Updraft on itself.
