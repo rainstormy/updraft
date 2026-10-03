@@ -54,7 +54,7 @@ catalog:
 
   # Vitest is a unit testing framework.
   # https://vitest.dev
-  vitest: 4.1.10
+  vitest: 5.0.3
 
 # Be very strict about third-party dependencies to reduce the risk of supply chain attacks.
 # https://pnpm.io/blog/2025/12/05/newsroom-npm-supply-chain-security
