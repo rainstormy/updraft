@@ -13,7 +13,7 @@ catalog:
   # Type definitions for the Node.js standard library.
   # https://nodejs.org/docs/latest/api
   # https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node
-  '@types/node': 24.13.2
+  '@types/node': 24.13.6
 
   # The official Go-powered 'tsgo' CLI for TypeScript. It will merge with `typescript` in TypeScript 7.
   # https://github.com/microsoft/typescript-go
