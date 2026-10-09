@@ -44,22 +44,19 @@
 		"@types/node": "catalog:",
 		"@typescript/native-preview": "catalog:",
 		"lefthook": "catalog:",
-		"oxfmt": "catalog:",
-		"oxlint": "catalog:",
 		"typescript": "catalog:",
-		"vite": "catalog:",
 		"vite-plus": "catalog:",
 		"vitest": "catalog:"
 	},
 	"devEngines": {
 		"packageManager": {
 			"name": "pnpm",
-			"version": "11.25.0",
+			"version": "12.9.1",
 			"onFail": "download"
 		},
 		"runtime": {
 			"name": "node",
-			"version": "24.20.0",
+			"version": "24.21.0",
 			"onFail": "download"
 		}
 	}

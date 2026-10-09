@@ -1,7 +1,9 @@
 import { env } from "node:process"
 import { defineOxfmtConfig } from "@rainstormy/presets-web/oxfmt"
 import { defineOxlintConfig, oxlintRestrictedImportPatterns } from "@rainstormy/presets-web/oxlint"
-import { defineConfig } from "vite-plus"
+import { type UserConfig, defineConfig } from "vite-plus"
+
+type UserOxfmtConfig = NonNullable<UserConfig["fmt"]>
 
 export default defineConfig({
 	build: {
@@ -15,7 +17,7 @@ export default defineConfig({
 	},
 	cacheDir: "node_modules/.cache/",
 	envPrefix: "UPDRAFT_",
-	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }),
+	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }) as UserOxfmtConfig,
 	lint: defineOxlintConfig({
 		ignorePatterns: ["dist/**/*"],
 		overrides: [
@@ -36,44 +38,26 @@ export default defineConfig({
 	}),
 	plugins: [],
 	run: {
+		// language=sh
 		tasks: {
 			build: {
-				// language=sh
 				command: [
 					"UPDRAFT_PLATFORM='cli' vite build --ssr src/main-cli.ts --outDir dist/cli/",
 					"UPDRAFT_PLATFORM='gha' vite build --ssr src/main-gha.ts --outDir dist/gha/",
 				],
-				input: [{ auto: true }, "!dist/**/*"],
+				cache: { input: [{ auto: true }, "!dist/**/*"] },
 			},
-			check: {
-				// language=sh
-				command: "vp check",
-			},
-			fmt: {
-				// language=sh
-				command: "vp check --fix",
-			},
-			generate: {
-				command: "",
-			},
+			check: { command: "vp check" },
+			fmt: { command: "vp check --fix" },
 			install: {
-				// language=sh
 				command: [
 					"vp install --frozen-lockfile --ignore-scripts",
 					'if [ "$LEFTHOOK" != "0" ]; then lefthook install; fi',
 				],
 				cache: false,
 			},
-			test: {
-				// language=sh
-				command: "vp test",
-				input: [{ auto: true }, "!node_modules/.vite-temp/vite.config.ts.timestamp-*"],
-			},
-			yolo: {
-				// language=sh
-				command: "lefthook uninstall",
-				cache: false,
-			},
+			test: { command: "vp test" },
+			yolo: { command: "lefthook uninstall", cache: false },
 		},
 	},
 	ssr: {
