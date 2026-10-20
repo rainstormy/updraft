@@ -22,7 +22,7 @@ on:
 jobs:
   clean-up-workflow-cache:
     name: Clean up workflow cache
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 1
     permissions:
       # To list and delete workflow cache entries.
