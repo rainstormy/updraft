@@ -42,42 +42,24 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
+      # To check out the repository.
+      # https://github.com/actions/checkout#recommended-permissions
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2026-03-10#get-repository-content
+      contents: read
+      #
       # To review the commit messages in the pull request.
       # https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-commits-on-a-pull-request
       pull-requests: read
     steps:
-      - name: Verify the commit messages
-        uses: rainstormy/github-action-validate-commit-messages@84da2861892ba8268c8be58a0f5dd8b18292132f # v1.1.9
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Prevent `GITHUB_TOKEN` from leaking into the runner's file system.
+          # https://github.com/actions/checkout#usage
+          persist-credentials: false
+        #
+      - name: Verify the commit messages (Comet)
+        uses: rainstormy/comet@5c8eb994705e924014f1295c4584974951b10c2d # v2.1.1
         with:
           github-token: ${{ github.token }}
-          rules: |
-            acknowledged-author-email-addresses,
-            acknowledged-author-names,
-            acknowledged-committer-email-addresses,
-            acknowledged-committer-names,
-            capitalised-subject-lines,
-            empty-line-after-subject-lines,
-            imperative-subject-lines,
-            limit-length-of-body-lines,
-            limit-length-of-subject-lines,
-            multi-word-subject-lines,
-            no-co-authors,
-            no-merge-commits,
-            no-revert-revert-commits,
-            no-squash-commits,
-            no-trailing-punctuation-in-subject-lines,
-            no-unexpected-whitespace,
-            unique-subject-lines,
-
-          # The author and committer email address must be on one of these forms:
-          # - `id+username@users.noreply.github.com`
-          # - `noreply@github.com` (committer only, for automated version upgrades and for reverting pull requests directly from the GitHub web interface)
-          acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
-          acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com noreply@github\.com'
-
-          # The author and committer name must be on one of these forms:
-          # - at least two words where the first word starts with a capital letter
-          # - `renovate[bot]` (for automated version upgrades)
-          # - `GitHub` (committer only, for automated version upgrades and for reverting pull requests directly from the GitHub web interface)
-          acknowledged-author-names--patterns: '\p{Lu}.*\s.+ renovate\[bot\]'
-          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+ renovate\[bot\] GitHub'
+          config-path: .github/comet.jsonc

@@ -48,6 +48,7 @@ export default defineConfig({
 				cache: { input: [{ auto: true }, "!dist/**/*"] },
 			},
 			check: { command: "vp check" },
+			comet: { command: "comet --config .github/comet.jsonc", cache: false },
 			fmt: { command: "vp check --fix" },
 			install: {
 				command: [

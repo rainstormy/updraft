@@ -189,6 +189,9 @@ settings:
 
 catalogs:
   default:
+    '@rainstormy/comet':
+      specifier: 2.1.1
+      version: 2.1.1
     '@rainstormy/presets-web':
       specifier: 1.0.0-rc.2
       version: 1.0.0-rc.2
@@ -228,6 +231,9 @@ importers:
         specifier: 'catalog:'
         version: 3.3.3
     devDependencies:
+      '@rainstormy/comet':
+        specifier: 'catalog:'
+        version: 2.1.1
       '@rainstormy/presets-web':
         specifier: 'catalog:'
         version: 1.0.0-rc.2(oxfmt@0.60.0(vite-plus@1.0.0(@types/node@24.13.6)(typescript@6.0.3)))(oxlint@1.85.0(oxlint-tsgolint@7.0.2003)(vite-plus@1.0.0(@types/node@24.13.6)(typescript@6.0.3)))(typescript@6.0.3)
@@ -750,6 +756,10 @@ packages:
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
+
+  '@rainstormy/comet@2.1.1':
+    resolution: {integrity: sha512-azZjqdsS/7C3MSxtOTiyIXlCTB1aS9/x23Eu2vF6MBnxvO5eQfh79CswmJuHebnZlgmlQlKjaU7qZjCwsTgl+w==}
+    hasBin: true
 
   '@rainstormy/presets-web@1.0.0-rc.2':
     resolution: {integrity: sha512-1ZaPhDfLXzsy8IvTO7NFFMlKIfwR6V9Dz1Hn208w6f1fGFrDLCDg7SdLuie8nPDus2OCBizNxcBiDtRsL5aM7g==}
@@ -2158,6 +2168,8 @@ snapshots:
   '@oxlint/plugins@1.79.0': {}
 
   '@polka/url@1.0.0-next.29': {}
+
+  '@rainstormy/comet@2.1.1': {}
 
   '@rainstormy/presets-web@1.0.0-rc.2(oxfmt@0.60.0(vite-plus@1.0.0(@types/node@24.13.6)(typescript@6.0.3)))(oxlint@1.85.0(oxlint-tsgolint@7.0.2003)(vite-plus@1.0.0(@types/node@24.13.6)(typescript@6.0.3)))(typescript@6.0.3)':
     dependencies:

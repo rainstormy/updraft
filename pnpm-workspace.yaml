@@ -6,6 +6,10 @@
 # IMPORTANT: Always add a comment that describes why we need that dependency and if it has any special maintenance requirements.
 # Keep in mind that adding a new dependency may increase the risk of supply chain attacks, as the attack surface grows.
 catalog:
+  # Comet is a commit message linter.
+  # https://github.com/rainstormy/comet
+  '@rainstormy/comet': 2.1.1
+
   # Predefined configurations for Oxfmt, Oxlint, and TypeScript.
   # https://github.com/rainstormy/presets-web
   '@rainstormy/presets-web': 1.0.0-rc.2

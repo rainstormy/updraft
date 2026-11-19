@@ -41,4 +41,4 @@ pre-push:
     check:
       # Verify the software quality before allowing commits to be pushed.
       # language=sh
-      run: vpr check && vpr test
+      run: vpr check && vpr test && vpr comet
