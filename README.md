@@ -58,7 +58,7 @@ Examples (see the [Options reference](#options) below):
 ```yaml
 jobs:
   prepare-release:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 1
     permissions: { }
     steps:
@@ -75,7 +75,7 @@ jobs:
 ```yaml
 jobs:
   prepare-release:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 1
     permissions: { }
     steps:
