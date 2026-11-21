@@ -33,13 +33,13 @@ jobs:
       # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
       # https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#example-caller-workflow
       contents: read
-    uses: ./.github/workflows/integrity.yml
+    uses: ./.github/workflows/integrity.yaml
 
   commit-messages:
     name: Commit messages
     # Skip verification of commit messages when the software integrity checks fail, as it will most likely require another commit to fix them.
     needs: integrity
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 1
     permissions:
       # To check out the repository.

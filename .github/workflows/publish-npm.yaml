@@ -1,15 +1,15 @@
 # This workflow implements one of the final stages of the release pipeline.
 # It publishes the package to the npm registry.
 #
-# It is triggered automatically by pushing a Git tag on the form `v<major.minor.patch[-prerelease][+buildinfo]>` as done by `.github/workflows/publish-tags.yml`.
+# It is triggered automatically by pushing a Git tag on the form `v<major.minor.patch[-prerelease][+buildinfo]>` as done by `.github/workflows/publish-tags.yaml`.
 #
 # It can be triggered manually via the GitHub CLI:
 #
-#   gh workflow run publish-npm.yml --ref <tag-name>
+#   gh workflow run publish-npm.yaml --ref <tag-name>
 #   gh run watch
 #
 # It can also be triggered manually via the GitHub web interface:
-# https://github.com/rainstormy/updraft/actions/workflows/publish-npm.yml
+# https://github.com/rainstormy/updraft/actions/workflows/publish-npm.yaml
 
 name: Publish / npm
 
@@ -37,12 +37,12 @@ jobs:
       # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
       # https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#example-caller-workflow
       contents: read
-    uses: ./.github/workflows/integrity.yml
+    uses: ./.github/workflows/integrity.yaml
 
   npm-package:
     name: npm package
     needs: integrity
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 1
     permissions:
       # To check out the repository.
@@ -55,9 +55,13 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Prevent `GITHUB_TOKEN` from leaking into the runner's file system.
+          # https://github.com/actions/checkout#usage
+          persist-credentials: false
         #
       - name: Install dependencies
-        uses: voidzero-dev/setup-vp@1b32467adbe183473499fd9d5d372c3ed9641754 # v1.18.0
+        uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
         with:
           node-version-file: package.json
           version-file: pnpm-workspace.yaml

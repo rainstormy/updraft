@@ -8,11 +8,11 @@
 #
 # It can be triggered manually on any branch via the GitHub CLI:
 #
-#   gh workflow run integrity.yml [--ref <branch-name>]
+#   gh workflow run integrity.yaml [--ref <branch-name>]
 #   gh run watch
 #
 # It can also be triggered manually on any branch via the GitHub web interface:
-# https://github.com/rainstormy/updraft/actions/workflows/integrity.yml
+# https://github.com/rainstormy/updraft/actions/workflows/integrity.yaml
 
 name: Integrity
 
@@ -40,7 +40,7 @@ concurrency:
 jobs:
   check:
     name: Check
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 2
     permissions:
       # To check out the repository.
@@ -49,6 +49,10 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Prevent `GITHUB_TOKEN` from leaking into the runner's file system.
+          # https://github.com/actions/checkout#usage
+          persist-credentials: false
         #
       - name: Verify the workflow syntax (actionlint)
         # Download and run actionlint in one step, as recommended by the actionlint docs.
@@ -61,13 +65,18 @@ jobs:
         shell: bash
         #
       - name: Install dependencies
-        uses: voidzero-dev/setup-vp@1b32467adbe183473499fd9d5d372c3ed9641754 # v1.18.0
+        uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
         with:
           node-version-file: package.json
           version-file: pnpm-workspace.yaml
           cache: true
         #
-      - name: Verify the code style (Oxfmt, Oxlint, TypeScript)
+      - name: Verify the code formatting (Oxfmt)
+        # language=sh
+        run: vp fmt --check
+        shell: bash
+        #
+      - name: Verify the code style (Oxlint, TypeScript)
         # language=sh
         run: vpr check
         shell: bash
