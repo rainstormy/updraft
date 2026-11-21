@@ -20,6 +20,10 @@ export default defineConfig({
 	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }) as UserOxfmtConfig,
 	lint: defineOxlintConfig({
 		ignorePatterns: ["dist/**/*"],
+		options: {
+			denyWarnings: false,
+			typeCheck: false,
+		},
 		overrides: [
 			{
 				files: [
@@ -47,9 +51,9 @@ export default defineConfig({
 				],
 				cache: { input: [{ auto: true }, "!dist/**/*"] },
 			},
-			check: { command: "vp check" },
+			check: { command: "vp lint --type-check --deny-warnings" },
 			comet: { command: "comet --config .github/comet.jsonc", cache: false },
-			fmt: { command: "vp check --fix" },
+			fmt: { command: "vp check --quiet --fix" },
 			install: {
 				command: [
 					"vp install --frozen-lockfile --ignore-scripts",
