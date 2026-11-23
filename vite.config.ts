@@ -5,6 +5,11 @@ import { type UserConfig, defineConfig } from "vite-plus"
 
 type UserOxfmtConfig = NonNullable<UserConfig["fmt"]>
 
+/**
+ * Configure Vite+.
+ *
+ * @see https://viteplus.dev/config
+ */
 export default defineConfig({
 	build: {
 		emptyOutDir: true,
@@ -17,7 +22,24 @@ export default defineConfig({
 	},
 	cacheDir: "node_modules/.cache/",
 	envPrefix: "UPDRAFT_",
+	ssr: {
+		noExternal: env.UPDRAFT_PLATFORM === "cli" ? [] : ["ansis", "fast-glob"], // Inline production dependencies into the build artefacts to produce a standalone executable that runs without installing `node_modules`.
+	},
+
+	/**
+	 * Configure Oxfmt.
+	 *
+	 * @see https://viteplus.dev/config/fmt
+	 * @see https://oxc.rs/docs/guide/usage/formatter/config.html
+	 */
 	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }) as UserOxfmtConfig,
+
+	/**
+	 * Configure Oxlint.
+	 *
+	 * @see https://viteplus.dev/config/lint
+	 * @see https://oxc.rs/docs/guide/usage/linter/config.html
+	 */
 	lint: defineOxlintConfig({
 		ignorePatterns: ["dist/**/*"],
 		options: {
@@ -40,7 +62,12 @@ export default defineConfig({
 			},
 		],
 	}),
-	plugins: [],
+
+	/**
+	 * Define tasks.
+	 *
+	 * @see https://viteplus.dev/config/run
+	 */
 	run: {
 		// language=sh
 		tasks: {
@@ -65,11 +92,17 @@ export default defineConfig({
 			yolo: { command: "lefthook uninstall", cache: false },
 		},
 	},
-	ssr: {
-		noExternal: env.UPDRAFT_PLATFORM === "cli" ? [] : ["ansis", "fast-glob"], // Inline production dependencies into the build artefacts to produce a standalone executable that runs without installing `node_modules`.
-	},
+
+	/**
+	 * Configure Vitest.
+	 *
+	 * @see https://viteplus.dev/config/test
+	 * @see https://vitest.dev/config
+	 */
 	test: {
+		fsModuleCache: true,
 		include: ["src/**/*.tests.ts"],
+		pool: "vmThreads",
 		setupFiles: ["src/utilities/vitest/VitestSetup.fakes.ts"],
 		mockReset: true,
 		unstubEnvs: true,
