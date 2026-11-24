@@ -1,9 +1,7 @@
 import { env } from "node:process"
 import { defineOxfmtConfig } from "@rainstormy/presets-web/oxfmt"
 import { defineOxlintConfig, oxlintRestrictedImportPatterns } from "@rainstormy/presets-web/oxlint"
-import { type UserConfig, defineConfig } from "vite-plus"
-
-type UserOxfmtConfig = NonNullable<UserConfig["fmt"]>
+import { defineConfig } from "vite-plus"
 
 /**
  * Configure Vite+.
@@ -32,7 +30,7 @@ export default defineConfig({
 	 * @see https://viteplus.dev/config/fmt
 	 * @see https://oxc.rs/docs/guide/usage/formatter/config.html
 	 */
-	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }) as UserOxfmtConfig,
+	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }),
 
 	/**
 	 * Configure Oxlint.
