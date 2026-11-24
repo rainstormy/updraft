@@ -209,8 +209,8 @@ catalogs:
       specifier: 24.19.2
       version: 24.19.2
     ansis:
-      specifier: 4.3.1
-      version: 4.3.1
+      specifier: 4.5.0
+      version: 4.5.0
     fast-glob:
       specifier: 3.3.3
       version: 3.3.3
@@ -233,7 +233,7 @@ importers:
     dependencies:
       ansis:
         specifier: 'catalog:'
-        version: 4.3.1
+        version: 4.5.0
       fast-glob:
         specifier: 'catalog:'
         version: 3.3.3
@@ -1290,8 +1290,8 @@ packages:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
 
-  ansis@4.3.1:
-    resolution: {integrity: sha512-BJ8/l4R5LRE7hW9WdSuGYrLSHi2ynxeFpDFbH0K/CgNeY/tyhk+vO6TYxXC5r5CpUhNVX310xzPsN/H9lCdfOA==}
+  ansis@4.5.0:
+    resolution: {integrity: sha512-KwIVkfFfJSSzBmZhDGuTmkhWqTdyB5oNVzzznBJbBZ5bZtHiqSrcugRF0RKJKT4Ss3d7ZrcjnlFVDlQNmtWfWw==}
     engines: {node: '>=14'}
 
   aria-query@5.3.0:
@@ -2557,7 +2557,7 @@ snapshots:
 
   ansi-styles@5.2.0: {}
 
-  ansis@4.3.1: {}
+  ansis@4.5.0: {}
 
   aria-query@5.3.0:
     dependencies:
