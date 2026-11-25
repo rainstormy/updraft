@@ -25,7 +25,7 @@ catalog:
 
   # This library formats console output.
   # https://github.com/webdiscus/ansis
-  ansis: 4.3.1
+  ansis: 4.5.0
 
   # This library executes glob patterns in the file system.
   # https://github.com/mrmlnc/fast-glob
