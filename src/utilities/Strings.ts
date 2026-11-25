@@ -26,7 +26,7 @@ export function dedent(
 	const commonIndent = commonIndentSize(lines)
 
 	const dedentedLines = lines.map((line) => line.slice(commonIndent))
-	return dedentedLines.join("\n").replace(leadingAndTrailingLinesRegex, "")
+	return dedentedLines.join("\n").replaceAll(leadingAndTrailingLinesRegex, "")
 }
 
 function lastLine(value: string): string {
