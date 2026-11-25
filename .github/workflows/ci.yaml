@@ -59,7 +59,7 @@ jobs:
           persist-credentials: false
         #
       - name: Verify the commit messages (Comet)
-        uses: rainstormy/comet@5c8eb994705e924014f1295c4584974951b10c2d # v2.1.1
+        uses: rainstormy/comet@b8bf259cc9a38cd2c50351f04bc91edd55414b9f # v2.1.2
         with:
           github-token: ${{ github.token }}
           config-path: .github/comet.jsonc
