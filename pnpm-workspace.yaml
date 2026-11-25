@@ -8,7 +8,7 @@
 catalog:
   # Comet is a commit message linter.
   # https://github.com/rainstormy/comet
-  '@rainstormy/comet': 2.1.1
+  '@rainstormy/comet': 2.1.2
 
   # Predefined configurations for Oxfmt, Oxlint, and TypeScript.
   # https://github.com/rainstormy/presets-web

@@ -200,8 +200,8 @@ settings:
 catalogs:
   default:
     '@rainstormy/comet':
-      specifier: 2.1.1
-      version: 2.1.1
+      specifier: 2.1.2
+      version: 2.1.2
     '@rainstormy/presets-web':
       specifier: 1.0.0-rc.4
       version: 1.0.0-rc.4
@@ -240,7 +240,7 @@ importers:
     devDependencies:
       '@rainstormy/comet':
         specifier: 'catalog:'
-        version: 2.1.1
+        version: 2.1.2
       '@rainstormy/presets-web':
         specifier: 'catalog:'
         version: 1.0.0-rc.4(oxfmt@0.79.0(vite-plus@1.7.0(@types/node@24.19.2)(typescript@7.0.2)))(oxlint@1.94.0(vite-plus@1.7.0(@types/node@24.19.2)(typescript@7.0.2)))(typescript@7.0.2)
@@ -609,8 +609,8 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
-  '@rainstormy/comet@2.1.1':
-    resolution: {integrity: sha512-azZjqdsS/7C3MSxtOTiyIXlCTB1aS9/x23Eu2vF6MBnxvO5eQfh79CswmJuHebnZlgmlQlKjaU7qZjCwsTgl+w==}
+  '@rainstormy/comet@2.1.2':
+    resolution: {integrity: sha512-Xn3MCakpUJmZg9NzhxxysNY+VFMuZxG0apTeCr6buu7AQKBGyvMMwRS9LmNbJTLdQHuWiO4eF0+sMD61It/B4g==}
     hasBin: true
 
   '@rainstormy/presets-web@1.0.0-rc.4':
@@ -1806,10 +1806,12 @@ packages:
   yuku-core@0.19.0:
     resolution: {integrity: sha512-kYK9e1XdfirNhkipzW0wmMcSWcVF/CWnuugodfVYRCUwvoBefweL9HzB96OiKEhsx78V5WbUxbJqlizMX869Qg==}
     engines: {node: '>=14.18.0'}
+    deprecated: 'Yuku is now one package with one core. Use "yuku" instead: https://yuku.fyi/javascript/. Existing installs keep working but get no more fixes.'
 
   yuku-parser@0.19.0:
     resolution: {integrity: sha512-XrBh9ZiQK5mJVRxZBAvD6LwRyAYrK3MFtH3+onyuxFL5hFD44EC3QOmIC1FjTj6H2MMwq46/NAI+NZxLZPZgxg==}
     engines: {node: '>=14.18.0'}
+    deprecated: 'Yuku is now one package with one core. Use "yuku" instead: https://yuku.fyi/javascript/. Existing installs keep working but get no more fixes.'
 
 snapshots:
 
@@ -2011,7 +2013,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
-  '@rainstormy/comet@2.1.1': {}
+  '@rainstormy/comet@2.1.2': {}
 
   '@rainstormy/presets-web@1.0.0-rc.4(oxfmt@0.79.0(vite-plus@1.7.0(@types/node@24.19.2)(typescript@7.0.2)))(oxlint@1.94.0(vite-plus@1.7.0(@types/node@24.19.2)(typescript@7.0.2)))(typescript@7.0.2)':
     dependencies:
